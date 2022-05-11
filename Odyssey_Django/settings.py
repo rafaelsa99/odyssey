@@ -90,7 +90,7 @@ DATABASES = {
         'USER': 'odyssey',
         'PASSWORD': 'odyssey',
         'HOST': 'gis4cloud.com',
-        'PORT': '5435',
+        'PORT': '5432',
     },
 }
 
