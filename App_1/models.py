@@ -4,6 +4,7 @@ from django_countries.fields import CountryField
 
 # Create your models here.
 class Site(models.Model):
+    """Model representing an archaeological site."""
     national_site_code = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=254)
     country_iso = CountryField(verbose_name="country", default="PT")
@@ -32,6 +33,7 @@ class Site(models.Model):
         ]
 
 class Occurrence(models.Model):
+    """Model representing an archaeological occurrence within a site."""
     name = models.CharField(max_length=254)
     acronym = models.CharField(max_length=254, blank=True)
     toponym = models.CharField(max_length=254, blank=True)
@@ -62,6 +64,7 @@ class Occurrence(models.Model):
         ]
 
 class File(models.Model):
+    """Model representing a file (e.g. LiDAR, photo, video)."""
     name = models.CharField(max_length=254, blank=True)
     file = models.FileField()
     type = models.CharField(max_length=254) # check data type. Maybe list of types could be a table
@@ -80,6 +83,7 @@ class File(models.Model):
         ordering = ['-creation_date']
 
 class MetricType(models.Model):
+    """Model representing a type of metric (e.g. area, width, height)."""
     name = models.CharField(max_length=254)
 
     def __str__(self):
@@ -92,6 +96,7 @@ class MetricType(models.Model):
         ordering = ['name']
 
 class Metric(models.Model):
+    """Model representing a metric of an occurrence."""
     type = models.ForeignKey(MetricType, on_delete=models.RESTRICT)
     auto_value = models.FloatField(verbose_name="automatic value")
     confirmed_value = models.FloatField()
@@ -107,6 +112,7 @@ class Metric(models.Model):
         ordering = ['type']
 
 class AttributeCategory(models.Model):
+    """Model representing a category for an attribute (e.g. chronology, geological context)."""
     name = models.CharField(max_length=254)
 
     def __str__(self):
@@ -119,6 +125,7 @@ class AttributeCategory(models.Model):
         ordering = ['name']
 
 class AttributeChoice(models.Model):
+    """Model to represent a choice option for an attribute category (e.g. for Chronology: neolithic, full bronze)."""
     category = models.ForeignKey(AttributeCategory, on_delete=models.CASCADE)
     value = models.CharField(max_length=254)
 
@@ -132,6 +139,7 @@ class AttributeChoice(models.Model):
         ordering = ['value']
 
 class Attribute(models.Model):
+    """Model representing an attribute of an occurrence."""
     category = models.ForeignKey(on_delete=models.RESTRICT)
     value = models.ForeignKey(on_delete=models.RESTRICT)
     occurrence = models.ForeignKey(on_delete=models.CASCADE)
