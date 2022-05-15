@@ -5,7 +5,7 @@ from django_countries.fields import CountryField
 # Create your models here.
 class Site(models.Model):
     """Model representing an archaeological site."""
-    national_site_code = models.IntegerField(null=True, blank=True)
+    national_site_code = models.IntegerField(null=True, blank=True, unique=True)
     name = models.CharField(max_length=254)
     country_iso = CountryField(verbose_name="country", default="PT")
     parish = models.CharField(max_length=254, blank=True)
@@ -68,9 +68,9 @@ class File(models.Model):
     name = models.CharField(max_length=254, blank=True)
     file = models.FileField()
     type = models.CharField(max_length=254) # check data type. Maybe list of types could be a table
-    creation_date = models.DateTimeField(auto_now_add=True)
-    site = models.ManyToManyField()
-    occurrence = models.ManyToManyField()
+    creation_date = models.DateField(auto_now_add=True)
+    site = models.ManyToManyField(Site)
+    occurrence = models.ManyToManyField(Occurrence)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
@@ -98,8 +98,8 @@ class MetricType(models.Model):
 class Metric(models.Model):
     """Model representing a metric of an occurrence."""
     type = models.ForeignKey(MetricType, on_delete=models.RESTRICT)
-    auto_value = models.FloatField(verbose_name="automatic value")
-    confirmed_value = models.FloatField()
+    auto_value = models.DecimalField(verbose_name="automatic value", max_digits= 10, decimal_places=3)
+    confirmed_value = models.DecimalField(max_digits= 10, decimal_places=3)
     occurrence = models.ForeignKey(Occurrence, on_delete=models.CASCADE)
 
     def __str__(self):
