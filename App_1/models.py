@@ -24,7 +24,7 @@ class Site(models.Model):
         # Checks if at least one of the spatial fields is filled in
         constraints = [
             models.CheckConstraint(
-                name="%App_1s_%Sites_location_and_or_surrounding_polygon",
+                name="Site_location_and_or_surrounding_polygon",
                 check=(
                     models.Q(location__isnull=False)
                     | models.Q(surrounding_polygon__isnull=False)
@@ -55,7 +55,7 @@ class Occurrence(models.Model):
         # Checks if at least one of the spatial fields is filled in
         constraints = [
             models.CheckConstraint(
-                name="%App_1s_%Occurrence_location_and_or_bounding_polygon",
+                name="Occurrence_location_and_or_bounding_polygon",
                 check=(
                     models.Q(location__isnull=False)
                     | models.Q(bounding_polygon__isnull=False)
@@ -140,15 +140,14 @@ class AttributeChoice(models.Model):
 
 class Attribute(models.Model):
     """Model representing an attribute of an occurrence."""
-    category = models.ForeignKey(on_delete=models.RESTRICT)
-    value = models.ForeignKey(on_delete=models.RESTRICT)
-    occurrence = models.ForeignKey(on_delete=models.CASCADE)
+    value = models.ForeignKey(AttributeChoice, on_delete=models.RESTRICT)
+    occurrence = models.ForeignKey(Occurrence, on_delete=models.CASCADE)
 
     def __str__(self):
-        return '{0}: {1} ({2})'.format(self.category, self.value, self.occurrence)
+        return '{0} ({1})'.format(self.value, self.occurrence)
 
     class Meta:
         db_table = 'attribute'
         verbose_name = "Attribute"
         verbose_name_plural = "Attributes"
-        ordering = ['category']
+        ordering = ['value']
