@@ -80,8 +80,8 @@ class File(models.Model):
     file = models.FileField()
     type = models.CharField(max_length=254) # check data type. Maybe list of types could be a table
     creation_date = models.DateField(auto_now_add=True)
-    site = models.ManyToManyField(Site)
-    occurrence = models.ManyToManyField(Occurrence)
+    site = models.ManyToManyField(Site, blank=True)
+    occurrence = models.ManyToManyField(Occurrence, blank=True)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
@@ -109,9 +109,9 @@ class MetricType(models.Model):
 class Metric(models.Model):
     """Model representing a metric of an occurrence."""
     type = models.ForeignKey(MetricType, on_delete=models.RESTRICT)
+    occurrence = models.ForeignKey(Occurrence, on_delete=models.CASCADE)
     auto_value = models.DecimalField(verbose_name="automatic value", max_digits= 10, decimal_places=3)
     confirmed_value = models.DecimalField(max_digits= 10, decimal_places=3)
-    occurrence = models.ForeignKey(Occurrence, on_delete=models.CASCADE)
 
     def __str__(self):
         return '{0} ({1})'.format(self.type, self.occurrence)
@@ -141,13 +141,13 @@ class AttributeChoice(models.Model):
     value = models.CharField(max_length=254)
 
     def __str__(self):
-        return self.value
+        return '{0}: {1}'.format(self.category, self.value)
 
     class Meta:
         db_table = 'attribute_choice'
         verbose_name = "Attribute Choice"
         verbose_name_plural = "Attribute Choices"
-        ordering = ['value']
+        ordering = ['category', 'value']
 
 class Attribute(models.Model):
     """Model representing an attribute of an occurrence."""
@@ -161,4 +161,4 @@ class Attribute(models.Model):
         db_table = 'attribute'
         verbose_name = "Attribute"
         verbose_name_plural = "Attributes"
-        ordering = ['value']
+        ordering = ['value__category', 'value']
