@@ -3,7 +3,7 @@ from django.contrib.gis import admin
 from App_1.forms import AtLeastOneFormSet, OccurrenceForm, SiteForm
 
 # Register your models here.
-from .models import Attribute, AttributeCategory, AttributeChoice, Metric, MetricType, Occurrence, Site, File
+from .models import AttributeOccurrence, AttributeCategory, AttributeChoice, AttributeSite, Metric, MetricType, Occurrence, Site, File
 
 class CustomGeoWidgetAdmin(admin.GISModelAdmin):
     """Custom GISModelAdmin with default coordinates to Portugal."""
@@ -29,11 +29,19 @@ class MetricsInline(admin.TabularInline):
     show_change_link = True
     extra = 0
 
-class AttributesInline(admin.TabularInline):
-    model = Attribute
+class AttributesOccurrenceInline(admin.TabularInline):
+    model = AttributeOccurrence
     fields = ('value',)
     show_change_link = True
     extra = 0
+    verbose_name_plural = "Attributes"
+
+class AttributesSiteInline(admin.TabularInline):
+    model = AttributeSite
+    fields = ('value',)
+    show_change_link = True
+    extra = 0
+    verbose_name_plural = "Attributes"
 
 class FilesInlineSite(admin.TabularInline):
     model = File.site.through
@@ -67,7 +75,7 @@ class SiteAdmin(CustomGeoWidgetAdmin):
             'fields': ('added_by',)
         }),
     )
-    inlines = [OccurrencesInline, FilesInlineSite]
+    inlines = [OccurrencesInline, AttributesSiteInline, FilesInlineSite]
     form = SiteForm
 
 @admin.register(Occurrence)
@@ -86,7 +94,7 @@ class OccurrenceAdmin(CustomGeoWidgetAdmin):
             'fields': ('added_by',)
         }),
     )
-    inlines = [AttributesInline, MetricsInline, FilesInlineOccurrence]
+    inlines = [AttributesOccurrenceInline, MetricsInline, FilesInlineOccurrence]
 
 @admin.register(File)
 class FileAdmin(admin.ModelAdmin):
@@ -121,7 +129,12 @@ class AttributeChoicesAdmin(admin.ModelAdmin):
     list_display = ('value', 'category')
     list_filter = ('category',)
 
-@admin.register(Attribute)
-class AttributeAdmin(admin.ModelAdmin):
+@admin.register(AttributeOccurrence)
+class AttributeOccurrenceAdmin(admin.ModelAdmin):
     list_display = ('value', 'occurrence')
+    list_filter = ('value',)
+
+@admin.register(AttributeSite)
+class AttributeSiteAdmin(admin.ModelAdmin):
+    list_display = ('value', 'site')
     list_filter = ('value',)

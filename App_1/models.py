@@ -149,7 +149,7 @@ class AttributeChoice(models.Model):
         verbose_name_plural = "Attribute Choices"
         ordering = ['category', 'value']
 
-class Attribute(models.Model):
+class AttributeOccurrence(models.Model):
     """Model representing an attribute of an occurrence."""
     value = models.ForeignKey(AttributeChoice, on_delete=models.RESTRICT)
     occurrence = models.ForeignKey(Occurrence, on_delete=models.CASCADE)
@@ -158,7 +158,21 @@ class Attribute(models.Model):
         return '{0} ({1})'.format(self.value, self.occurrence)
 
     class Meta:
-        db_table = 'attribute'
+        db_table = 'attribute_occurrence'
         verbose_name = "Attribute"
-        verbose_name_plural = "Attributes"
+        verbose_name_plural = "Occurrence Attributes"
+        ordering = ['value__category', 'value']
+
+class AttributeSite(models.Model):
+    """Model representing an attribute of a site."""
+    value = models.ForeignKey(AttributeChoice, on_delete=models.RESTRICT)
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '{0} ({1})'.format(self.value, self.occurrence)
+
+    class Meta:
+        db_table = 'attribute_site'
+        verbose_name = "Attribute"
+        verbose_name_plural = "Site Attributes"
         ordering = ['value__category', 'value']
