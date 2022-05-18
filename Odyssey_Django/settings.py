@@ -45,6 +45,8 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'gis4cloud.com','*']
 # Application definition
 
 INSTALLED_APPS = [
+
+    #Django default apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -52,7 +54,20 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
+
+    #Django-Allauth apps
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.github',
+
+    #Crispy forms
+    'crispy_forms',
+
+    #Custom Apps
     'landing_app',
+    
 
 ]
 
@@ -144,3 +159,19 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+SITE_ID = 1
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+LOGIN_REDIRECT_URL = 'index'
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
