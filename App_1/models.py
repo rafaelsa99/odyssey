@@ -1,27 +1,33 @@
 from django.contrib.gis.db import models
 from django.conf import settings
+from django.forms import ValidationError
 from django_countries.fields import CountryField
 
 # Create your models here.
 class Site(models.Model):
     """Model representing an archaeological site."""
-    national_site_code = models.IntegerField(null=True, blank=True, unique=True)
     name = models.CharField(max_length=254)
+    national_site_code = models.IntegerField(null=True, blank=True, unique=True)
     country_iso = CountryField(verbose_name="country", default="PT")
     parish = models.CharField(max_length=254, blank=True)
     location = models.PointField(null=True, blank=True)
     surrounding_polygon = models.PolygonField(null=True, blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
+    added_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):  
         return self.name
 
+    def clean(self):
+        # Checks if at least one of the spatial fields is filled in (Model Level)
+        if not self.location and not self.surrounding_polygon:
+            raise ValidationError('At least one of the spatial fields (point or polygon) is required.')
+    
     class Meta:
         db_table = 'site'
         verbose_name = "Site"
         verbose_name_plural = "Sites"
         ordering = ['national_site_code', 'name']
-        # Checks if at least one of the spatial fields is filled in
+        # Checks if at least one of the spatial fields is filled in (DB Level)
         constraints = [
             models.CheckConstraint(
                 name="Site_location_and_or_surrounding_polygon",
@@ -42,17 +48,22 @@ class Occurrence(models.Model):
     location = models.PointField(null=True, blank=True)
     bounding_polygon = models.PolygonField(null=True, blank=True)
     site = models.ForeignKey(Site, on_delete=models.RESTRICT)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
+    added_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.name
+
+    def clean(self):
+        # Checks if at least one of the spatial fields is filled in (Model Level)
+        if not self.location and not self.bounding_polygon:
+            raise ValidationError('At least one of the spatial fields (point or polygon) is required.')
 
     class Meta:
         db_table = 'occurrence'
         verbose_name = "Occurrence"
         verbose_name_plural = "Occurrences"
         ordering = ['name']
-        # Checks if at least one of the spatial fields is filled in
+        # Checks if at least one of the spatial fields is filled in (DB Level)
         constraints = [
             models.CheckConstraint(
                 name="Occurrence_location_and_or_bounding_polygon",
@@ -71,7 +82,7 @@ class File(models.Model):
     creation_date = models.DateField(auto_now_add=True)
     site = models.ManyToManyField(Site)
     occurrence = models.ManyToManyField(Occurrence)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
+    added_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.file
