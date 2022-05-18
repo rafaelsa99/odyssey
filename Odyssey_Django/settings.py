@@ -46,7 +46,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'gis4cloud.com','*']
 
 INSTALLED_APPS = [
 
-    #Django default apps
+    #Django  apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
+    'django_countries',
+
 
     #Django-Allauth apps
     'django.contrib.sites',
@@ -67,9 +69,9 @@ INSTALLED_APPS = [
 
     #Custom Apps
     'landing_app',
-    
+    'App_1',
 
-]
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
