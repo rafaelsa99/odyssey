@@ -64,6 +64,7 @@ class AttributeChoicesInline(admin.TabularInline):
 class SiteAdmin(CustomGeoWidgetAdmin):
     list_display = ('name', 'national_site_code', 'parish', 'added_by')
     list_filter = ('added_by',)
+    search_fields = ['name', 'national_site_code', 'parish',]
     fieldsets = (
         (None, {
             'fields': (tuple(['name', 'national_site_code']))
@@ -82,6 +83,7 @@ class SiteAdmin(CustomGeoWidgetAdmin):
 class OccurrenceAdmin(CustomGeoWidgetAdmin):
     list_display = ('name', 'acronym', 'site', 'added_by')
     list_filter = ('added_by',)
+    search_fields = ['name', 'acronym', 'site',]
     form = OccurrenceForm
     fieldsets = (
         (None, {
@@ -100,6 +102,7 @@ class OccurrenceAdmin(CustomGeoWidgetAdmin):
 class FileAdmin(admin.ModelAdmin):
     list_display = ('name', 'type', 'creation_date', 'added_by')
     list_filter = ('type', 'added_by',)
+    search_fields = ['name', 'creation_date']
     fieldsets = (
         (None, {
             'fields': ('name', 'type', 'file')
@@ -112,29 +115,36 @@ class FileAdmin(admin.ModelAdmin):
         }),
     )   
 
-admin.site.register(MetricType, admin.ModelAdmin)
+@admin.register(MetricType)
+class MetricTypeAdmin(admin.ModelAdmin):
+    search_fields = ['name']
 
 @admin.register(Metric)
 class MetricAdmin(admin.ModelAdmin):
     list_display = ('type', 'occurrence')
     list_filter = ('type',)
+    search_fields = ['type', 'occurrence']
     fields = ('type', 'occurrence', ('auto_value', 'confirmed_value'))
 
 @admin.register(AttributeCategory)
 class AttributeCategoryAdmin(admin.ModelAdmin):
+    search_fields = ['name']
     inlines = [AttributeChoicesInline]
 
 @admin.register(AttributeChoice)
 class AttributeChoicesAdmin(admin.ModelAdmin):
     list_display = ('value', 'category')
     list_filter = ('category',)
+    search_fields = ['value', 'category']
 
 @admin.register(AttributeOccurrence)
 class AttributeOccurrenceAdmin(admin.ModelAdmin):
     list_display = ('value', 'occurrence')
     list_filter = ('value',)
+    search_fields = ['value', 'occurrence']
 
 @admin.register(AttributeSite)
 class AttributeSiteAdmin(admin.ModelAdmin):
     list_display = ('value', 'site')
     list_filter = ('value',)
+    search_fields = ['value', 'site']
