@@ -110,8 +110,8 @@ class Metric(models.Model):
     """Model representing a metric of an occurrence."""
     type = models.ForeignKey(MetricType, on_delete=models.RESTRICT)
     occurrence = models.ForeignKey(Occurrence, on_delete=models.CASCADE)
-    auto_value = models.DecimalField(verbose_name="automatic value", max_digits= 10, decimal_places=3)
-    confirmed_value = models.DecimalField(max_digits= 10, decimal_places=3)
+    auto_value = models.DecimalField(verbose_name="automatic value", max_digits= 10, decimal_places=2, null=True, blank=True)
+    confirmed_value = models.DecimalField(max_digits= 10, decimal_places=2, null=True, blank=True)
 
     def __str__(self):
         return '{0} ({1})'.format(self.type, self.occurrence)
@@ -169,7 +169,7 @@ class AttributeSite(models.Model):
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
     def __str__(self):
-        return '{0} ({1})'.format(self.value, self.occurrence)
+        return '{0} ({1})'.format(self.value, self.site)
 
     class Meta:
         db_table = 'attribute_site'

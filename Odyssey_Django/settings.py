@@ -53,8 +53,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
+    
+    #Countries
     'django_countries',
 
+    #Custom Maps
+    'leaflet',
 
     #Django-Allauth apps
     'django.contrib.sites',
@@ -176,3 +180,11 @@ LOGIN_REDIRECT_URL = 'index'
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+LEAFLET_CONFIG = {
+    'DEFAULT_CENTER': (39.694819, -8.130229),
+    'DEFAULT_ZOOM': 6,
+    'MAX_ZOOM': 20,
+    'MIN_ZOOM':3,
+    'SCALE': 'both',
+}

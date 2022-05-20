@@ -1,19 +1,9 @@
 from django.contrib.gis import admin
-
+from leaflet.admin import LeafletGeoAdmin
 from App_1.forms import AtLeastOneFormSet, OccurrenceForm, SiteForm
 
 # Register your models here.
 from .models import AttributeOccurrence, AttributeCategory, AttributeChoice, AttributeSite, Metric, MetricType, Occurrence, Site, File
-
-class CustomGeoWidgetAdmin(admin.GISModelAdmin):
-    """Custom GISModelAdmin with default coordinates to Portugal."""
-    gis_widget_kwargs = {
-        'attrs': {
-            'default_zoom': 6,
-            'default_lon': -8.130229,
-            'default_lat': 39.694819,
-        },
-    }
 
 class OccurrencesInline(admin.TabularInline):
     model = Occurrence
@@ -61,10 +51,11 @@ class AttributeChoicesInline(admin.TabularInline):
     extra = 0
 
 @admin.register(Site)
-class SiteAdmin(CustomGeoWidgetAdmin):
+class SiteAdmin(LeafletGeoAdmin):
     list_display = ('name', 'national_site_code', 'parish', 'added_by')
     list_filter = ('added_by',)
     search_fields = ['name', 'national_site_code', 'parish',]
+    list_per_page = 50
     fieldsets = (
         (None, {
             'fields': (tuple(['name', 'national_site_code']))
@@ -80,10 +71,11 @@ class SiteAdmin(CustomGeoWidgetAdmin):
     form = SiteForm
 
 @admin.register(Occurrence)
-class OccurrenceAdmin(CustomGeoWidgetAdmin):
+class OccurrenceAdmin(LeafletGeoAdmin):
     list_display = ('name', 'acronym', 'site', 'added_by')
     list_filter = ('added_by',)
-    search_fields = ['name', 'acronym', 'site',]
+    search_fields = ['name', 'acronym', 'site__name',]
+    list_per_page = 50
     form = OccurrenceForm
     fieldsets = (
         (None, {
@@ -103,6 +95,7 @@ class FileAdmin(admin.ModelAdmin):
     list_display = ('name', 'type', 'creation_date', 'added_by')
     list_filter = ('type', 'added_by',)
     search_fields = ['name', 'creation_date']
+    list_per_page = 50
     fieldsets = (
         (None, {
             'fields': ('name', 'type', 'file')
@@ -118,33 +111,39 @@ class FileAdmin(admin.ModelAdmin):
 @admin.register(MetricType)
 class MetricTypeAdmin(admin.ModelAdmin):
     search_fields = ['name']
+    list_per_page = 50
 
 @admin.register(Metric)
 class MetricAdmin(admin.ModelAdmin):
     list_display = ('type', 'occurrence')
     list_filter = ('type',)
-    search_fields = ['type', 'occurrence']
+    list_per_page = 50
+    search_fields = ['type', 'occurrence__name']
     fields = ('type', 'occurrence', ('auto_value', 'confirmed_value'))
 
 @admin.register(AttributeCategory)
 class AttributeCategoryAdmin(admin.ModelAdmin):
     search_fields = ['name']
+    list_per_page = 50
     inlines = [AttributeChoicesInline]
 
 @admin.register(AttributeChoice)
 class AttributeChoicesAdmin(admin.ModelAdmin):
     list_display = ('value', 'category')
     list_filter = ('category',)
-    search_fields = ['value', 'category']
+    list_per_page = 50
+    search_fields = ['value', 'category__name']
 
 @admin.register(AttributeOccurrence)
 class AttributeOccurrenceAdmin(admin.ModelAdmin):
     list_display = ('value', 'occurrence')
     list_filter = ('value',)
-    search_fields = ['value', 'occurrence']
+    list_per_page = 50
+    search_fields = ['value', 'occurrence__name']
 
 @admin.register(AttributeSite)
 class AttributeSiteAdmin(admin.ModelAdmin):
     list_display = ('value', 'site')
     list_filter = ('value',)
-    search_fields = ['value', 'site']
+    list_per_page = 50
+    search_fields = ['value', 'site__name']
