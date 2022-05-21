@@ -1,4 +1,6 @@
+from django import forms
 from django.contrib.gis import admin
+from django.contrib.gis.db import models
 from leaflet.admin import LeafletGeoAdmin
 from App_1.forms import AtLeastOneFormSet, OccurrenceForm, SiteForm
 
@@ -7,11 +9,14 @@ from .models import AttributeOccurrence, AttributeCategory, AttributeChoice, Att
 
 class OccurrencesInline(admin.TabularInline):
     model = Occurrence
-    fields = ('name', 'latitude', 'longitude')
+    fields = ('name', 'latitude', 'longitude', 'location')
     show_change_link = True
     extra = 1
     formset = AtLeastOneFormSet
     form = OccurrenceForm
+    formfield_overrides = {
+        models.PointField: {'widget': forms.HiddenInput()},
+    }
 
 class MetricsInline(admin.TabularInline):
     model = Metric
