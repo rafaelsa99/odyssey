@@ -11,7 +11,7 @@ from django.contrib import messages
 
 def index(request):
 
-    return render (request, 'registration/index.html', {})
+    return render (request, 'landing/index.html', {})
 
 def login_user(request):
 
