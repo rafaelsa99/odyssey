@@ -11,12 +11,8 @@ from django.contrib import messages
 
 def index(request):
 
-    return render (request, 'registration/landing.html', {})
+    return render (request, 'registration/index.html', {})
 
 def login_user(request):
 
     return render(request, 'registration/login.html', {})
-
-def logout_user (request):
-
-    return render (request, 'account/logged_out.html')

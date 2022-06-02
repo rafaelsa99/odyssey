@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.gis import admin
 from django.contrib.gis.db import models
 from leaflet.admin import LeafletGeoAdmin
-from sdi.forms import AtLeastOneFormSet, OccurrenceForm, SiteForm
+from sdi.forms import AtLeastOneFormSet, OccurrenceForm, SiteFormAdmin
 
 # Register your models here.
 from .models import AttributeOccurrence, AttributeCategory, AttributeChoice, AttributeSite, Metric, MetricType, Occurrence, Site, File
@@ -73,7 +73,7 @@ class SiteAdmin(LeafletGeoAdmin):
         }),
     )
     inlines = [OccurrencesInline, AttributesSiteInline, FilesInlineSite]
-    form = SiteForm
+    form = SiteFormAdmin
 
 @admin.register(Occurrence)
 class OccurrenceAdmin(LeafletGeoAdmin):
