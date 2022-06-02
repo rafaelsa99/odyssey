@@ -19,4 +19,8 @@ def login_user(request):
 
 def logout_user (request):
 
-    return render (request, 'account/logged_out.html')
+    return render (request, 'account/logged_out.html', {})
+
+
+def info(request) :
+    return render (request, 'registration/info.html', {})
