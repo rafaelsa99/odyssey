@@ -1,0 +1,23 @@
+{% extends "../base/base.html" %}
+{% load leaflet_tags %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block content %}
+
+{{ form.media }}
+{% leaflet_js plugins="forms" %}
+{% leaflet_css plugins="forms" %}
+
+<div class="container">
+    <div class="jumbotron">
+        <h1>{% trans "Add New Archaeological Site" %}</h1>
+    </div>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" value="Add" class="btn btn-success">
+    <form>
+</div>
+        
+{% endblock %}

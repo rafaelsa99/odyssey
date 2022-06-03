@@ -11,16 +11,12 @@ from django.contrib import messages
 
 def index(request):
 
-    return render (request, 'registration/landing.html', {})
+    return render (request, 'landing/index.html', {})
 
 def login_user(request):
 
     return render(request, 'registration/login.html', {})
 
-def logout_user (request):
-
-    return render (request, 'account/logged_out.html', {})
-
-
 def info(request) :
-    return render (request, 'registration/info.html', {})
+    return render (request, 'landing/info.html', {})
+

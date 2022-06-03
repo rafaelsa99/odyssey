@@ -14,7 +14,6 @@ from pathlib import Path
 
 import os
 if os.name == 'nt':
-    import platform
     OSGEO4W = r"C:\OSGeo4W"
 
     os.environ['OSGEO4W_ROOT'] = OSGEO4W
@@ -60,6 +59,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
+    
+    #Countries
+    'django_countries',
+
+    #Custom Maps
+    'leaflet',
 
     #Django-Allauth apps
     'django.contrib.sites',
@@ -73,6 +78,7 @@ INSTALLED_APPS = [
 
     #Custom Apps
     'landing_app',
+    'sdi',
 
 
 ]
@@ -145,7 +151,12 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
+
+LANGUAGES = [
+    ('en','English'),
+    ('pt', 'Portuguese')
+]
 
 TIME_ZONE = 'UTC'
 
@@ -161,15 +172,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MEDIA_URL = '/Images/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATICFILES_DIRS = [os.path.join (BASE_DIR, 'Static')]
-
-
-
-
-
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -188,6 +196,14 @@ SITE_ID = 1
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 LOGIN_REDIRECT_URL = 'index'
-
+LOGOUT_REDIRECT_URL = 'index'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+LEAFLET_CONFIG = {
+    'DEFAULT_CENTER': (39.694819, -8.130229),
+    'DEFAULT_ZOOM': 6,
+    'MAX_ZOOM': 20,
+    'MIN_ZOOM':3,
+    'SCALE': 'both',
+}
