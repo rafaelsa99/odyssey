@@ -20,3 +20,9 @@ def login_user(request):
 def info(request) :
     return render (request, 'landing/info.html', {})
 
+def object(request):
+    return render(request,'landing/objectives.html', {})
+
+
+def publi(request):
+    return render(request, 'landing/publications.html', {})
