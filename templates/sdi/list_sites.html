@@ -7,6 +7,11 @@
     <div class="jumbotron">
         <h1>{% trans "Archaeological Sites" %}</h1>
     </div>
+	{% if messages %}
+       {% for message in messages %}
+       <div class="alert alert-success" role="alert">{{ message }}</div>
+       {% endfor %}
+    {% endif %}
 	<div class="card card-body">
 		<a class="btn btn-primary  btn-sm btn-block" href="{% url 'addsite' %}">{% trans "Add New Archaeological Site" %}</a>
 		<table class="table table-sm table-hover">

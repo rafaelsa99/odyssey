@@ -26,6 +26,11 @@
             {% endif %}
         </h4>
     </div>
+    {% if messages %}
+       {% for message in messages %}
+       <div class="alert alert-success" role="alert">{{ message }}</div>
+       {% endfor %}
+    {% endif %}
     <form action="" method="post">
         {% csrf_token %}
         {{ form|crispy }}

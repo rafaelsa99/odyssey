@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import redirect, render
 
@@ -43,6 +44,7 @@ def create_site(request):
         occurrence.added_by = request.user
         occurrence.site = site
         occurrence.save()
+        messages.success(request, "Site and Occurrence created successfully.")
         return redirect(site.get_absolute_url())
     return render(request, "sdi/add_site.html", context=context)
 
@@ -64,6 +66,7 @@ def update_site(request, pk):
         occurrences = paginator.page(paginator.num_pages)
     if form.is_valid():
         form.save()
+        messages.success(request, "Changes saved successfully.")
         return redirect(site.get_absolute_url())
     context = {
         'form': form,
@@ -81,7 +84,9 @@ def delete_site(request, pk):
     context = {'item': site,}  
     if request.method == "POST":
         try:
+            msg = "Site " + site.name + " successfully deleted."
             site.delete()
+            messages.success(request, msg)
             return redirect(list_sites)
         except RestrictedError:
             context['error']= "Cannot delete the site, as there are still " + str(site.occurrence_set.count()) + " associated occurrence(s). Delete the associated occurrences first to be able to delete the site."
@@ -99,6 +104,7 @@ def create_occurrence(request, pk):
         occurrence.added_by = request.user
         occurrence.site = site
         occurrence.save()
+        messages.success(request, "Occurrence created successfully.")
         return redirect(occurrence.get_absolute_url())
     context = {
         'form': form,
@@ -115,6 +121,7 @@ def update_occurrence(request, pk):
     form = OccurrenceForm(request.POST or None, instance=occurrence)
     if form.is_valid():
         form.save()
+        messages.success(request, "Changes saved successfully.")
         return redirect(occurrence.get_absolute_url())
     context = {
         'form': form,
@@ -131,7 +138,9 @@ def delete_occurrence(request, pk):
     
     if request.method == "POST":
         site = occurrence.site
+        msg = "Occurrence " + occurrence.name + " successfully deleted."
         occurrence.delete()
+        messages.success(request, msg)
         return redirect(site.get_absolute_url())
     context = {'item': occurrence}    
     return render(request, "sdi/delete.html", context=context)
