@@ -2,18 +2,18 @@ from django import forms
 from django.contrib.gis import admin
 from django.contrib.gis.db import models
 from leaflet.admin import LeafletGeoAdmin
-from sdi.forms import AtLeastOneFormSet, OccurrenceForm, SiteFormAdmin
+from sdi.forms import AtLeastOneFormSet, OccurrenceFormAdmin, SiteFormAdmin
 
 # Register your models here.
 from .models import AttributeOccurrence, AttributeCategory, AttributeChoice, AttributeSite, Metric, MetricType, Occurrence, Site, File
 
 class OccurrencesInline(admin.TabularInline):
     model = Occurrence
-    fields = ('name', 'latitude', 'longitude', 'location')
+    fields = ('name', 'latitude', 'longitude', 'position')
     show_change_link = True
     extra = 1
     formset = AtLeastOneFormSet
-    form = OccurrenceForm
+    form = OccurrenceFormAdmin
     formfield_overrides = {
         models.PointField: {'widget': forms.HiddenInput()},
     }
@@ -81,13 +81,13 @@ class OccurrenceAdmin(LeafletGeoAdmin):
     list_filter = ('added_by',)
     search_fields = ['name', 'acronym', 'site__name',]
     list_per_page = 50
-    form = OccurrenceForm
+    form = OccurrenceFormAdmin
     fieldsets = (
         (None, {
             'fields': ('name', 'acronym', 'toponym', 'owner', 'altitude', 'site')
         }),
         ('Location', {
-            'fields': ('location', tuple(['latitude', 'longitude']), 'bounding_polygon')
+            'fields': ('position', tuple(['latitude', 'longitude']), 'bounding_polygon')
         }),
         (None, {
             'fields': ('added_by',)
@@ -97,9 +97,9 @@ class OccurrenceAdmin(LeafletGeoAdmin):
 
 @admin.register(File)
 class FileAdmin(admin.ModelAdmin):
-    list_display = ('name', 'type', 'creation_date', 'added_by')
+    list_display = ('name', 'type', 'upload_date', 'added_by')
     list_filter = ('type', 'added_by',)
-    search_fields = ['name', 'creation_date']
+    search_fields = ['name', 'upload_date']
     list_per_page = 50
     fieldsets = (
         (None, {

@@ -1,6 +1,7 @@
 from django.contrib.gis.db import models
 from django.conf import settings
 from django.forms import ValidationError
+from django.urls import reverse
 from django_countries.fields import CountryField
 
 # Create your models here.
@@ -16,6 +17,10 @@ class Site(models.Model):
 
     def __str__(self):  
         return self.name
+
+    def get_absolute_url(self):
+        """Returns the url to access a particular archaeological site."""
+        return reverse('update_site', args=[str(self.id)])
 
     def clean(self):
         # Checks if at least one of the spatial fields is filled in (Model Level)
@@ -45,7 +50,7 @@ class Occurrence(models.Model):
     toponym = models.CharField(max_length=254, blank=True)
     owner = models.CharField(max_length=254, blank=True)
     altitude = models.IntegerField(null=True, blank=True)
-    location = models.PointField(null=True, blank=True)
+    position = models.PointField(null=True, blank=True)
     bounding_polygon = models.PolygonField(null=True, blank=True)
     site = models.ForeignKey(Site, on_delete=models.RESTRICT)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
@@ -55,8 +60,12 @@ class Occurrence(models.Model):
 
     def clean(self):
         # Checks if at least one of the spatial fields is filled in (Model Level)
-        if not self.location and not self.bounding_polygon:
+        if not self.position and not self.bounding_polygon:
             raise ValidationError('At least one of the spatial fields (point or polygon) is required.')
+
+    def get_absolute_url(self):
+        """Returns the url to access a particular occurrence."""
+        return reverse('update_occurrence', args=[str(self.id)])
 
     class Meta:
         db_table = 'occurrence'
@@ -66,9 +75,9 @@ class Occurrence(models.Model):
         # Checks if at least one of the spatial fields is filled in (DB Level)
         constraints = [
             models.CheckConstraint(
-                name="Occurrence_location_and_or_bounding_polygon",
+                name="Occurrence_position_and_or_bounding_polygon",
                 check=(
-                    models.Q(location__isnull=False)
+                    models.Q(position__isnull=False)
                     | models.Q(bounding_polygon__isnull=False)
                 ),
             )
@@ -79,7 +88,7 @@ class File(models.Model):
     name = models.CharField(max_length=254, blank=True)
     file = models.FileField()
     type = models.CharField(max_length=254) # check data type. Maybe list of types could be a table
-    creation_date = models.DateField(auto_now_add=True)
+    upload_date = models.DateField(auto_now_add=True)
     site = models.ManyToManyField(Site, blank=True)
     occurrence = models.ManyToManyField(Occurrence, blank=True)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
@@ -91,7 +100,7 @@ class File(models.Model):
         db_table = 'file'
         verbose_name = "File"
         verbose_name_plural = "Files"
-        ordering = ['-creation_date']
+        ordering = ['-upload_date']
 
 class MetricType(models.Model):
     """Model representing a type of metric (e.g. area, width, height)."""

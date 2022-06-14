@@ -5,9 +5,10 @@
 
 {% block content %}
 
-{{ form.media }}
-{% leaflet_js plugins="forms" %}
 {% leaflet_css plugins="forms" %}
+{% leaflet_js plugins="forms" %}
+
+{{ form.media }}
 
 <div class="container">
     <div class="jumbotron">
@@ -15,9 +16,11 @@
     </div>
     <form action="" method="post">
         {% csrf_token %}
-        {{ form|crispy }}
-        <input type="submit" value="Add" class="btn btn-success">
-    <form>
+        {{ site|crispy }}
+        <h2>{% trans "Occurrence" %}</h2>
+        {{ occurrence|crispy }}
+        <input type="submit" value={% trans "Add" %} class="btn btn-success"/>
+    </form>
 </div>
-        
+<br>  
 {% endblock %}
