@@ -1,3 +1,4 @@
+from sys import prefix
 from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import redirect, render
@@ -30,8 +31,8 @@ def list_sites(request):
 
 @login_required(login_url='login')
 def create_site(request):
-    formSite = SiteForm(request.POST or None)
-    formOccurrence = OccurrenceForm(request.POST or None)
+    formSite = SiteForm(request.POST or None, prefix='site')
+    formOccurrence = OccurrenceForm(request.POST or None, prefix='occurrence')
     context = {
             'site': formSite,
             'occurrence': formOccurrence,
