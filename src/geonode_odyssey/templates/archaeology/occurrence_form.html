@@ -1,0 +1,39 @@
+{% extends "geonode_base.html" %}
+{% load leaflet_tags %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block body %}
+
+{% leaflet_css plugins="forms" %}
+{% leaflet_js plugins="forms" %}
+
+{{ form.media }}
+
+<div class="container">
+    <div class="jumbotron">
+        <h1>
+            {% if form.instance.pk == None %}
+                {% trans "Add New " %}
+            {% endif %}
+            {% trans "Occurrence" %}</h1>
+        <h4>
+            {% trans "In " %}
+            {% if occurrence.site == None %}
+            <a class="text-secondary" href="{% url 'update_site' site.id %}">{{site}}</a>
+            {% else %}
+            <a class="text-secondary" href="{% url 'update_site' occurrence.site.id %}">{{occurrence.site}}</a>
+            {% endif %}
+        </h4>
+    </div>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" value={% trans "Submit" %} class="btn btn-success"/>
+        {% if form.instance.pk != None %}
+        <a class="btn btn-danger" href="{% url 'delete_occurrence' occurrence.id %}">{% trans "Delete" %}</a>
+        {% endif %}
+    </form>
+</div>
+<br>
+{% endblock %}

@@ -1,0 +1,37 @@
+<dataStore>
+  <id>DataStoreInfoImpl--5d91988e:1823a7f63bb:-8000</id>
+  <name>geonode_odyssey_data</name>
+  <type>PostGIS</type>
+  <enabled>true</enabled>
+  <workspace>
+    <id>WorkspaceInfoImpl-78ff667e:12476299803:-7ffd</id>
+  </workspace>
+  <connectionParameters>
+    <entry key="Evictor run periodicity">300</entry>
+    <entry key="Estimated extends">true</entry>
+    <entry key="fetch size">100000</entry>
+    <entry key="encode functions">false</entry>
+    <entry key="Expose primary keys">true</entry>
+    <entry key="validate connections">true</entry>
+    <entry key="Support on the fly geometry simplification">false</entry>
+    <entry key="Connection timeout">10</entry>
+    <entry key="create database">false</entry>
+    <entry key="Batch insert size">30</entry>
+    <entry key="preparedStatements">true</entry>
+    <entry key="database">geonode_odyssey_data</entry>
+    <entry key="port">5432</entry>
+    <entry key="passwd">crypt1:1jr2Hat2ztT/g7Nag0RoDA==</entry>
+    <entry key="min connections">10</entry>
+    <entry key="Loose bbox">true</entry>
+    <entry key="host">localhost</entry>
+    <entry key="dbtype">postgis</entry>
+    <entry key="namespace">http://www.geonode.org/</entry>
+    <entry key="max connections">100</entry>
+    <entry key="Evictor tests per run">3</entry>
+    <entry key="Test while idle">true</entry>
+    <entry key="user">geonode_odyssey_data</entry>
+    <entry key="Max connection idle time">300</entry>
+  </connectionParameters>
+  <__default>false</__default>
+  <dateCreated>2022-07-26 12:33:23.384 UTC</dateCreated>
+</dataStore>

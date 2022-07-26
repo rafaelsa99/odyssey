@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block extra_head %}
+      <link href="{{ STATIC_URL }}css/site_base.css" rel="stylesheet"/>
+{% endblock %}
+{% block extra_tab %}
+<li>
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+         role="button" aria-haspopup="true">
+         Archaeology<i class="fa fa-angle-down fa-lg"></i>
+      </a>
+      <ul class="dropdown-menu">
+            <li><a href="{% url 'list_sites' %}">Sites</a></li>
+            <li class="divider" role="separator"></li>
+            <li><a href="{% url 'addsite' %}">Create Site</a></li>
+      </ul>
+  </li>
+{% endblock %}

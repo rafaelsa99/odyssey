@@ -1,0 +1,19 @@
+<layer>
+  <name>Mamoas_Arcos</name>
+  <id>LayerInfoImpl--11523451:1823ab9c1f4:-7edb</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--11523451:1823ab9c1f4:-7ed7</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--11523451:1823ab9c1f4:-7edd</id>
+  </resource>
+  <queryable>true</queryable>
+  <opaque>false</opaque>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2022-07-26 13:38:43.585 UTC</dateCreated>
+  <dateModified>2022-07-26 13:38:47.679 UTC</dateModified>
+</layer>

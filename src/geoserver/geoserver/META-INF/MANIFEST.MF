@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Application-Name: 
+Implementation-Title: Web Application (WAR)
+Implementation-Version: 2.19.6
+Build-Timestamp: 05-Jul-2022 11:24
+Archiver-Version: Plexus Archiver
+Built-By: jenkins
+Specification-Vendor: Open Source Geospatial Foundation
+Specification-Title: Web Application (WAR)
+Implementation-Vendor-Id: org.opengeo
+GeoServerModule: core
+Project-Version: 2.19.6
+Implementation-Vendor: Open Source Geospatial Foundation
+Iteration-Name: 
+Git-Revision: a13b3ee0276bcf24735efa1520ae658ac1b466fd
+Created-By: Apache Maven 3.6.3
+Build-Jdk: 1.8.0_221
+Specification-Version: 2.19.6
+
