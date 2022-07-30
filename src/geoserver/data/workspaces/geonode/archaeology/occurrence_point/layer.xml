@@ -1,0 +1,17 @@
+<layer>
+  <name>occurrence_point</name>
+  <id>LayerInfoImpl--be02ae1:1824ae90817:-7de3</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--11523451:1823ab9c1f4:-7ffd</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--be02ae1:1824ae90817:-7de4</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2022-07-30 00:50:10.956 UTC</dateCreated>
+  <dateModified>2022-07-30 00:56:56.361 UTC</dateModified>
+</layer>

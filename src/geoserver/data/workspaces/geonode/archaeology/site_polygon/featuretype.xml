@@ -1,0 +1,97 @@
+<featureType>
+  <id>FeatureTypeInfoImpl--be02ae1:1824ae90817:-7e21</id>
+  <name>site_polygon</name>
+  <nativeName>site_polygon</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl-78ff667e:12476299803:-7ffe</id>
+  </namespace>
+  <title>Archaeological Sites (polygon)</title>
+  <abstract>Archaeological Sites represented by polygons.</abstract>
+  <keywords>
+    <string>features</string>
+    <string>site_polygon</string>
+  </keywords>
+  <metadataLinks>
+    <metadataLink>
+      <type>other</type>
+      <metadataType>other</metadataType>
+      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=6c19bf62-e0d7-4d82-9a20-6310461c490a&amp;outputschema=urn%3Aoasis%3Anames%3Atc%3Aebxml-regrep%3Axsd%3Arim%3A3.0&amp;elementsetname=full</content>
+    </metadataLink>
+    <metadataLink>
+      <type>other</type>
+      <metadataType>other</metadataType>
+      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=6c19bf62-e0d7-4d82-9a20-6310461c490a&amp;outputschema=http%3A%2F%2Fwww.w3.org%2F2005%2FAtom&amp;elementsetname=full</content>
+    </metadataLink>
+    <metadataLink>
+      <type>other</type>
+      <metadataType>other</metadataType>
+      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=6c19bf62-e0d7-4d82-9a20-6310461c490a&amp;outputschema=http%3A%2F%2Fgcmd.gsfc.nasa.gov%2FAboutus%2Fxml%2Fdif%2F&amp;elementsetname=full</content>
+    </metadataLink>
+    <metadataLink>
+      <type>other</type>
+      <metadataType>other</metadataType>
+      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=6c19bf62-e0d7-4d82-9a20-6310461c490a&amp;outputschema=http%3A%2F%2Fwww.opengis.net%2Fcat%2Fcsw%2F2.0.2&amp;elementsetname=full</content>
+    </metadataLink>
+    <metadataLink>
+      <type>text/xml</type>
+      <metadataType>FGDC</metadataType>
+      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=6c19bf62-e0d7-4d82-9a20-6310461c490a&amp;outputschema=http%3A%2F%2Fwww.opengis.net%2Fcat%2Fcsw%2Fcsdgm&amp;elementsetname=full</content>
+    </metadataLink>
+    <metadataLink>
+      <type>other</type>
+      <metadataType>other</metadataType>
+      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=6c19bf62-e0d7-4d82-9a20-6310461c490a&amp;outputschema=http%3A%2F%2Fwww.isotc211.org%2F2005%2Fgmd&amp;elementsetname=full</content>
+    </metadataLink>
+    <metadataLink>
+      <type>other</type>
+      <metadataType>other</metadataType>
+      <content>http://localhost:8000/showmetadata/xsl/13</content>
+    </metadataLink>
+  </metadataLinks>
+  <srs>EPSG:4326</srs>
+  <nativeBoundingBox>
+    <minx>-9.580078</minx>
+    <maxx>-8.371582</maxx>
+    <miny>38.119</miny>
+    <maxy>40.932361</maxy>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-9.580078</minx>
+    <maxx>-8.371582</maxx>
+    <miny>38.119</miny>
+    <maxy>40.932361</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <advertised>true</advertised>
+  <metadata>
+    <entry key="JDBC_VIRTUAL_TABLE">
+      <virtualTable>
+        <name>site_polygon</name>
+        <sql>select site.id, site.name, site.national_site_code, site.country_iso, site.parish, site.surrounding_polygon, people_profile.username as added_by, string_agg(occurrence.designation, &apos;, &apos;) as occurrences, attributes.values as attributes from site left join occurrence on site.id = occurrence.site_id left join (select attribute_site.site_id, array_to_string(array_agg(attribute_category.name  || &apos;: &apos; || attribute_choice.value), &apos;, &apos;) as values from attribute_site, attribute_category, attribute_choice where attribute_site.value_id = attribute_choice.id and attribute_choice.category_id = attribute_category.id group by attribute_site.site_id) as attributes on attributes.site_id = site.id, people_profile where site.added_by_id = people_profile.id group by site.id, attributes.values, people_profile.username
+</sql>
+        <escapeSql>false</escapeSql>
+        <geometry>
+          <name>surrounding_polygon</name>
+          <type>Polygon</type>
+          <srid>-1</srid>
+        </geometry>
+      </virtualTable>
+    </entry>
+    <entry key="cachingEnabled">false</entry>
+  </metadata>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl--54ab80b:1823b340422:-8000</id>
+  </store>
+  <serviceConfiguration>false</serviceConfiguration>
+  <simpleConversionEnabled>false</simpleConversionEnabled>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <padWithZeros>false</padWithZeros>
+  <forcedDecimal>false</forcedDecimal>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <skipNumberMatched>false</skipNumberMatched>
+  <circularArcPresent>false</circularArcPresent>
+  <encodeMeasures>false</encodeMeasures>
+</featureType>

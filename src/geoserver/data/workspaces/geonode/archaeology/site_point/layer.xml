@@ -1,0 +1,16 @@
+<layer>
+  <name>site_point</name>
+  <id>LayerInfoImpl--be02ae1:1824ae90817:-7e23</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--11523451:1823ab9c1f4:-7ffd</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--be02ae1:1824ae90817:-7e24</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2022-07-30 00:20:36.363 UTC</dateCreated>
+</layer>

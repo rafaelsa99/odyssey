@@ -1,0 +1,16 @@
+<layer>
+  <name>site_polygon</name>
+  <id>LayerInfoImpl--be02ae1:1824ae90817:-7e20</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--be02ae1:1824ae90817:-7f72</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--be02ae1:1824ae90817:-7e21</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2022-07-30 00:21:30.866 UTC</dateCreated>
+</layer>

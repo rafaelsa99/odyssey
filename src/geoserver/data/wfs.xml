@@ -33,7 +33,10 @@ data.</abstrct>
   <schemaBaseURL>http://schemas.opengis.net</schemaBaseURL>
   <verbose>false</verbose>
   <metadata>
+    <entry key="inspire.language">eng</entry>
     <entry key="SHAPE-ZIP_DEFAULT_PRJ_IS_ESRI">false</entry>
+    <entry key="inspire.spatialDatasetIdentifier"></entry>
+    <entry key="inspire.createExtendedCapabilities">false</entry>
   </metadata>
   <gml>
     <entry>
@@ -44,24 +47,25 @@ data.</abstrct>
       </gml>
     </entry>
     <entry>
-      <version>V_10</version>
-      <gml>
-        <srsNameStyle>XML</srsNameStyle>
-        <overrideGMLAttributes>true</overrideGMLAttributes>
-      </gml>
-    </entry>
-    <entry>
       <version>V_11</version>
       <gml>
         <srsNameStyle>URN</srsNameStyle>
         <overrideGMLAttributes>false</overrideGMLAttributes>
       </gml>
     </entry>
+    <entry>
+      <version>V_10</version>
+      <gml>
+        <srsNameStyle>XML</srsNameStyle>
+        <overrideGMLAttributes>true</overrideGMLAttributes>
+      </gml>
+    </entry>
   </gml>
   <serviceLevel>COMPLETE</serviceLevel>
   <maxFeatures>1000000</maxFeatures>
   <featureBounding>false</featureBounding>
-  <canonicalSchemaLocation>false</canonicalSchemaLocation>
-  <encodeFeatureMember>false</encodeFeatureMember>
+  <canonicalSchemaLocation>true</canonicalSchemaLocation>
+  <encodeFeatureMember>true</encodeFeatureMember>
   <hitsIgnoreMaxFeatures>false</hitsIgnoreMaxFeatures>
+  <includeWFSRequestDumpFile>false</includeWFSRequestDumpFile>
 </wfs>
