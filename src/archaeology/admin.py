@@ -5,7 +5,7 @@ from leaflet.admin import LeafletGeoAdmin
 from .forms import AtLeastOneFormSet, OccurrenceFormAdmin, SiteFormAdmin
 
 # Register your models here.
-from .models import AttributeOccurrence, AttributeCategory, AttributeChoice, AttributeSite, Metric, MetricType, Occurrence, Site, DocumentOccurrence, DocumentSite
+from .models import AttributeCategory, AttributeChoice, Metric, MetricType, Occurrence, Site
 
 class OccurrencesInline(admin.TabularInline):
     model = Occurrence
@@ -25,28 +25,30 @@ class MetricsInline(admin.TabularInline):
     extra = 0
 
 class AttributesOccurrenceInline(admin.TabularInline):
-    model = AttributeOccurrence
-    fields = ('value',)
+    model = Occurrence.attribute.through
     show_change_link = True
     extra = 0
+    verbose_name = "Attribute"
     verbose_name_plural = "Attributes"
 
 class AttributesSiteInline(admin.TabularInline):
-    model = AttributeSite
-    fields = ('value',)
+    model = Site.attribute.through
     show_change_link = True
     extra = 0
+    verbose_name = "Attribute"
     verbose_name_plural = "Attributes"
 
 class DocumentsInlineSite(admin.TabularInline):
-    model = DocumentSite
+    model = Site.document.through
     verbose_name = "Related Document"
+    verbose_name_plural = "Related Documents"
     show_change_link = True
     extra = 0
 
 class DocumentsInlineOccurrence(admin.TabularInline):
-    model = DocumentOccurrence
+    model = Occurrence.document.through
     verbose_name = "Related Document"
+    verbose_name_plural = "Related Documents"
     show_change_link = True
     extra = 0
 
@@ -120,31 +122,3 @@ class AttributeChoicesAdmin(admin.ModelAdmin):
     list_filter = ('category',)
     list_per_page = 50
     search_fields = ['value', 'category__name']
-
-@admin.register(AttributeOccurrence)
-class AttributeOccurrenceAdmin(admin.ModelAdmin):
-    list_display = ('value', 'occurrence')
-    list_filter = ('value',)
-    list_per_page = 50
-    search_fields = ['value', 'occurrence__name']
-
-@admin.register(AttributeSite)
-class AttributeSiteAdmin(admin.ModelAdmin):
-    list_display = ('value', 'site')
-    list_filter = ('value',)
-    list_per_page = 50
-    search_fields = ['value', 'site__name']
-
-@admin.register(DocumentOccurrence)
-class DocumentOccurrenceAdmin(admin.ModelAdmin):
-    list_display = ('document', 'occurrence')
-    list_filter = ('document',)
-    list_per_page = 50
-    search_fields = ['document', 'occurrence__name']
-
-@admin.register(DocumentSite)
-class DocumentSiteAdmin(admin.ModelAdmin):
-    list_display = ('document', 'site')
-    list_filter = ('document',)
-    list_per_page = 50
-    search_fields = ['document', 'site__name']

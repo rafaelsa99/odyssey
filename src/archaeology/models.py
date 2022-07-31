@@ -7,6 +7,33 @@ from django_countries.fields import CountryField
 from geonode.documents.models import Document
 
 # Create your models here.
+class AttributeCategory(models.Model):
+    """Model representing a category for an attribute (e.g. chronology, geological context)."""
+    name = models.CharField(max_length=254)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        db_table = 'attribute_category'
+        verbose_name = "Attribute Category"
+        verbose_name_plural = "Attribute Categories"
+        ordering = ['name']
+
+class AttributeChoice(models.Model):
+    """Model to represent a choice option for an attribute category (e.g. for Chronology: neolithic, full bronze)."""
+    category = models.ForeignKey(AttributeCategory, on_delete=models.CASCADE)
+    value = models.CharField(max_length=254)
+
+    def __str__(self):
+        return '{0}: {1}'.format(self.category, self.value)
+
+    class Meta:
+        db_table = 'attribute_choice'
+        verbose_name = "Attribute Choice"
+        verbose_name_plural = "Attribute Choices"
+        ordering = ['category', 'value']
+
 class Site(models.Model):
     """Model representing an archaeological site."""
     name = models.CharField(max_length=254)
@@ -16,6 +43,8 @@ class Site(models.Model):
     location = models.PointField(null=True, blank=True)
     surrounding_polygon = models.PolygonField(null=True, blank=True)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
+    document = models.ManyToManyField(AttributeChoice, blank=True)
+    attribute = models.ManyToManyField(Document, blank=True)
 
     def __str__(self):  
         return self.name
@@ -56,6 +85,8 @@ class Occurrence(models.Model):
     bounding_polygon = models.PolygonField(null=True, blank=True)
     site = models.ForeignKey(Site, on_delete=models.PROTECT)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
+    document = models.ManyToManyField(AttributeChoice, blank=True)
+    attribute = models.ManyToManyField(Document, blank=True)
 
     def __str__(self):
         return self.designation
@@ -113,84 +144,3 @@ class Metric(models.Model):
         verbose_name = "Metric"
         verbose_name_plural = "Metrics"
         ordering = ['type']
-
-class AttributeCategory(models.Model):
-    """Model representing a category for an attribute (e.g. chronology, geological context)."""
-    name = models.CharField(max_length=254)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        db_table = 'attribute_category'
-        verbose_name = "Attribute Category"
-        verbose_name_plural = "Attribute Categories"
-        ordering = ['name']
-
-class AttributeChoice(models.Model):
-    """Model to represent a choice option for an attribute category (e.g. for Chronology: neolithic, full bronze)."""
-    category = models.ForeignKey(AttributeCategory, on_delete=models.CASCADE)
-    value = models.CharField(max_length=254)
-
-    def __str__(self):
-        return '{0}: {1}'.format(self.category, self.value)
-
-    class Meta:
-        db_table = 'attribute_choice'
-        verbose_name = "Attribute Choice"
-        verbose_name_plural = "Attribute Choices"
-        ordering = ['category', 'value']
-
-class AttributeOccurrence(models.Model):
-    """Model representing an attribute of an occurrence."""
-    value = models.ForeignKey(AttributeChoice, on_delete=models.PROTECT)
-    occurrence = models.ForeignKey(Occurrence, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return '{0} ({1})'.format(self.value, self.occurrence)
-
-    class Meta:
-        db_table = 'attribute_occurrence'
-        verbose_name = "Occurrence Attribute"
-        verbose_name_plural = "Occurrence Attributes"
-        ordering = ['value__category', 'value']
-
-class AttributeSite(models.Model):
-    """Model representing an attribute of a site."""
-    value = models.ForeignKey(AttributeChoice, on_delete=models.PROTECT)
-    site = models.ForeignKey(Site, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return '{0} ({1})'.format(self.value, self.site)
-
-    class Meta:
-        db_table = 'attribute_site'
-        verbose_name = "Site Attribute"
-        verbose_name_plural = "Site Attributes"
-        ordering = ['value__category', 'value']
-
-class DocumentOccurrence(models.Model):
-    """Model representing a document associated to an occurrence."""
-    document = models.ForeignKey(Document, on_delete=models.PROTECT)
-    occurrence = models.ForeignKey(Occurrence, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return '{0} ({1})'.format(self.document, self.occurrence)
-
-    class Meta:
-        db_table = 'document_occurrence'
-        verbose_name = "Occurrence Document"
-        verbose_name_plural = "Occurrence Documents"
-
-class DocumentSite(models.Model):
-    """Model representing a document associated to a site."""
-    document = models.ForeignKey(Document, on_delete=models.PROTECT)
-    site = models.ForeignKey(Site, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return '{0} ({1})'.format(self.document, self.site)
-
-    class Meta:
-        db_table = 'document_site'
-        verbose_name = "Site Document"
-        verbose_name_plural = "Site Documents"
