@@ -4,6 +4,7 @@ from django.conf import settings
 from django.forms import ValidationError
 from django.urls import reverse
 from django_countries.fields import CountryField
+from geonode.documents.models import Document
 
 # Create your models here.
 class Site(models.Model):
@@ -84,25 +85,6 @@ class Occurrence(models.Model):
             )
         ]
 
-class File(models.Model):
-    """Model representing a file (e.g. LiDAR, photo, video)."""
-    name = models.CharField(max_length=254, blank=True)
-    file = models.FileField()
-    type = models.CharField(max_length=254) # check data type. Maybe list of types could be a table
-    upload_date = models.DateField(auto_now_add=True)
-    site = models.ManyToManyField(Site, blank=True)
-    occurrence = models.ManyToManyField(Occurrence, blank=True)
-    added_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
-
-    def __str__(self):
-        return self.file
-
-    class Meta:
-        db_table = 'file'
-        verbose_name = "File"
-        verbose_name_plural = "Files"
-        ordering = ['-upload_date']
-
 class MetricType(models.Model):
     """Model representing a type of metric (e.g. area, width, height)."""
     name = models.CharField(max_length=254)
@@ -169,7 +151,7 @@ class AttributeOccurrence(models.Model):
 
     class Meta:
         db_table = 'attribute_occurrence'
-        verbose_name = "Attribute"
+        verbose_name = "Occurrence Attribute"
         verbose_name_plural = "Occurrence Attributes"
         ordering = ['value__category', 'value']
 
@@ -183,6 +165,32 @@ class AttributeSite(models.Model):
 
     class Meta:
         db_table = 'attribute_site'
-        verbose_name = "Attribute"
+        verbose_name = "Site Attribute"
         verbose_name_plural = "Site Attributes"
         ordering = ['value__category', 'value']
+
+class DocumentOccurrence(models.Model):
+    """Model representing a document associated to an occurrence."""
+    document = models.ForeignKey(Document, on_delete=models.PROTECT)
+    occurrence = models.ForeignKey(Occurrence, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '{0} ({1})'.format(self.document, self.occurrence)
+
+    class Meta:
+        db_table = 'document_occurrence'
+        verbose_name = "Occurrence Document"
+        verbose_name_plural = "Occurrence Documents"
+
+class DocumentSite(models.Model):
+    """Model representing a document associated to a site."""
+    document = models.ForeignKey(Document, on_delete=models.PROTECT)
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '{0} ({1})'.format(self.document, self.site)
+
+    class Meta:
+        db_table = 'document_site'
+        verbose_name = "Site Document"
+        verbose_name_plural = "Site Documents"

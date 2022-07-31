@@ -5,7 +5,7 @@ from leaflet.admin import LeafletGeoAdmin
 from .forms import AtLeastOneFormSet, OccurrenceFormAdmin, SiteFormAdmin
 
 # Register your models here.
-from .models import AttributeOccurrence, AttributeCategory, AttributeChoice, AttributeSite, Metric, MetricType, Occurrence, Site, File
+from .models import AttributeOccurrence, AttributeCategory, AttributeChoice, AttributeSite, Metric, MetricType, Occurrence, Site, DocumentOccurrence, DocumentSite
 
 class OccurrencesInline(admin.TabularInline):
     model = Occurrence
@@ -38,15 +38,15 @@ class AttributesSiteInline(admin.TabularInline):
     extra = 0
     verbose_name_plural = "Attributes"
 
-class FilesInlineSite(admin.TabularInline):
-    model = File.site.through
-    verbose_name = "Related File"
+class DocumentsInlineSite(admin.TabularInline):
+    model = DocumentSite
+    verbose_name = "Related Document"
     show_change_link = True
     extra = 0
 
-class FilesInlineOccurrence(admin.TabularInline):
-    model = File.occurrence.through
-    verbose_name = "Related File"
+class DocumentsInlineOccurrence(admin.TabularInline):
+    model = DocumentOccurrence
+    verbose_name = "Related Document"
     show_change_link = True
     extra = 0
 
@@ -72,7 +72,7 @@ class SiteAdmin(LeafletGeoAdmin):
             'fields': ('added_by',)
         }),
     )
-    inlines = [OccurrencesInline, AttributesSiteInline, FilesInlineSite]
+    inlines = [OccurrencesInline, AttributesSiteInline, DocumentsInlineSite]
     form = SiteFormAdmin
 
 @admin.register(Occurrence)
@@ -93,25 +93,7 @@ class OccurrenceAdmin(LeafletGeoAdmin):
             'fields': ('added_by',)
         }),
     )
-    inlines = [AttributesOccurrenceInline, MetricsInline, FilesInlineOccurrence]
-
-@admin.register(File)
-class FileAdmin(admin.ModelAdmin):
-    list_display = ('name', 'type', 'upload_date', 'added_by')
-    list_filter = ('type', 'added_by',)
-    search_fields = ['name', 'upload_date']
-    list_per_page = 50
-    fieldsets = (
-        (None, {
-            'fields': ('name', 'type', 'file')
-        }),
-        ('Associations', {
-            'fields': ('site', 'occurrence')
-        }),
-        (None, {
-            'fields': ('added_by',)
-        }),
-    )   
+    inlines = [AttributesOccurrenceInline, MetricsInline, DocumentsInlineOccurrence]  
 
 @admin.register(MetricType)
 class MetricTypeAdmin(admin.ModelAdmin):
@@ -152,3 +134,17 @@ class AttributeSiteAdmin(admin.ModelAdmin):
     list_filter = ('value',)
     list_per_page = 50
     search_fields = ['value', 'site__name']
+
+@admin.register(DocumentOccurrence)
+class DocumentOccurrenceAdmin(admin.ModelAdmin):
+    list_display = ('document', 'occurrence')
+    list_filter = ('document',)
+    list_per_page = 50
+    search_fields = ['document', 'occurrence__name']
+
+@admin.register(DocumentSite)
+class DocumentSiteAdmin(admin.ModelAdmin):
+    list_display = ('document', 'site')
+    list_filter = ('document',)
+    list_per_page = 50
+    search_fields = ['document', 'site__name']
