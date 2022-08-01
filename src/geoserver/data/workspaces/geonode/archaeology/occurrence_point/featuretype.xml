@@ -50,16 +50,17 @@
   </metadataLinks>
   <srs>EPSG:4326</srs>
   <nativeBoundingBox>
-    <minx>-8.723145</minx>
-    <maxx>-8.4375</maxx>
-    <miny>39.535398</miny>
-    <maxy>40.932097</maxy>
+    <minx>-180.0</minx>
+    <maxx>180.0</maxx>
+    <miny>-90.0</miny>
+    <maxy>90.0</maxy>
+    <crs>EPSG:4326</crs>
   </nativeBoundingBox>
   <latLonBoundingBox>
-    <minx>-8.723145</minx>
-    <maxx>-8.4375</maxx>
-    <miny>39.535398</miny>
-    <maxy>40.932097</maxy>
+    <minx>-180.0</minx>
+    <maxx>180.0</maxx>
+    <miny>-90.0</miny>
+    <maxy>90.0</maxy>
     <crs>EPSG:4326</crs>
   </latLonBoundingBox>
   <projectionPolicy>FORCE_DECLARED</projectionPolicy>
@@ -69,12 +70,12 @@
     <entry key="JDBC_VIRTUAL_TABLE">
       <virtualTable>
         <name>occurrence_point</name>
-        <sql>select occurrence.id, occurrence.designation, occurrence.acronym, occurrence.toponym, site.name as site_name, occurrence.owner, occurrence.altitude, occurrence.position, people_profile.username as added_by, string_agg(metric_values.automatic_values, &apos;, &apos;) as automatic_metrics, string_agg(metric_values.confirmed_values, &apos;, &apos;) as confirmed_metrics, attributes.values as attributes from occurrence left join (select attribute_occurrence.occurrence_id, array_to_string(array_agg(attribute_category.name  || &apos;: &apos; || attribute_choice.value), &apos;, &apos;) as values from attribute_occurrence, attribute_category, attribute_choice where attribute_occurrence.value_id = attribute_choice.id and attribute_choice.category_id = attribute_category.id group by attribute_occurrence.occurrence_id) as attributes on attributes.occurrence_id = occurrence.id left join (select metric.occurrence_id, array_to_string(array_agg(metric_type.name  || &apos;=&apos; || metric.auto_value), &apos;, &apos;) as automatic_values, array_to_string(array_agg(metric_type.name  || &apos;=&apos; || metric.confirmed_value), &apos;, &apos;) as confirmed_values from metric, metric_type where metric.type_id = metric_type.id group by metric.occurrence_id) as metric_values on metric_values.occurrence_id = occurrence.id, people_profile, site where occurrence.added_by_id = people_profile.id and site.id = occurrence.site_id group by occurrence.id, attributes.values, people_profile.username, site.name
+        <sql>select occurrence.id, occurrence.designation, occurrence.acronym, occurrence.toponym, site.name as site_name, occurrence.owner, occurrence.altitude, occurrence.position, people_profile.username as added_by, string_agg(metric_values.automatic_values, &apos;, &apos;) as automatic_metrics, string_agg(metric_values.confirmed_values, &apos;, &apos;) as confirmed_metrics, attributes.values as attributes from occurrence left join (select occurrence_attribute.occurrence_id, array_to_string(array_agg(attribute_category.name  || &apos;: &apos; || attribute_choice.value), &apos;, &apos;) as values from occurrence_attribute, attribute_category, attribute_choice where occurrence_attribute.attributechoice_id = attribute_choice.id and attribute_choice.category_id = attribute_category.id group by occurrence_attribute.occurrence_id) as attributes on attributes.occurrence_id = occurrence.id left join (select metric.occurrence_id, array_to_string(array_agg(metric_type.name  || &apos;=&apos; || metric.auto_value), &apos;, &apos;) as automatic_values, array_to_string(array_agg(metric_type.name  || &apos;=&apos; || metric.confirmed_value), &apos;, &apos;) as confirmed_values from metric, metric_type where metric.type_id = metric_type.id group by metric.occurrence_id) as metric_values on metric_values.occurrence_id = occurrence.id, people_profile, site where occurrence.added_by_id = people_profile.id and site.id = occurrence.site_id group by occurrence.id, attributes.values, people_profile.username, site.name
 </sql>
         <escapeSql>false</escapeSql>
         <geometry>
           <name>position</name>
-          <type>Geometry</type>
+          <type>Point</type>
           <srid>-1</srid>
         </geometry>
       </virtualTable>
