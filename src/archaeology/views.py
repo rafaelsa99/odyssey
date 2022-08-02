@@ -106,6 +106,7 @@ def create_occurrence(request, pk):
         occurrence.added_by = request.user
         occurrence.site = site
         occurrence.save()
+        form.save_m2m()
         messages.success(request, "Occurrence created successfully.")
         execute_from_command_line(["../manage_dev.sh", "updatelayers", "-s", "archaeology"])
         return redirect(occurrence.get_absolute_url())
