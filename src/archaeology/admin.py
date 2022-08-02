@@ -25,28 +25,28 @@ class MetricsInline(admin.TabularInline):
     extra = 0
 
 class AttributesOccurrenceInline(admin.TabularInline):
-    model = Occurrence.attribute.through
+    model = Occurrence.attribute_occurrence.through
     show_change_link = True
     extra = 0
     verbose_name = "Attribute"
     verbose_name_plural = "Attributes"
 
 class AttributesSiteInline(admin.TabularInline):
-    model = Site.attribute.through
+    model = Site.attribute_site.through
     show_change_link = True
     extra = 0
     verbose_name = "Attribute"
     verbose_name_plural = "Attributes"
 
 class DocumentsInlineSite(admin.TabularInline):
-    model = Site.document.through
+    model = Site.document_site.through
     verbose_name = "Related Document"
     verbose_name_plural = "Related Documents"
     show_change_link = True
     extra = 0
 
 class DocumentsInlineOccurrence(admin.TabularInline):
-    model = Occurrence.document.through
+    model = Occurrence.document_occurrence.through
     verbose_name = "Related Document"
     verbose_name_plural = "Related Documents"
     show_change_link = True

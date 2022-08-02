@@ -20,13 +20,13 @@
 
 from django.conf.urls import url, include
 from django.views.generic import TemplateView
-
+from django.urls import include, path
 from geonode.urls import urlpatterns
 from geonode.base import register_url_event
 
 urlpatterns += [
     url(r'^archaeology/', include('archaeology.urls')),
-
+    path("select2/", include("django_select2.urls")),
 ]
 
 homepage = register_url_event()(TemplateView.as_view(template_name='site_index.html'))

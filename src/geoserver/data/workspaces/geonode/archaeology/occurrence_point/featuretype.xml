@@ -1,12 +1,12 @@
 <featureType>
-  <id>FeatureTypeInfoImpl--be02ae1:1824ae90817:-7de4</id>
+  <id>FeatureTypeInfoImpl--2c04627b:1825a33c53c:-7fa6</id>
   <name>occurrence_point</name>
   <nativeName>occurrence_point</nativeName>
   <namespace>
     <id>NamespaceInfoImpl-78ff667e:12476299803:-7ffe</id>
   </namespace>
   <title>Archaeological Occurrences (point)</title>
-  <abstract>Archaeological Occurrences represented by points.</abstract>
+  <abstract>Occurrences inside the Archaeological Sites represented by points.</abstract>
   <keywords>
     <string>features</string>
     <string>occurrence_point</string>
@@ -15,52 +15,51 @@
     <metadataLink>
       <type>other</type>
       <metadataType>other</metadataType>
-      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=859f2ad6-fcdf-4352-a323-fd9fe91ee319&amp;outputschema=http%3A%2F%2Fwww.w3.org%2F2005%2FAtom&amp;elementsetname=full</content>
+      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=6714986a-1f2a-4365-97a4-6b6847c549b0&amp;outputschema=http%3A%2F%2Fwww.w3.org%2F2005%2FAtom&amp;elementsetname=full</content>
     </metadataLink>
     <metadataLink>
       <type>other</type>
       <metadataType>other</metadataType>
-      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=859f2ad6-fcdf-4352-a323-fd9fe91ee319&amp;outputschema=http%3A%2F%2Fgcmd.gsfc.nasa.gov%2FAboutus%2Fxml%2Fdif%2F&amp;elementsetname=full</content>
+      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=6714986a-1f2a-4365-97a4-6b6847c549b0&amp;outputschema=http%3A%2F%2Fgcmd.gsfc.nasa.gov%2FAboutus%2Fxml%2Fdif%2F&amp;elementsetname=full</content>
     </metadataLink>
     <metadataLink>
       <type>other</type>
       <metadataType>other</metadataType>
-      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=859f2ad6-fcdf-4352-a323-fd9fe91ee319&amp;outputschema=http%3A%2F%2Fwww.opengis.net%2Fcat%2Fcsw%2F2.0.2&amp;elementsetname=full</content>
+      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=6714986a-1f2a-4365-97a4-6b6847c549b0&amp;outputschema=http%3A%2F%2Fwww.opengis.net%2Fcat%2Fcsw%2F2.0.2&amp;elementsetname=full</content>
     </metadataLink>
     <metadataLink>
       <type>other</type>
       <metadataType>other</metadataType>
-      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=859f2ad6-fcdf-4352-a323-fd9fe91ee319&amp;outputschema=urn%3Aoasis%3Anames%3Atc%3Aebxml-regrep%3Axsd%3Arim%3A3.0&amp;elementsetname=full</content>
+      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=6714986a-1f2a-4365-97a4-6b6847c549b0&amp;outputschema=urn%3Aoasis%3Anames%3Atc%3Aebxml-regrep%3Axsd%3Arim%3A3.0&amp;elementsetname=full</content>
     </metadataLink>
     <metadataLink>
       <type>text/xml</type>
       <metadataType>FGDC</metadataType>
-      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=859f2ad6-fcdf-4352-a323-fd9fe91ee319&amp;outputschema=http%3A%2F%2Fwww.opengis.net%2Fcat%2Fcsw%2Fcsdgm&amp;elementsetname=full</content>
+      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=6714986a-1f2a-4365-97a4-6b6847c549b0&amp;outputschema=http%3A%2F%2Fwww.opengis.net%2Fcat%2Fcsw%2Fcsdgm&amp;elementsetname=full</content>
     </metadataLink>
     <metadataLink>
       <type>other</type>
       <metadataType>other</metadataType>
-      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=859f2ad6-fcdf-4352-a323-fd9fe91ee319&amp;outputschema=http%3A%2F%2Fwww.isotc211.org%2F2005%2Fgmd&amp;elementsetname=full</content>
+      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=6714986a-1f2a-4365-97a4-6b6847c549b0&amp;outputschema=http%3A%2F%2Fwww.isotc211.org%2F2005%2Fgmd&amp;elementsetname=full</content>
     </metadataLink>
     <metadataLink>
       <type>other</type>
       <metadataType>other</metadataType>
-      <content>http://localhost:8000/showmetadata/xsl/14</content>
+      <content>http://localhost:8000/showmetadata/xsl/17</content>
     </metadataLink>
   </metadataLinks>
   <srs>EPSG:4326</srs>
   <nativeBoundingBox>
-    <minx>-180.0</minx>
-    <maxx>180.0</maxx>
-    <miny>-90.0</miny>
-    <maxy>90.0</maxy>
-    <crs>EPSG:4326</crs>
+    <minx>-8.723145</minx>
+    <maxx>-8.4375</maxx>
+    <miny>39.535398</miny>
+    <maxy>40.932097</maxy>
   </nativeBoundingBox>
   <latLonBoundingBox>
-    <minx>-180.0</minx>
-    <maxx>180.0</maxx>
-    <miny>-90.0</miny>
-    <maxy>90.0</maxy>
+    <minx>-8.723145</minx>
+    <maxx>-8.4375</maxx>
+    <miny>39.535398</miny>
+    <maxy>40.932097</maxy>
     <crs>EPSG:4326</crs>
   </latLonBoundingBox>
   <projectionPolicy>FORCE_DECLARED</projectionPolicy>
@@ -70,7 +69,7 @@
     <entry key="JDBC_VIRTUAL_TABLE">
       <virtualTable>
         <name>occurrence_point</name>
-        <sql>select occurrence.id, occurrence.designation, occurrence.acronym, occurrence.toponym, site.name as site_name, occurrence.owner, occurrence.altitude, occurrence.position, people_profile.username as added_by, string_agg(metric_values.automatic_values, &apos;, &apos;) as automatic_metrics, string_agg(metric_values.confirmed_values, &apos;, &apos;) as confirmed_metrics, attributes.values as attributes from occurrence left join (select occurrence_attribute.occurrence_id, array_to_string(array_agg(attribute_category.name  || &apos;: &apos; || attribute_choice.value), &apos;, &apos;) as values from occurrence_attribute, attribute_category, attribute_choice where occurrence_attribute.attributechoice_id = attribute_choice.id and attribute_choice.category_id = attribute_category.id group by occurrence_attribute.occurrence_id) as attributes on attributes.occurrence_id = occurrence.id left join (select metric.occurrence_id, array_to_string(array_agg(metric_type.name  || &apos;=&apos; || metric.auto_value), &apos;, &apos;) as automatic_values, array_to_string(array_agg(metric_type.name  || &apos;=&apos; || metric.confirmed_value), &apos;, &apos;) as confirmed_values from metric, metric_type where metric.type_id = metric_type.id group by metric.occurrence_id) as metric_values on metric_values.occurrence_id = occurrence.id, people_profile, site where occurrence.added_by_id = people_profile.id and site.id = occurrence.site_id group by occurrence.id, attributes.values, people_profile.username, site.name
+        <sql>select occurrence.id, occurrence.designation, occurrence.acronym, occurrence.toponym, site.name as site_name, occurrence.owner, occurrence.altitude, occurrence.position, people_profile.username as added_by, string_agg(metric_values.automatic_values, &apos;, &apos;) as automatic_metrics, string_agg(metric_values.confirmed_values, &apos;, &apos;) as confirmed_metrics, attributes.values as attributes from occurrence left join (select occurrence_attribute_occurrence.occurrence_id, array_to_string(array_agg(attribute_category.name  || &apos;: &apos; || attribute_choice.value), &apos;, &apos;) as values from occurrence_attribute_occurrence, attribute_category, attribute_choice where occurrence_attribute_occurrence.attributechoice_id = attribute_choice.id and attribute_choice.category_id = attribute_category.id group by occurrence_attribute_occurrence.occurrence_id) as attributes on attributes.occurrence_id = occurrence.id left join (select metric.occurrence_id, array_to_string(array_agg(metric_type.name  || &apos;=&apos; || metric.auto_value), &apos;, &apos;) as automatic_values, array_to_string(array_agg(metric_type.name  || &apos;=&apos; || metric.confirmed_value), &apos;, &apos;) as confirmed_values from metric, metric_type where metric.type_id = metric_type.id group by metric.occurrence_id) as metric_values on metric_values.occurrence_id = occurrence.id, people_profile, site where occurrence.added_by_id = people_profile.id and site.id = occurrence.site_id group by occurrence.id, attributes.values, people_profile.username, site.name
 </sql>
         <escapeSql>false</escapeSql>
         <geometry>
@@ -80,7 +79,6 @@
         </geometry>
       </virtualTable>
     </entry>
-    <entry key="cachingEnabled">false</entry>
   </metadata>
   <store class="dataStore">
     <id>DataStoreInfoImpl--54ab80b:1823b340422:-8000</id>

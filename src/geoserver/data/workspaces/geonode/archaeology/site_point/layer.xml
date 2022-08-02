@@ -1,16 +1,17 @@
 <layer>
   <name>site_point</name>
-  <id>LayerInfoImpl--be02ae1:1824ae90817:-7e23</id>
+  <id>LayerInfoImpl--2c04627b:1825a33c53c:-7faa</id>
   <type>VECTOR</type>
   <defaultStyle>
     <id>StyleInfoImpl--11523451:1823ab9c1f4:-7ffd</id>
   </defaultStyle>
   <resource class="featureType">
-    <id>FeatureTypeInfoImpl--be02ae1:1824ae90817:-7e24</id>
+    <id>FeatureTypeInfoImpl--2c04627b:1825a33c53c:-7fab</id>
   </resource>
   <attribution>
     <logoWidth>0</logoWidth>
     <logoHeight>0</logoHeight>
   </attribution>
-  <dateCreated>2022-07-30 00:20:36.363 UTC</dateCreated>
+  <dateCreated>2022-08-01 16:55:42.887 UTC</dateCreated>
+  <dateModified>2022-08-02 17:10:34.343 UTC</dateModified>
 </layer>

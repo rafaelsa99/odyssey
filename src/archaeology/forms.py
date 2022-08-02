@@ -4,7 +4,8 @@ from django.core.exceptions import ValidationError
 from django.forms.models import BaseInlineFormSet
 from django.contrib.gis.geos import Point
 from leaflet.forms.widgets import LeafletWidget
-from .models import Occurrence, Site    
+from .models import Occurrence, Site
+from django_select2 import forms as s2forms
 
 class AtLeastOneFormSet(BaseInlineFormSet):
     def clean(self):
@@ -34,6 +35,8 @@ class SiteForm(forms.ModelForm):
         widgets = {
             'location': LeafletWidget(),
             'surrounding_polygon': LeafletWidget(),
+            'attribute_site': s2forms.Select2MultipleWidget,
+            'document_site': s2forms.Select2MultipleWidget,
         }
         exclude = ['added_by',]
     
@@ -73,6 +76,8 @@ class OccurrenceForm(forms.ModelForm):
         widgets = {
             'position': LeafletWidget(),
             'bounding_polygon': LeafletWidget(),
+            'attribute_occurrence': s2forms.Select2MultipleWidget,
+            'document_occurrence': s2forms.Select2MultipleWidget,
         }
         exclude = ['added_by', 'site',]
     

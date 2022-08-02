@@ -43,8 +43,8 @@ class Site(models.Model):
     location = models.PointField(null=True, blank=True)
     surrounding_polygon = models.PolygonField(null=True, blank=True)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
-    document = models.ManyToManyField(Document, blank=True)
-    attribute = models.ManyToManyField(AttributeChoice, blank=True)
+    document_site = models.ManyToManyField(Document, blank=True, verbose_name="document")
+    attribute_site = models.ManyToManyField(AttributeChoice, blank=True, verbose_name="attribute")
 
     def __str__(self):  
         return self.name
@@ -85,8 +85,8 @@ class Occurrence(models.Model):
     bounding_polygon = models.PolygonField(null=True, blank=True)
     site = models.ForeignKey(Site, on_delete=models.PROTECT)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
-    document = models.ManyToManyField(Document, blank=True)
-    attribute = models.ManyToManyField(AttributeChoice, blank=True)
+    document_occurrence = models.ManyToManyField(Document, blank=True, verbose_name="document")
+    attribute_occurrence = models.ManyToManyField(AttributeChoice, blank=True, verbose_name="attribute")
 
     def __str__(self):
         return self.designation

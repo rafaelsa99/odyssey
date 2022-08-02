@@ -5,12 +5,19 @@
 {% load crispy_forms_tags %}
 {% load i18n %}
 
+{% block extra_head %}
+{{ site.media.css }}
+{{ occurrence.media.css }}
+<style>
+    select { width: 100% }
+</style>
+{% endblock %}
+
+
 {% block body %}
 
 {% leaflet_css plugins="forms" %}
 {% leaflet_js plugins="forms" %}
-
-{{ form.media }}
 
 <div class="container">
     <div class="jumbotron">
@@ -25,4 +32,9 @@
     </form>
 </div>
 <br>  
+{% endblock %}
+
+{% block extra_script %}
+{{ site.media.js }}
+{{ occurrence.media.js }}
 {% endblock %}

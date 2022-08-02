@@ -2,7 +2,8 @@
 # geonode-mapstore-client-3.3.0 is a broken dependency. Can be deleted once geonode-mapstore-client
 # 3.3.0 will be available 
 django-countries==7.3.2
-django-countries==7.3.2
+django-crispy-forms==1.14.0
+django-select2==7.10.0
 -e git+https://github.com/GeoNode/geonode-mapstore-client.git@3.3.x#egg=django_geonode_mapstore_client
 -e git+https://github.com/GeoNode/geonode.git@3.3.x#egg=GeoNode
 # GeoNode==3.3.2.post2

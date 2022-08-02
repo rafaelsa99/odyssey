@@ -38,9 +38,11 @@ def create_site(request):
         occurrence = formOccurrence.save(commit=False)
         site.added_by = request.user
         site.save()
+        formSite.save_m2m()
         occurrence.added_by = request.user
         occurrence.site = site
         occurrence.save()
+        formOccurrence.save_m2m()
         messages.success(request, "Site and Occurrence created successfully.")
         execute_from_command_line(["../manage_dev.sh", "updatelayers", "-s", "archaeology"])
         return redirect(site.get_absolute_url())
