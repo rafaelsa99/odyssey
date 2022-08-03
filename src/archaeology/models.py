@@ -135,9 +135,15 @@ class Metric(models.Model):
     occurrence = models.ForeignKey(Occurrence, on_delete=models.CASCADE)
     auto_value = models.DecimalField(verbose_name="automatic value", max_digits= 10, decimal_places=2, null=True, blank=True)
     confirmed_value = models.DecimalField(max_digits= 10, decimal_places=2, null=True, blank=True)
+    unit_measurement = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
-        return '{0} ({1})'.format(self.type, self.occurrence)
+        if self.confirmed_value:
+            return '{0} ({1}) = {2} {3}'.format(self.type, self.occurrence, self.confirmed_value, self.unit_measurement)
+        elif self.auto_value:
+            return '{0} ({1}) = {2} {3}'.format(self.type, self.occurrence, self.auto_value, self.unit_measurement)
+        else:
+            return '{0} ({1})'.format(self.type, self.occurrence)
 
     class Meta:
         db_table = 'metric'

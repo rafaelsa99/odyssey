@@ -20,7 +20,7 @@ class OccurrencesInline(admin.TabularInline):
 
 class MetricsInline(admin.TabularInline):
     model = Metric
-    fields = ('type', 'auto_value', 'confirmed_value')
+    fields = ('type', 'auto_value', 'confirmed_value', 'unit_measurement')
     show_change_link = True
     extra = 0
 
@@ -104,11 +104,11 @@ class MetricTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Metric)
 class MetricAdmin(admin.ModelAdmin):
-    list_display = ('type', 'occurrence')
+    list_display = ('type', 'occurrence', 'auto_value', 'confirmed_value', 'unit_measurement')
     list_filter = ('type',)
     list_per_page = 50
     search_fields = ['type', 'occurrence__name']
-    fields = ('type', 'occurrence', ('auto_value', 'confirmed_value'))
+    fields = ('type', 'occurrence', ('auto_value', 'confirmed_value', 'unit_measurement'))
 
 @admin.register(AttributeCategory)
 class AttributeCategoryAdmin(admin.ModelAdmin):
