@@ -135,7 +135,7 @@ class Metric(models.Model):
     occurrence = models.ForeignKey(Occurrence, on_delete=models.CASCADE)
     auto_value = models.DecimalField(verbose_name="automatic value", max_digits= 10, decimal_places=2, null=True, blank=True)
     confirmed_value = models.DecimalField(max_digits= 10, decimal_places=2, null=True, blank=True)
-    unit_measurement = models.CharField(max_length=50, null=True, blank=True)
+    unit_measurement = models.CharField(verbose_name="unit of measurement", max_length=50, null=True, blank=True)
 
     def __str__(self):
         if self.confirmed_value:

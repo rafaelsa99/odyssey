@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.forms.models import BaseInlineFormSet
 from django.contrib.gis.geos import Point
 from leaflet.forms.widgets import LeafletWidget
-from .models import Occurrence, Site
+from .models import Metric, Occurrence, Site
 from django_select2 import forms as s2forms
 
 class AtLeastOneFormSet(BaseInlineFormSet):
@@ -17,6 +17,11 @@ class AtLeastOneFormSet(BaseInlineFormSet):
         if non_empty_forms - len(self.deleted_forms) < 1:
             raise ValidationError("Please fill at least one form.")
 
+class MetricForm(forms.ModelForm):
+    class Meta(object):
+        model = Metric
+        exclude = ['occurrence', 'auto_value']
+    
 class SiteForm(forms.ModelForm):
     latitude = forms.FloatField(
         min_value=-90,
