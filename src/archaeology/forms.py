@@ -6,6 +6,10 @@ from django.contrib.gis.geos import Point
 from leaflet.forms.widgets import LeafletWidget
 from .models import Metric, Occurrence, Site
 from django_select2 import forms as s2forms
+from django.forms import inlineformset_factory
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Submit
+
 
 class AtLeastOneFormSet(BaseInlineFormSet):
     def clean(self):
@@ -16,12 +20,18 @@ class AtLeastOneFormSet(BaseInlineFormSet):
                 non_empty_forms += 1
         if non_empty_forms - len(self.deleted_forms) < 1:
             raise ValidationError("Please fill at least one form.")
-
-class MetricForm(forms.ModelForm):
-    class Meta(object):
-        model = Metric
-        exclude = ['occurrence', 'auto_value']
     
+class MetricForm(forms.ModelForm):
+    class Meta:
+        model = Metric
+        exclude = ['auto_value','occurrence']
+
+class MetricFormSetHelper(FormHelper):
+    def __init__(self, *args, **kwargs):
+        super(MetricFormSetHelper, self).__init__(*args, **kwargs)
+        self.add_input(Submit('submit', 'Submit', css_class="btn btn-success"))
+        self.template = 'bootstrap4/table_inline_formset.html'
+
 class SiteForm(forms.ModelForm):
     latitude = forms.FloatField(
         min_value=-90,

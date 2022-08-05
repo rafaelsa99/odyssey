@@ -2,13 +2,13 @@ from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import redirect, render
 
-from .forms import MetricForm, OccurrenceForm, SiteForm
+from .forms import MetricForm, OccurrenceForm, SiteForm, MetricFormSetHelper
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .models import Occurrence, Site
+from .models import Metric, Occurrence, Site
 from django.db.models import ProtectedError
 from django.core.management import execute_from_command_line
-from django.forms import formset_factory
+from django.forms import modelformset_factory
 
 # Create your views here.
 
@@ -102,14 +102,16 @@ def create_occurrence(request, pk):
     except Site.DoesNotExist:
         raise Http404("Site does not exist")
     form = OccurrenceForm(request.POST or None, initial={'site':site})
-    formset = formset_factory(MetricForm, extra = 1)
+    MetricFormset = modelformset_factory(Metric, form=MetricForm, extra=3)
+    formset = MetricFormset(queryset=Metric.objects.none())
+    helper = MetricFormSetHelper()
     if form.is_valid():
         occurrence = form.save(commit=False)
         occurrence.added_by = request.user
         occurrence.site = site
         occurrence.save()
         form.save_m2m()
-        metric_formset  = formset(request.POST)
+        metric_formset  = MetricFormset(request.POST)
         if metric_formset.is_valid():
             for metric_form in metric_formset.forms:
                 if all([metric_form.is_valid(), metric_form.cleaned_data != {}]):
@@ -123,24 +125,41 @@ def create_occurrence(request, pk):
         'form': form,
         'site':site,
         'formset':formset,
+        'helper': helper,
     }
     return render(request, "archaeology/occurrence_form.html", context=context)
 
 @login_required
 def update_occurrence(request, pk):
     try:
-        occurrence = Occurrence.objects.get(id=pk)
+        occurrence_instance = Occurrence.objects.get(id=pk)
     except Occurrence.DoesNotExist:
         raise Http404("Occurrence does not exist")
-    form = OccurrenceForm(request.POST or None, instance=occurrence)
+    form = OccurrenceForm(request.POST or None, instance=occurrence_instance)
+    MetricFormset = modelformset_factory(Metric, form=MetricForm, extra=1, can_delete=True)
+    formset = MetricFormset(queryset=Metric.objects.filter(occurrence=occurrence_instance))
+    helper = MetricFormSetHelper()
     if form.is_valid():
         form.save()
+        metric_formset  = MetricFormset(request.POST)
+        if metric_formset.is_valid():
+            for metric_form in metric_formset.forms:
+                if all([metric_form.is_valid(), metric_form.cleaned_data["DELETE"]]):
+                    print(metric_form.cleaned_data["id"].id)
+                    metric_object = Metric.objects.get(id=int(metric_form.cleaned_data["id"].id))
+                    metric_object.delete()
+                elif all([metric_form.is_valid(), metric_form.cleaned_data != {}]):
+                    metric = metric_form.save(commit=False)
+                    metric.occurrence = occurrence_instance
+                    metric.save()
         messages.success(request, "Changes saved successfully.")
         execute_from_command_line(["../manage_dev.sh", "updatelayers", "-s", "archaeology"])
-        return redirect(occurrence.get_absolute_url())
+        return redirect(occurrence_instance.get_absolute_url())
     context = {
         'form': form,
-        'occurrence': occurrence,
+        'occurrence': occurrence_instance,
+        'formset':formset,
+        'helper': helper,
     }
     return render(request, "archaeology/occurrence_form.html", context=context)
 
