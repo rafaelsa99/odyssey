@@ -3,7 +3,8 @@
       <link href="{{ STATIC_URL }}css/site_base.css" rel="stylesheet"/>
 {% endblock %}
 {% block extra_tab %}
-<li>
+{% if user.is_authenticated %}
+    <li>
       <a href="#" class="dropdown-toggle" data-toggle="dropdown"
          role="button" aria-haspopup="true">
          Archaeology<i class="fa fa-angle-down fa-lg"></i>
@@ -13,5 +14,6 @@
             <li class="divider" role="separator"></li>
             <li><a href="{% url 'addsite' %}">Create Site</a></li>
       </ul>
-  </li>
+    </li>
+{% endif %}  
 {% endblock %}
