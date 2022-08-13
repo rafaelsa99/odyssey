@@ -1,3 +1,4 @@
+from ast import And
 from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import redirect, render
@@ -138,6 +139,68 @@ def delete_site(request, pk):
     return render(request, "archaeology/delete.html", context=context)
 
 @login_required
+def list_occurrences(request):
+    if 'searchBy' in request.GET and request.GET['searchBy'] == "extent":
+        bbox_coordinates = request.GET['coordinates'].split(",")
+        bbox = Polygon.from_bbox((bbox_coordinates[0],bbox_coordinates[1],bbox_coordinates[2],bbox_coordinates[3]))
+        occurrences_list = Occurrence.objects.filter(Q(position__intersects=bbox) | Q(bounding_polygon__intersects=bbox))
+    elif 'text' in request.GET and request.GET['text'] != "":
+        text = request.GET['text']
+        search_by = request.GET['searchBy']
+        if not search_by or search_by == "designation":
+            occurrences_list = Occurrence.objects.filter(Q(designation__icontains=text) | Q(acronym__icontains=text) | Q(toponym__icontains=text))
+        elif search_by == "site":
+            try:
+                code = int(text)
+                occurrences_list = Occurrence.objects.filter(site__national_site_code__exact=code)
+            except ValueError:
+                occurrences_list = Occurrence.objects.filter(site__name__icontains=text)
+        elif search_by == "owner":
+            occurrences_list = Occurrence.objects.filter(owner__icontains=text)
+        elif search_by == "attributes":
+            occurrences_list = Occurrence.objects.filter(attribute_occurrence__value__icontains=text)
+    elif 'searchBy' in request.GET and request.GET['searchBy'] == "altitude" and request.GET['min_alt'] != "" and request.GET['max_alt'] != "":
+        try:
+            min_alt = int(request.GET['min_alt'])
+            max_alt = int(request.GET['max_alt'])
+            occurrences_list = Occurrence.objects.filter(Q(altitude__gte=min_alt) & Q(altitude__lte=max_alt))
+        except ValueError:
+            occurrences_list = Occurrence.objects.none()
+    else:
+        occurrences_list = Occurrence.objects.all()
+    if 'orderBy' in request.GET:
+        orderBy = request.GET['orderBy']
+        if orderBy == "recent":
+            occurrences_list = occurrences_list.order_by('-id')
+        elif orderBy == "older":
+            occurrences_list = occurrences_list.order_by('id')
+        elif orderBy == "name_asc":
+            occurrences_list = occurrences_list.order_by('designation')
+        elif orderBy == "name_desc":
+            occurrences_list = occurrences_list.order_by('-designation')
+        elif orderBy == "site_asc":
+            occurrences_list = occurrences_list.order_by('site__name')
+        elif orderBy == "site_desc":
+            occurrences_list = occurrences_list.order_by('-site__name')
+    page = request.GET.get('page', 1)
+    paginator = Paginator(occurrences_list, 10)
+    try:
+        occurrences = paginator.page(page)
+    except PageNotAnInteger:
+        occurrences = paginator.page(1)
+    except EmptyPage:
+        occurrences = paginator.page(paginator.num_pages)
+    path = ''
+    path += "%s" % "&".join(["%s=%s" % (key, value) for (key, value) in request.GET.items() if not key=='page' ])
+    context = {
+        'occurrences': occurrences,
+        'values': request.GET,
+        'count': occurrences_list.count(),
+        'path': path,
+        }
+    return render(request, "archaeology/list_occurrences.html", context=context)
+
+@login_required
 def create_occurrence(request, pk):
     try:
         site = Site.objects.get(id=pk)
@@ -186,14 +249,15 @@ def update_occurrence(request, pk):
         metric_formset  = MetricFormset(request.POST)
         if metric_formset.is_valid():
             for metric_form in metric_formset.forms:
-                if all([metric_form.is_valid(), metric_form.cleaned_data["DELETE"]]):
-                    print(metric_form.cleaned_data["id"].id)
-                    metric_object = Metric.objects.get(id=int(metric_form.cleaned_data["id"].id))
-                    metric_object.delete()
-                elif all([metric_form.is_valid(), metric_form.cleaned_data != {}]):
-                    metric = metric_form.save(commit=False)
-                    metric.occurrence = occurrence_instance
-                    metric.save()
+                if all([metric_form.is_valid(), metric_form.cleaned_data != {}]):
+                    if metric_form.cleaned_data.get("DELETE") == True:
+                        if metric_form.cleaned_data.get("id") != None:
+                            metric_object = Metric.objects.get(id=int(metric_form.cleaned_data["id"].id))
+                            metric_object.delete()
+                    else:
+                        metric = metric_form.save(commit=False)
+                        metric.occurrence = occurrence_instance
+                        metric.save()
         messages.success(request, "Changes saved successfully.")
         execute_from_command_line(["../manage_dev.sh", "updatelayers", "-s", "archaeology"])
         return redirect(occurrence_instance.get_absolute_url())
