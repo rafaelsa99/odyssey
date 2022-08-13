@@ -1,59 +1,207 @@
 {% extends "geonode_base.html" %}
 {% load i18n %}
+{% load leaflet_tags %}
+{% block extra_head %}
+<style>   
+    .btn {
+        margin-bottom: 5px;
+    }
+    
+    .grid {
+        position: relative;
+        width: 100%;
+        background: #fff;
+        color: #666666;
+        border-radius: 2px;
+        margin-bottom: 25px;
+        box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .grid .grid-body {
+        padding: 15px 20px 15px 20px;
+        font-size: 0.9em;
+        line-height: 1.9em;
+    }
+
+    .show {
+      display: none;
+    }
+</style>
+{% leaflet_js %}
+{% leaflet_css %}
+{% endblock %}
 
 {% block body %}
-
 <div class="container">
-    <div class="jumbotron">
-        <h1>{% trans "Archaeological Sites" %}</h1>
+<div class="row">
+  <!-- BEGIN SEARCH RESULT -->
+  <div class="col-md-12">
+    <div class="grid search">
+      <div class="grid-body">
+        <div class="row">
+          <!-- BEGIN FILTERS -->
+          <div class="col-md-3">
+            <h2 class="grid-title"><i class="fa fa-filter"></i> {% trans "Filters" %}</h2>
+            <hr>
+            <form action="" method="get" id="searchForm">
+            <!-- BEGIN FILTER BY CATEGORY -->
+            <h4>{% trans "Search by:" %}</h4>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="searchBy" id="searchBy1" value="name" {% if "name" == values.searchBy or not values.searchBy %}checked{% endif %}>
+              <label class="form-check-label" for="searchBy1">{% trans "Name" %}</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="searchBy" id="searchBy2" value="national_site_code" {% if "national_site_code" == values.searchBy %}checked{% endif %}>
+              <label class="form-check-label" for="searchBy2">{% trans "National Site Code" %}</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="searchBy" id="searchBy3" value="parish" {% if "parish" == values.searchBy %}checked{% endif %}>
+              <label class="form-check-label" for="searchBy3">{% trans "Parish" %}</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="searchBy" id="searchBy4" value="attributes" {% if "attributes" == values.searchBy %}checked{% endif %}>
+              <label class="form-check-label" for="searchBy4">{% trans "Attributes" %}</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="searchBy" id="searchBy5" value="extent" {% if "extent" == values.searchBy %}checked{% endif %}>
+              <label class="form-check-label" for="searchBy5">{% trans "Extent" %}</label>
+            </div>            
+            <!-- END FILTER BY CATEGORY -->
+            
+            <div class="padding"></div>
+            <div class="show">
+            <!-- BEGIN FILTER BY EXTENT -->
+              <h4>{% trans "Extent" %}:</h4>
+              {% leaflet_map "extent" callback="map_init" %}
+              <input type="hidden" id="coordinates" name="coordinates"> 
+            </div>
+            <!-- END FILTER BY EXTENT -->
+          </div>
+          <!-- END FILTERS -->
+          <!-- BEGIN RESULT -->
+          <div class="col-md-9">
+            <h2><i class="fa fa-globe"></i>{% trans " Explore Archaeological Sites" %}</h2>
+            <hr>
+            <!-- BEGIN SEARCH INPUT -->
+            <div class="input-group">
+              <input type="text" class="form-control" name="text" value="{{ values.text }}">
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+              </span>
+            </div>
+          
+            <!-- END SEARCH INPUT -->
+            {% if values.searchBy == "extent" %}
+            <p>{% trans "Showing " %}{{count}} {% trans "result" %}{{ count|pluralize }} {% trans "matching the geographical extent" %}</p>
+            {% elif values.text %}
+              <p>{% trans "Showing " %}{{count}} {% trans "result" %}{{ count|pluralize }} {% trans "matching" %} "{{ values.text }}"</p>
+            {% else %}
+              <p>{% trans "Showing all results" %}</p>
+            {% endif %}
+            
+            <div class="padding"></div>
+            
+            <div class="row">
+              <!-- BEGIN ORDER RESULT -->
+              <div class="form-group">
+                <select class="btn btn-default pull-right" name="orderBy" onchange='this.form.submit();'>
+                  <option value="" disabled selected hidden>{% trans "Order by" %}</option>
+                  <option value="recent" {% if "recent" == values.orderBy%}selected{% endif %}>{% trans "Most recent" %}</option>
+                  <option value="older" {% if "older" == values.orderBy%}selected{% endif %}>{% trans "Less recent" %}</option>
+                  <option value="name_asc" {% if "name_asc" == values.orderBy%}selected{% endif %}>{% trans "Name (A - Z)" %}</option>
+                  <option value="name_desc" {% if "name_desc" == values.orderBy%}selected{% endif %}>{% trans "Name (Z - A)" %}</option>
+                  <option value="code_asc" {% if "code_asc" == values.orderBy%}selected{% endif %}>{% trans "Site Code (ascending)" %}</option>
+                  <option value="code_desc" {% if "code_desc" == values.orderBy%}selected{% endif %}>{% trans "Site Code (descending)" %}</option>
+                </select>
+              </div> 
+              </div>
+              <!-- END ORDER RESULT -->
+            
+            </form>
+            <!-- BEGIN TABLE RESULT -->
+            {% if count == 0 %}
+              <h3>{% trans "No results found." %}</h3>
+            {% else %}
+            
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>{% trans "Site" %}</th>
+                    <th class="text-right">{% trans "National Site Code" %}</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for site in sites %}
+                  <tr>
+                  <td><a href="{% url 'update_site' site.id %}"><strong>{{site.name}}</strong></a><br>{{site.parish}} ({{site.country_iso}})</td>
+                  <td class="text-right">{{site.national_site_code}}</td>
+                </tr>
+                {% endfor %}
+              </tbody></table>
+            </div>
+            <!-- END TABLE RESULT -->
+            
+            <!-- BEGIN PAGINATION -->
+            {% if sites.has_other_pages %}
+            <ul class="pagination">
+              {% if sites.has_previous %}
+              <li class="page-item"><a class="page-link" href="?page={{ sites.previous_page_number }}&{{path}}">&laquo;</a></li>
+              {% else %}
+              <li class="page-item disabled"><a class="page-link" href="" tabindex="-1">&laquo;</a></li>
+              {% endif %}
+              {% for i in sites.paginator.page_range %}
+              {% if sites.number == i %}
+                <li class="page-item active"><a class="page-link" href="?page={{ i }}&{{path}}">{{ i }} <span class="sr-only">(current)</span></a></li>
+              {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ i }}&{{path}}">{{ i }}</a></li>
+              {% endif %}
+              {% endfor %}
+              {% if sites.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{ sites.next_page_number }}&{{path}}">&raquo;</a></li>
+              {% else %}
+              <li class="page-item disabled"><a class="page-link" href="" tabindex="-1">&raquo;</a></li>
+              {% endif %}
+            </ul>
+            {% endif %}
+            <!-- END PAGINATION -->
+            {% endif %}
+          </div>
+          <!-- END RESULT -->
+        </div>
+      </div>
     </div>
-	<div class="card card-body">
-		<a class="btn btn-primary  btn-sm btn-block" href="{% url 'addsite' %}">{% trans "Add New Archaeological Site" %}</a>
-		<table class="table table-sm table-hover">
-			<thead>
-				<tr>
-					<th>{% trans "National Site Code" %}</th>
-					<th>{% trans "Name" %}</th>
-					<th>{% trans "Parish" %}</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for site in sites %}
-					<tr>
-						<td>{{site.national_site_code}}</td>
-						<td>{{site.name}}</td>
-						<td>{{site.parish}}</td>
-						<td>
-							<a class="btn btn-sm btn-info" href="{% url 'update_site' site.id %}">{% trans "View" %}</a>
-							<a class="btn btn-sm btn-danger" href="{% url 'delete_site' site.id %}">{% trans "Delete" %}</a>
-						</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-		{% if sites.has_other_pages %}
-		<ul class="pagination">
-			{% if sites.has_previous %}
-			<li class="page-item"><a class="page-link" href="?page={{ sites.previous_page_number }}">&laquo;</a></li>
-			{% else %}
-			<li class="page-item disabled"><a class="page-link" href="" tabindex="-1">&laquo;</a></li>
-			{% endif %}
-			{% for i in sites.paginator.page_range %}
-			{% if sites.number == i %}
-				<li class="page-item active"><a class="page-link" href="?page={{ i }}">{{ i }} <span class="sr-only">(current)</span></a></li>
-			{% else %}
-				<li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-			{% endif %}
-			{% endfor %}
-			{% if sites.has_next %}
-			<li class="page-item"><a class="page-link" href="?page={{ sites.next_page_number }}">&raquo;</a></li>
-			{% else %}
-			<li class="page-item disabled"><a class="page-link" href="" tabindex="-1">&raquo;</a></li>
-			{% endif %}
-		</ul>
-		{% endif %}
-	</div>
+  </div>
+  <!-- END SEARCH RESULT -->
 </div>
-<br>
+</div>
+
+{% endblock %}
+
+{% block extra_script %}
+<script>
+  function map_init (map, options) {
+    map.on('moveend', function() { 
+      document.getElementById("coordinates").value = map.getBounds();
+      document.getElementById("searchForm").submit(); 
+    });
+  }
+
+  $(window).on('load', function(){
+    if ($("#searchBy5").is(':checked')) {
+      $('.show').removeClass("hidden");
+    } else {
+      $('.show').addClass("hidden");
+    }
+  });
+
+  $(".form-check input[type='radio']").on("change", function() {
+     if ($("#searchBy5").is(':checked')) {
+       $('.show').removeClass("hidden");
+     } else {
+       $('.show').addClass("hidden");
+     }
+   })
+</script>
 {% endblock %}

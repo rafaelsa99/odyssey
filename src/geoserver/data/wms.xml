@@ -26,27 +26,32 @@
   <schemaBaseURL>http://schemas.opengis.net</schemaBaseURL>
   <verbose>false</verbose>
   <metadata>
+    <entry key="disableDatelineWrappingHeuristic">false</entry>
     <entry key="kmlSuperoverlayMode">auto</entry>
-    <entry key="kmlReflectorMode">refresh</entry>
     <entry key="loopContinuously">false</entry>
-    <entry key="svgAntiAlias">true</entry>
     <entry key="kmlPlacemark">false</entry>
     <entry key="inspire.spatialDatasetIdentifier"></entry>
     <entry key="kmlKmscore">40</entry>
-    <entry key="mapWrapping">true</entry>
-    <entry key="maxAnimatorRenderingTime">300</entry>
-    <entry key="pngCompression">25</entry>
     <entry key="jpegCompression">25</entry>
-    <entry key="inspire.language">eng</entry>
+    <entry key="advancedProjectionDensification">false</entry>
     <entry key="advancedProjectionHandling">true</entry>
     <entry key="maxAllowedFrames">600000</entry>
     <entry key="kmlAttr">true</entry>
-    <entry key="svgRenderer">Batik</entry>
     <entry key="disposalMethod">none</entry>
     <entry key="maxRenderingSize">600000</entry>
     <entry key="inspire.createExtendedCapabilities">false</entry>
-    <entry key="scalehintMapunitsPixel">false</entry>
     <entry key="framesDelay">1000</entry>
+    <entry key="kmlReflectorMode">refresh</entry>
+    <entry key="svgAntiAlias">true</entry>
+    <entry key="rootLayerInCapabilities">true</entry>
+    <entry key="mapWrapping">true</entry>
+    <entry key="maxAnimatorRenderingTime">300</entry>
+    <entry key="pngCompression">25</entry>
+    <entry key="inspire.metadataURL">http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=10adbf1b-8bd5-473c-bf91-4c07b22d9071&amp;outputschema=http%3A%2F%2Fwww.isotc211.org%2F2005%2Fgmd&amp;elementsetname=full</entry>
+    <entry key="inspire.language">eng</entry>
+    <entry key="inspire.metadataURLType">application/vnd.ogc.csw.GetRecordByIdResponse_xml</entry>
+    <entry key="svgRenderer">Batik</entry>
+    <entry key="scalehintMapunitsPixel">false</entry>
   </metadata>
   <srs>
     <string>4326</string>
@@ -71,4 +76,9 @@
   <maxRequestMemory>65536</maxRequestMemory>
   <maxRenderingTime>60</maxRenderingTime>
   <maxRenderingErrors>1000</maxRenderingErrors>
+  <cacheConfiguration>
+    <enabled>false</enabled>
+    <maxEntries>1000</maxEntries>
+    <maxEntrySize>51200</maxEntrySize>
+  </cacheConfiguration>
 </wms>

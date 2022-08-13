@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import redirect, render
-
+from django.views.generic.list import ListView
 from .forms import MetricForm, OccurrenceForm, SiteForm, MetricFormSetHelper
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -10,20 +10,60 @@ from django.db.models import ProtectedError
 from django.core.management import execute_from_command_line
 from django.forms import modelformset_factory
 
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 @login_required
 def list_sites(request):
-    sites_list = Site.objects.all()
+    if 'searchBy' in request.GET and request.GET['searchBy'] == "extent":
+        sites_list = Site.objects.all() #SUBSTITUTE BY SEARCHING FOR SITES WITHIN BBOX
+    elif 'text' in request.GET and request.GET['text'] != "":
+        text = request.GET['text']
+        search_by = request.GET['searchBy']
+        if not search_by or search_by == "name":
+            sites_list = Site.objects.filter(name__icontains=text)
+        elif search_by == "national_site_code":
+            try:
+                code = int(text)
+                sites_list = Site.objects.filter(national_site_code__exact=code)
+            except ValueError:
+                sites_list = Site.objects.none()
+        elif search_by == "parish":
+            sites_list = Site.objects.filter(parish__icontains=text)
+        elif search_by == "attributes":
+            sites_list = Site.objects.filter(attribute_site__value__icontains=text)
+    else:
+        sites_list = Site.objects.all()
+    if 'orderBy' in request.GET:
+        orderBy = request.GET['orderBy']
+        if orderBy == "recent":
+            sites_list = sites_list.order_by('-id')
+        elif orderBy == "older":
+            sites_list = sites_list.order_by('id')
+        elif orderBy == "name_asc":
+            sites_list = sites_list.order_by('name')
+        elif orderBy == "name_desc":
+            sites_list = sites_list.order_by('-name')
+        elif orderBy == "code_asc":
+            sites_list = sites_list.order_by('national_site_code')
+        elif orderBy == "code_desc":
+            sites_list = sites_list.order_by('-national_site_code')
     page = request.GET.get('page', 1)
-    paginator = Paginator(sites_list, 15)
+    paginator = Paginator(sites_list, 10)
     try:
         sites = paginator.page(page)
     except PageNotAnInteger:
         sites = paginator.page(1)
     except EmptyPage:
         sites = paginator.page(paginator.num_pages)
-    context = {'sites': sites}
+    path = ''
+    path += "%s" % "&".join(["%s=%s" % (key, value) for (key, value) in request.GET.items() if not key=='page' ])
+    context = {
+        'sites': sites,
+        'values': request.GET,
+        'count': sites_list.count(),
+        'path': path,
+        }
     return render(request, "archaeology/list_sites.html", context=context)
 
 @login_required

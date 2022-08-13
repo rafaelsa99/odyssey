@@ -149,7 +149,3 @@ LEAFLET_CONFIG = {
     'MIN_ZOOM':3,
     'SCALE': 'both',
 }
-
-#PYCSW= {
-#    'CONFIGURATION': {'metadata:inspire[enabled]': True, },
-#}

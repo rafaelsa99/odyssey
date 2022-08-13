@@ -44,7 +44,7 @@ class Site(models.Model):
     surrounding_polygon = models.PolygonField(null=True, blank=True)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
     document_site = models.ManyToManyField(Document, blank=True, verbose_name="documents")
-    attribute_site = models.ManyToManyField(AttributeChoice, blank=True, verbose_name="a-ttributes")
+    attribute_site = models.ManyToManyField(AttributeChoice, blank=True, verbose_name="attributes")
 
     def __str__(self):  
         return self.name
