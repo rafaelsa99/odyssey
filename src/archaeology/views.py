@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import redirect, render
-from django.views.generic.list import ListView
+from django.db.models import Q
 from .forms import MetricForm, OccurrenceForm, SiteForm, MetricFormSetHelper
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -9,14 +9,16 @@ from .models import Metric, Occurrence, Site
 from django.db.models import ProtectedError
 from django.core.management import execute_from_command_line
 from django.forms import modelformset_factory
-
+from django.contrib.gis.geos import Polygon
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 @login_required
 def list_sites(request):
     if 'searchBy' in request.GET and request.GET['searchBy'] == "extent":
-        sites_list = Site.objects.all() #SUBSTITUTE BY SEARCHING FOR SITES WITHIN BBOX
+        bbox_coordinates = request.GET['coordinates'].split(",")
+        bbox = Polygon.from_bbox((bbox_coordinates[0],bbox_coordinates[1],bbox_coordinates[2],bbox_coordinates[3]))
+        sites_list = Site.objects.filter(Q(location__intersects=bbox) | Q(surrounding_polygon__intersects=bbox))
     elif 'text' in request.GET and request.GET['text'] != "":
         text = request.GET['text']
         search_by = request.GET['searchBy']

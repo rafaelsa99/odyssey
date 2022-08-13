@@ -72,6 +72,7 @@
             <div class="show">
             <!-- BEGIN FILTER BY EXTENT -->
               <h4>{% trans "Extent" %}:</h4>
+              <button class="btn btn-primary" type="submit">{% trans "Search" %}</button>
               {% leaflet_map "extent" callback="map_init" %}
               <input type="hidden" id="coordinates" name="coordinates"> 
             </div>
@@ -181,10 +182,23 @@
 
 {% block extra_script %}
 <script>
+
   function map_init (map, options) {
+    var stop_flag = false
+    var url = new URL(window.location.href);
+    var coord = url.searchParams.get("coordinates");
+    if (coord != null){
+      var array = coord.split(',');
+      var corner1 = L.latLng(array[1], array[0]);
+      var corner2 = L.latLng(array[3], array[2]);
+      var bounds = L.latLngBounds(corner1, corner2);
+      map.fitBounds(bounds);
+    }
+    document.getElementById("coordinates").value = map.getBounds().toBBoxString();
     map.on('moveend', function() { 
-      document.getElementById("coordinates").value = map.getBounds();
-      document.getElementById("searchForm").submit(); 
+      document.getElementById("coordinates").value = map.getBounds().toBBoxString();
+      //Causes a form submit loop since this event is fired with the fitBound method
+      //document.getElementById("searchForm").submit();
     });
   }
 
