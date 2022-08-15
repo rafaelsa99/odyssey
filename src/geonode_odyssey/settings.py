@@ -145,7 +145,7 @@ if LDAP_ENABLED and 'geonode_ldap' not in INSTALLED_APPS:
 LEAFLET_CONFIG = {
     'DEFAULT_CENTER': (39.694819, -8.130229),
     'DEFAULT_ZOOM': 6,
-    'MAX_ZOOM': 20,
+    'MAX_ZOOM': 18,
     'MIN_ZOOM':3,
     'SCALE': 'both',
 }

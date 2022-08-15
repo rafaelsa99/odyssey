@@ -165,7 +165,7 @@
                 <tbody>
                   {% for occurrence in occurrences %}
                   <tr>
-                  <td><a href="{% url 'update_occurrence' occurrence.id %}"><strong>{{occurrence.designation}}</strong></a><br>{{occurrence.site}}</td>
+                  <td><a href="{% url 'view_occurrence' occurrence.id %}"><strong>{{occurrence.designation}}</strong></a><br>{{occurrence.site}}</td>
                   <td class="text-right">{{occurrence.altitude}}</td>
                 </tr>
                 {% endfor %}

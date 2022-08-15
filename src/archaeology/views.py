@@ -75,15 +75,7 @@ def view_site(request, pk):
         site = Site.objects.get(id=pk)
     except Site.DoesNotExist:
         raise Http404("Site does not exist")
-    occurrences_list = site.occurrence_set.all()
-    page = request.GET.get('page', 1)
-    paginator = Paginator(occurrences_list, 5)
-    try:
-        occurrences = paginator.page(page)
-    except PageNotAnInteger:
-        occurrences = paginator.page(1)
-    except EmptyPage:
-        occurrences = paginator.page(paginator.num_pages)
+    occurrences = site.occurrence_set.all()
     context = {
         'site': site,
         'occurrences': occurrences,
@@ -224,7 +216,16 @@ def list_occurrences(request):
 
 @login_required
 def view_occurrence(request, pk):
-    return render(request, "archaeology/occurrence_detail.html")
+    try:
+        occurrence_instance = Occurrence.objects.get(id=pk)
+    except Occurrence.DoesNotExist:
+        raise Http404("Occurrence does not exist")
+    metrics = occurrence_instance.metric_set.all()
+    context = {
+        'occurrence': occurrence_instance,
+        'metrics': metrics,
+    }
+    return render(request, "archaeology/occurrence_detail.html", context=context)
 
 @login_required
 def create_occurrence(request, pk):

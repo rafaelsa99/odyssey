@@ -20,7 +20,7 @@
         {% if item|get_class == 'Occurrence' %}
         <form action="{% url 'delete_occurrence' item.id %}" method="post">
             {% csrf_token %}
-            <a class="btn btn-warning" href="{% url 'update_occurrence' item.id %}">{% trans "Cancel" %}</a>
+            <a class="btn btn-warning" href="{% url 'view_occurrence' item.id %}">{% trans "Cancel" %}</a>
         {% elif item|get_class == 'Site' %} 
         <form action="{% url 'delete_site' item.id %}" method="post">
             {% csrf_token %}

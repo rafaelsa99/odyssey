@@ -47,7 +47,7 @@
                             <td>{{occurrence.altitude}}</td>
                             <td>{{occurrence.owner}}</td>
                             <td>
-                                <a class="btn btn-sm btn-info" href="{% url 'update_occurrence' occurrence.id %}">{% trans "View" %}</a>
+                                <a class="btn btn-sm btn-info" href="{% url 'view_occurrence' occurrence.id %}">{% trans "View" %}</a>
                                 <a class="btn btn-sm btn-danger" href="{% url 'delete_occurrence' occurrence.id %}">{% trans "Delete" %}</a>
                             </td>
                         </tr>

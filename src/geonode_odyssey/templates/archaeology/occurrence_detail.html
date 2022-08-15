@@ -5,7 +5,7 @@
 {% load i18n %}
 
 {% block title %}
-{{site.name}}
+{{occurrence.designation}}
 {% endblock %}
 
 {% block extra_head %}
@@ -23,7 +23,15 @@
 
 {% block body %}
 <div class="page-header">
-    <h2 class="page-title">{{site.name}}</h2>
+    <h2 class="page-title">{{occurrence.designation}}</h2>
+    <h4>
+        {% trans "In " %}
+        {% if occurrence.site == None %}
+        <a class="text-secondary" href="{% url 'view_site' site.id %}">{{site}}</a>
+        {% else %}
+        <a class="text-secondary" href="{% url 'view_site' occurrence.site.id %}">{{occurrence.site}}</a>
+        {% endif %}
+    </h4>
 </div>
 <div class="container">
     <div class="row">
@@ -40,7 +48,7 @@
                 <a class="nav-link" data-toggle="tab" href="#attributes"><i class="fa fa-align-justify"></i> {% trans "Attributes" %}</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#occurrences"><i class="fa fa-map-pin"></i> {% trans "Occurrences" %}</a>
+                <a class="nav-link" data-toggle="tab" href="#metrics"><i class="fa fa-pencil"></i> {% trans "Metrics" %}</a>
                 </li>
                 <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#documents"><i class="fa fa-folder-open"></i> {% trans "Documents" %}</a>
@@ -50,16 +58,18 @@
             <div class="tab-content">
                 <div class="tab-pane active mrg-top" id="info">
                     <dl class="dl-horizontal">
-                        <dt>{% trans "Name" %}</dt>
-                        <dd>{{site.name}}</dd>
-                        <dt>{% trans "National Site Code" %}</dt>
-                        <dd>{{site.national_site_code}}</dd>
-                        <dt>{% trans "Country" %}</dt>
-                        <dd>{{site.country_iso.name}}</dd>
-                        <dt>{% trans "Parish" %}</dt>
-                        <dd>{{site.parish}}</dd>
+                        <dt>{% trans "Designation" %}</dt>
+                        <dd>{{occurrence.designation}}</dd>
+                        <dt>{% trans "Acronym" %}</dt>
+                        <dd>{{occurrence.acronym}}</dd>
+                        <dt>{% trans "Toponym" %}</dt>
+                        <dd>{{occurrence.toponym}}</dd>
+                        <dt>{% trans "Owner" %}</dt>
+                        <dd>{{occurrence.owner}}</dd>
+                        <dt>{% trans "Altitude" %}</dt>
+                        <dd>{{occurrence.altitude}}</dd>
                         <dt>{% trans "Added by" %}</dt>
-                        <dd><a href="{{site.added_by.get_absolute_url}}">{{site.added_by}}</a></dd>
+                        <dd><a href="{{occurrence.added_by.get_absolute_url}}">{{occurrence.added_by}}</a></dd>
                     </dl>
                 </div>
                 <div class="tab-pane mrg-top" id="attributes">
@@ -69,7 +79,7 @@
                             <th>{% trans "Value" %}</th>
                         </thead>
                         <tbody>
-                            {% for attribute in site.attribute_site.all %}
+                            {% for attribute in occurrence.attribute_occurrence.all %}
                             <tr>
                                 <td>{{attribute.category}}</td>
                                 <td>{{attribute.value}}</td>
@@ -80,22 +90,22 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="tab-pane mrg-top" id="occurrences">
+                <div class="tab-pane mrg-top" id="metrics">
                     <table class="table table-striped table-bordered table-condensed">
                         <thead>
-                            <th>{% trans "Occurrence" %}</th>
-                            <th>{% trans "Altitude" %}</th>
-                            <th>{% trans "Owner" %}</th>
+                            <th>{% trans "Type" %}</th>
+                            <th>{% trans "Automatic Value" %}</th>
+                            <th>{% trans "Confirmed Value" %}</th>
                         </thead>
                         <tbody>
-                            {% for occurrence in occurrences %}
+                            {% for metric in metrics %}
                             <tr>
-                                <td><a href="{% url 'view_occurrence' occurrence.id %}">{{occurrence.designation}}</a></td>
-                                <td>{{occurrence.altitude}}</td>
-                                <td>{{occurrence.owner}}</td>
+                                <td>{{metric.type}}</td>
+                                <td>{{metric.auto_value}} {% if metric.auto_value != None %} {{metric.unit_measurement}} {% endif %}</td>
+                                <td>{{metric.confirmed_value}} {{metric.unit_measurement}}</td>
                             </tr>
                             {% empty %}
-                                <h5>{% trans "No occurrences!" %}</h5>
+                                <h5>{% trans "No metrics!" %}</h5>
                             {% endfor %}
                         </tbody>
                     </table>
@@ -108,7 +118,7 @@
                             <th>{% trans "Abstract" %}</th>
                         </thead>
                         <tbody>
-                            {% for document in site.document_site.all %}
+                            {% for document in occurrence.document_occurrence.all %}
                             <tr>
                                 <td><a href="{{document.get_absolute_url}}">{{document.title_en}}</a></td>
                                 <td>{{document.date}}</td>
@@ -125,10 +135,10 @@
         <div class="col-md-3">
             <ul class="list-group">
                 <li class="list-group-item">
-                    <a class="btn btn-primary  btn-md btn-block" href="{% url 'update_site' site.id %}">{% trans "Edit" %}</a>
+                    <a class="btn btn-primary  btn-md btn-block" href="{% url 'update_occurrence' occurrence.id %}">{% trans "Edit" %}</a>
                 </li>
                 <li class="list-group-item">
-                    <a class="btn btn-danger  btn-md btn-block" href="{% url 'delete_site' site.id %}">{% trans "Delete" %}</a>
+                    <a class="btn btn-danger  btn-md btn-block" href="{% url 'delete_occurrence' occurrence.id %}">{% trans "Delete" %}</a>
                 </li>
             </ul>
         </div>
@@ -139,8 +149,8 @@
 {% block extra_script %}
 <script>
   function map_init (map, options) {
-    point = L.geoJson({{ site.location|geojsonfeature|safe}}).addTo(map);
-    polygon = L.geoJson({{ site.surrounding_polygon|geojsonfeature|safe}}).addTo(map);
+    point = L.geoJson({{ occurrence.position|geojsonfeature|safe}}).addTo(map);
+    polygon = L.geoJson({{ occurrence.bounding_polygon|geojsonfeature|safe}}).addTo(map);
     var group = new L.featureGroup([point, polygon]);
     map.fitBounds([group.getBounds().getSouthWest(),group.getBounds().getNorthEast()]);
   }
