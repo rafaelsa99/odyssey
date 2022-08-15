@@ -70,6 +70,27 @@ def list_sites(request):
     return render(request, "archaeology/list_sites.html", context=context)
 
 @login_required
+def view_site(request, pk):
+    try:
+        site = Site.objects.get(id=pk)
+    except Site.DoesNotExist:
+        raise Http404("Site does not exist")
+    occurrences_list = site.occurrence_set.all()
+    page = request.GET.get('page', 1)
+    paginator = Paginator(occurrences_list, 5)
+    try:
+        occurrences = paginator.page(page)
+    except PageNotAnInteger:
+        occurrences = paginator.page(1)
+    except EmptyPage:
+        occurrences = paginator.page(paginator.num_pages)
+    context = {
+        'site': site,
+        'occurrences': occurrences,
+    }
+    return render(request, "archaeology/site_detail.html", context=context)
+
+@login_required
 def create_site(request):
     formSite = SiteForm(request.POST or None)
     formOccurrence = OccurrenceForm(request.POST or None)
@@ -199,6 +220,11 @@ def list_occurrences(request):
         'path': path,
         }
     return render(request, "archaeology/list_occurrences.html", context=context)
+
+
+@login_required
+def view_occurrence(request, pk):
+    return render(request, "archaeology/occurrence_detail.html")
 
 @login_required
 def create_occurrence(request, pk):

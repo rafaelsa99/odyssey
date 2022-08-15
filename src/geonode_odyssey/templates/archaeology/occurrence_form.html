@@ -3,6 +3,14 @@
 {% load crispy_forms_tags %}
 {% load i18n %}
 
+{% block title %}
+    {% if form.instance.pk == None %}
+       {% trans "Create Occurrence" %}
+    {% else %}
+        {% trans "Update Occurrence - " %} {{occurrence.designation}}
+    {% endif %}
+{% endblock %}
+
 {% block extra_head %}
 {{ form.media.css }}
 <style>
@@ -16,18 +24,18 @@
 {% leaflet_js plugins="forms" %}
 
 <div class="container">
-    <div class="jumbotron">
-        <h1>
+    <div class="page-header">
+        <h2>
             {% if form.instance.pk == None %}
                 {% trans "Add New " %}
             {% endif %}
-            {% trans "Occurrence" %}</h1>
+            {% trans "Occurrence" %}</h2>
         <h4>
             {% trans "In " %}
             {% if occurrence.site == None %}
-            <a class="text-secondary" href="{% url 'update_site' site.id %}">{{site}}</a>
+            <a class="text-secondary" href="{% url 'view_site' site.id %}">{{site}}</a>
             {% else %}
-            <a class="text-secondary" href="{% url 'update_site' occurrence.site.id %}">{{occurrence.site}}</a>
+            <a class="text-secondary" href="{% url 'view_site' occurrence.site.id %}">{{occurrence.site}}</a>
             {% endif %}
         </h4>
     </div>

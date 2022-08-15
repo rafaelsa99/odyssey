@@ -3,6 +3,10 @@
 {% load crispy_forms_tags %}
 {% load i18n %}
 
+{% block title %}
+    {% trans "Update Site - " %} {{site.name}}
+{% endblock %}
+
 {% block extra_head %}
 {{ form.media.css }}
 <style>
@@ -16,8 +20,8 @@
 {% leaflet_js plugins="forms" %}
 
 <div class="container">
-    <div class="jumbotron">
-        <h1>{% trans "Archaeological Site" %}</h1>
+    <div class="page-header">
+        <h2>{% trans "Archaeological Site" %}</h2>
     </div>
     <form action="" method="post">
         {% csrf_token %}

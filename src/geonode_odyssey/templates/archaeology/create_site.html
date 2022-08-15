@@ -5,6 +5,10 @@
 {% load crispy_forms_tags %}
 {% load i18n %}
 
+{% block title %}
+{% trans "Create Site" %}
+{% endblock %}
+
 {% block extra_head %}
 {{ site.media.css }}
 {{ occurrence.media.css }}
@@ -19,14 +23,17 @@
 {% leaflet_css plugins="forms" %}
 {% leaflet_js plugins="forms" %}
 
+<div class="page-header">
+    <h2 class="page-title">{% trans "Add New Archaeological Site" %}</h2>
+</div>
+
 <div class="container">
-    <div class="jumbotron">
-        <h1>{% trans "Add New Archaeological Site" %}</h1>
-    </div>
     <form action="" method="post">
         {% csrf_token %}
         {{ site|crispy }}
-        <h2>{% trans "Occurrence" %}</h2>
+        <div class="page-header">
+            <h2>{% trans "Occurrence" %}</h2>
+        </div>
         {{ occurrence|crispy }}
         <input type="submit" value={% trans "Add" %} class="btn btn-success"/>
     </form>

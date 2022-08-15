@@ -1,6 +1,11 @@
 {% extends "geonode_base.html" %}
 {% load i18n %}
 {% load leaflet_tags %}
+
+{% block title %}
+{% trans "Explore Sites" %}
+{% endblock %}
+
 {% block extra_head %}
 <style>   
     .btn {
@@ -136,7 +141,7 @@
                 <tbody>
                   {% for site in sites %}
                   <tr>
-                  <td><a href="{% url 'update_site' site.id %}"><strong>{{site.name}}</strong></a><br>{{site.parish}} ({{site.country_iso}})</td>
+                  <td><a href="{% url 'view_site' site.id %}"><strong>{{site.name}}</strong></a><br>{{site.parish}} ({{site.country_iso.name}})</td>
                   <td class="text-right">{{site.national_site_code}}</td>
                 </tr>
                 {% endfor %}

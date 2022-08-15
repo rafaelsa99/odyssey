@@ -1,6 +1,11 @@
 {% extends "geonode_base.html" %}
 {% load i18n %}
 {% load class_tag %}
+
+{% block title %}
+{% trans "Delete Site - " %} {{item}}
+{% endblock %}
+
 {% block body %}
 
 <br>
@@ -19,7 +24,7 @@
         {% elif item|get_class == 'Site' %} 
         <form action="{% url 'delete_site' item.id %}" method="post">
             {% csrf_token %}
-            <a class="btn btn-warning" href="{% url 'update_site' item.id %}">{% trans "Cancel" %}</a>
+            <a class="btn btn-warning" href="{% url 'view_site' item.id %}">{% trans "Cancel" %}</a>
         {% endif %}
             <input type="submit" value={% trans "Delete" %} class="btn btn-danger"/>
         </form>

@@ -51,7 +51,7 @@ class Site(models.Model):
 
     def get_absolute_url(self):
         """Returns the url to access a particular archaeological site."""
-        return reverse('update_site', args=[str(self.id)])
+        return reverse('view_site', args=[str(self.id)])
 
     def clean(self):
         # Checks if at least one of the spatial fields is filled in (Model Level)
@@ -98,7 +98,7 @@ class Occurrence(models.Model):
 
     def get_absolute_url(self):
         """Returns the url to access a particular occurrence."""
-        return reverse('update_occurrence', args=[str(self.id)])
+        return reverse('view_occurrence', args=[str(self.id)])
 
     class Meta:
         db_table = 'occurrence'
