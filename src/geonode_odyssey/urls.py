@@ -23,6 +23,7 @@ from django.views.generic import TemplateView
 from django.urls import include, path
 from geonode.urls import urlpatterns
 from geonode.base import register_url_event
+from . import views
 
 urlpatterns += [
     url(r'^archaeology/', include('archaeology.urls')),
@@ -30,10 +31,8 @@ urlpatterns += [
     path('about/project', TemplateView.as_view(template_name='about_project.html'), name="about_project"),
 ]
 
-homepage = register_url_event()(TemplateView.as_view(template_name='site_index.html'))
-
 urlpatterns = [
     url(r'^/?$',
-        homepage,
+        views.index,
         name='home'),
  ] + urlpatterns
