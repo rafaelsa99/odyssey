@@ -7,7 +7,6 @@ from .forms import MetricForm, OccurrenceForm, SiteForm, MetricFormSetHelper
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Metric, Occurrence, Site
-from django.db.models import ProtectedError
 from django.core.management import execute_from_command_line
 from django.forms import modelformset_factory
 from django.contrib.gis.geos import Polygon
@@ -139,16 +138,14 @@ def delete_site(request, pk):
         site = Site.objects.get(id=pk)
     except Site.DoesNotExist:
         raise Http404("Site does not exist")
-    context = {'item': site,}  
+    occurrences = site.occurrence_set.all()
+    context = {'item': site, 'occurrences': occurrences, }  
     if request.method == "POST":
-        try:
-            msg = "Site " + site.name + " successfully deleted."
-            site.delete()
-            messages.success(request, msg)
-            execute_from_command_line(["../manage_dev.sh", "updatelayers", "-s", "archaeology"])
-            return redirect(list_sites)
-        except ProtectedError:
-            context['error']= "Cannot delete the site, as there are still " + str(site.occurrence_set.count()) + " associated occurrence(s). Delete the associated occurrences first to be able to delete the site."
+        msg = "Site " + site.name + " successfully deleted."
+        site.delete()
+        messages.success(request, msg)
+        execute_from_command_line(["../manage_dev.sh", "updatelayers", "-s", "archaeology"])
+        return redirect(list_sites)
     return render(request, "archaeology/delete.html", context=context)
 
 @login_required

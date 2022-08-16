@@ -7,28 +7,44 @@
 {% endblock %}
 
 {% block body %}
-
-<br>
 <div class="container">
-    <div class="jumbotron">
-        {% if error %}
-        <div class="alert alert-danger" role="alert">
-            {% trans error %}
+    <div class="page-header">
+        <h2 class="page-title">{% trans "Remove " %}
+            {% if item|get_class == 'Occurrence' %}
+                {% trans "Occurrence" %}
+            {% elif item|get_class == 'Site' %} 
+                {% trans "Site" %}
+            {% endif %}
+        </h2>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+        <p class="lead">
+            {% trans "Are you sure you want to delete" %} <a href="{{ item.get_absolute_url }}">{{ item }}</a>?
+            </p>
+            {% if item|get_class == 'Occurrence' %}
+            <form action="{% url 'delete_occurrence' item.id %}" method="post">
+                {% csrf_token %}
+                <a class="btn btn-default" href="{% url 'view_occurrence' item.id %}">{% trans "No, don't remove it" %}</a>
+            {% elif item|get_class == 'Site' %} 
+            <form action="{% url 'delete_site' item.id %}" method="post">
+                {% csrf_token %}
+                <a class="btn btn-default" href="{% url 'view_site' item.id %}">{% trans "No, don't remove it" %}</a>
+            {% endif %}
+            <input type="submit" value="{% trans "Yes, I am sure" %}" class="btn btn-danger"/>
+        </div>
+        {% if occurrences %}
+        <div class="col-md-4">
+        <ul class="nav nav-list">
+        <li class="nav-header">{% trans "This action affects the following occurrences:" %}</li>
+        {% for occurrence in occurrences %}
+            <li><a href="{{ occurrence.get_absolute_url }}">{{ occurrence.designation }}</a></li>
+        {% empty %}
+            <li>{% trans "This site does not have occurrences" %}</li>
+        {% endfor %}
+        </ul>
         </div>
         {% endif %}
-        <p>{% trans "Are you sure you want to delete" %} "{{item}}"?</p>
-        {% if item|get_class == 'Occurrence' %}
-        <form action="{% url 'delete_occurrence' item.id %}" method="post">
-            {% csrf_token %}
-            <a class="btn btn-warning" href="{% url 'view_occurrence' item.id %}">{% trans "Cancel" %}</a>
-        {% elif item|get_class == 'Site' %} 
-        <form action="{% url 'delete_site' item.id %}" method="post">
-            {% csrf_token %}
-            <a class="btn btn-warning" href="{% url 'view_site' item.id %}">{% trans "Cancel" %}</a>
-        {% endif %}
-            <input type="submit" value={% trans "Delete" %} class="btn btn-danger"/>
-        </form>
     </div>
 </div>
-
 {% endblock %}

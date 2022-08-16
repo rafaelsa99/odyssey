@@ -83,7 +83,7 @@ class Occurrence(models.Model):
     altitude = models.IntegerField(null=True, blank=True)
     position = models.PointField(null=True, blank=True)
     bounding_polygon = models.PolygonField(null=True, blank=True)
-    site = models.ForeignKey(Site, on_delete=models.PROTECT)
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
     document_occurrence = models.ManyToManyField(Document, blank=True, verbose_name="documents")
     attribute_occurrence = models.ManyToManyField(AttributeChoice, blank=True, verbose_name="attributes")

@@ -1,0 +1,20 @@
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+    border-color: #101010;
+  }
+
+.jumbotron {
+    background: url("../img/background.png") no-repeat !important;
+    background-size: cover !important;
+}
+
+.navbar-brand {
+    margin-top: .25em;
+    background: transparent url("../img/Odyssey_logo.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+#partners{
+    background-color: white;
+}
