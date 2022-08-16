@@ -1,0 +1,86 @@
+{% extends "geonode_base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% block title %} {% trans "About the Project" %} {% endblock %}
+
+{% block body_outer %}
+<div class="page-header">
+  <h2>{% trans "About the Project" %}</h2>
+</div>
+
+<div class="row">
+  <div class="col-md-8">
+    <p class="lead">Odyssey - {% trans "Platform for Automated Sensing in Archaeology" %}</p>
+    {% blocktrans %}
+    <p align ="justify">Odyssey is a Portuguese research project that merges the potential of geoinformatics and the study of the past. Formed by a multidisciplinary team of archaeologists and computer engineers, the project aims to locate archaeological sites by employing non-invasive remote-sensing techniques. This approach is relatively new in archaeological research and the first of its kind in Portuguese territory. </p>
+    <p align ="justify">The project takes place from 2021 to 2023 and it is funded by the European Union.</p>
+    <h3 id="objectives">Objectives</h3>
+    <p align= "justify">The project's main goal is to support the tasks of archaeologists. The employment of remote-sensing techniques in Archaeology is not something  new. The use of aerial photographs was the first approach to study archaeological heritage from a distance. It helped to understand archaeological sites from a different perspective and also supported fieldwork tasks. Recently new elements have entered into archaeological research such as the use of satellite imagery or drones with new data such as LiDAR point clouds or multiespectal imagery. These elements were not created for Archaeology but many archaeologists saw how they could be of use for archaeological research and started applying them. These kind of studies begun in northern Europe and are just starting to be used in Portugal.    </p>
+    <p align ="justify">The potential of multiespectral imagery and LiDAR data, if used correctly, is that they contain very detailed information of interest to archaeologists, such as topographic anomalies (that could potentially be archaeological) or differences in moisture conditions of the soil (that could hint at possible archaeological sites). It must be said that these techniques do not substitute archaeological fieldwork such as excavations or surveys. They serve as support and their information must be verified with fieldwork</p>
+    <p align ="justify"> To sum up we can say that the project's main goal is to help in the location of new archaeological sites and, by doing so,  in preserving and protecting cultural heritage. The use of this innovative approach can help new locate archaeological sites that would be very difficult to find by traditional means and at the same time it can do so in a very limited time saving time and money to archaeologists.</p>
+    {% endblocktrans %}
+    <h3 id="institutions">{% trans "Institutions" %}</h3>
+    <div class="container row">
+        <div class="col-md-4">
+          <div class="thumbnail" id="ERA">
+              <img class="mx-auto d-block" src= "{% static 'img/ERA_Arq.jpg' %}" alt="ERA Arqueologia" style= "width:63%" >
+              {% blocktrans %}
+              <div class="caption">
+                &nbsp
+                <h4 class="text-center">ERA Arqueologia</h4>
+                &nbsp
+                <p class="text-justify">Archaeology company founded in 1997.</p>
+                <p class="text-justify"> ERA has worked all over Portugal and has contributed in very diverse projects. The study of Archaeology in Portugal was traditionally done by public institutions (universities, museums, etc) but ERA has showed in the last 25 years how the private sector can contribute in innovative, professional and efficient ways to the study of the human past. </p>
+                <p class="text-justify"> ERA is the coordinating entity of the project.</p>
+              </div>
+              {% endblocktrans %}
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="thumbnail" id="UA">
+              <img class="mx-auto d-block" src= "{% static 'img/UA.png' %}" alt="UA" style="width:52%" >
+              {% blocktrans %}
+              <div class="caption">
+                &nbsp
+                <h4 class="text-center">Universidade de Aveiro</h4>
+                &nbsp
+                <p class="text-justify">Public university founded in 1973.</p>
+                <p class="text-justify"> The project's team is based at IEETA (Instituto de Engenheria Eletronica e Telemática de Aveiro), a Computer Science Engineering research unit. Researchers from two different areas of study are working within the project: GIS developers and Artificial Intelligence specialists.  </p>
+                <p class= "text-justify"> The Universidade de Aveiro is a leading institution in the area of Computer Engineering. </p>
+              </div>
+              {% endblocktrans %}
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="thumbnail" id="ISMAI">
+              <img class="mx-auto d-block" src= "{% static 'img/ISMAI.png' %}"  alt="ISMAI" style="width:58%">
+              {% blocktrans %}
+              <div class="caption">
+                &nbsp
+                <h4 class="text-center">Universidade de Maia</h4>
+                &nbsp
+                <p class="text-justify">Private university founded in 1990.</p>
+                <p class="text-justify">The most important private university in northern Portugal. Researchers from this university were among the first to work with LiDAR and multiespectral data.  </p>
+                <p class="text-justify"></p>
+              </div>
+              {% endblocktrans %}
+          </div>
+        </div>
+      </div>
+    
+</div>
+  <div class="col-md-4">
+    <ul class="list-group">
+      <li class="list-group-item"><h3>{% trans "Sections" %}</h3></li>
+      <li class="list-group-item"><a href="#objectives">{% trans "Objectives" %}</a></li>
+      <li class="list-group-item"><a href="#institutions">{% trans "Institutions" %}</a></li>
+      <li class="list-group-item"> <ul class="list-group">
+      <li class="list-group-item"><a href="#ERA">{% trans "ERA Arqueologia" %}</a></li>
+      <li class="list-group-item"><a href="#UA">{% trans "Universidade de Aveiro" %}</a></li>
+      <li class="list-group-item"><a href="#ISMAI">{% trans "Universidade da Maia" %}</a></li>
+    </ul>
+    </li>
+    </ul>
+  </div>
+</div>
+{% endblock %}
