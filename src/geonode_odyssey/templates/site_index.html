@@ -192,7 +192,9 @@ This is where you can override the hero area block. You can simply modify the co
                   <p><a class="btn btn-default" href="{% url "profile_browse" %}" role="button">{% trans "See users" %} &raquo;</a></p>
                 {% endif %}
               </div>
+            </div>
             {% endwith %}
+            <div class="row home-facets">
             <div class="col-md-6">
               <p><a href="{% url "list_sites" %}"><i class="fa fa-globe fa-4x"></i></a></p>
               <h2><a href="{% url "list_sites" %}">{{ num_sites }} {% trans "Archaeological Site" %}{{ num_sites|pluralize }}</a></h2>
