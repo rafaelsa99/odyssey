@@ -21,7 +21,7 @@
 # Django settings for the GeoNode project.
 import os
 import ast
-
+from django.utils.translation import gettext_lazy as _
 try:
     from urllib.parse import urlparse, urlunparse
     from urllib.request import urlopen, Request
@@ -67,9 +67,16 @@ ROOT_URLCONF = os.getenv('ROOT_URLCONF', '{}.urls'.format(PROJECT_NAME))
 STATICFILES_DIRS = [os.path.join(LOCAL_ROOT, "static"), ] + STATICFILES_DIRS
 
 # Location of locale files
-LOCALE_PATHS = (
-    os.path.join(LOCAL_ROOT, 'locale'),
-    ) + LOCALE_PATHS
+#LOCALE_PATHS = (
+#    os.path.join(LOCAL_ROOT, 'locale'),
+#    ) + LOCALE_PATHS
+SITE_ROOT = os.path.dirname(os.path.realpath(__name__))
+LOCALE_PATHS = ( os.path.join(SITE_ROOT, 'locale'), )
+
+LANGUAGES = [
+    ('en', _('English')),
+    ('pt', _('Portuguese')),
+]
 
 TEMPLATES[0]['DIRS'].insert(0, os.path.join(LOCAL_ROOT, "templates"))
 loaders = TEMPLATES[0]['OPTIONS'].get('loaders') or ['django.template.loaders.filesystem.Loader','django.template.loaders.app_directories.Loader']

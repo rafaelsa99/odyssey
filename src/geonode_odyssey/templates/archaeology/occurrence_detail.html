@@ -102,8 +102,8 @@
                             {% for metric in metrics %}
                             <tr>
                                 <td>{{metric.type}}</td>
-                                <td>{{metric.auto_value}} {% if metric.auto_value != None %} {{metric.unit_measurement}} {% endif %}</td>
-                                <td>{{metric.confirmed_value}} {{metric.unit_measurement}}</td>
+                                <td>{{metric.auto_value}} {% if metric.auto_value != None and metric.unit_measurement != None %} {{metric.unit_measurement}} {% endif %}</td>
+                                <td>{{metric.confirmed_value}} {% if metric.unit_measurement != None %}{{metric.unit_measurement}}{% endif %}</td>
                             </tr>
                             {% empty %}
                                 <h5>{% trans "No metrics!" %}</h5>
