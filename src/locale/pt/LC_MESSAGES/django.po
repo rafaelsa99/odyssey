@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-17 00:10+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2022-08-18 16:52+0100\n"
+"PO-Revision-Date: 2022-08-18 16:57+0100\n"
 "Last-Translator: Rafael Gomes de Sá, rafael.sa@ua.pt\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: Portuguese\n"
@@ -17,6 +17,153 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Please fill at least one form."
+msgstr "Por favor, preencha pelo menos um formulário."
+
+msgid "Latitude"
+msgstr "Latitude"
+
+msgid "Enter coordinates as an alternative to selecting a point on the map."
+msgstr "Introduza as coordenadas como alternativa à selecção de um ponto no mapa."
+
+msgid "Longitude"
+msgstr "Longitude"
+
+msgid "Name"
+msgstr "Nome"
+
+msgid "Attribute Category"
+msgstr "Categorias de Atributos"
+
+msgid "Attribute Categories"
+msgstr "Categorias de Atributos"
+
+msgid "Category"
+msgstr "Categoria"
+
+msgid "Value"
+msgstr "Valor"
+
+msgid "Attribute Choice"
+msgstr "Opção do Atributo"
+
+msgid "Attribute Choices"
+msgstr "Opções do Atributo"
+
+msgid "National Site Code"
+msgstr "Código Nacional de Sítio"
+
+msgid "Country"
+msgstr "País"
+
+msgid "Parish"
+msgstr "Freguesia"
+
+msgid "Location"
+msgstr "Localização"
+
+msgid "Surrounding Polygon"
+msgstr "Polígono Envolvente"
+
+msgid "Added by"
+msgstr "Adicionado por"
+
+msgid "documents"
+msgstr "Documentos"
+
+msgid "attributes"
+msgstr "Atributos"
+
+msgid "At least one of the spatial fields (point or polygon) is required."
+msgstr "Pelo menos um dos campos geográficos (ponto ou polígono) é necessário."
+
+msgid "Site"
+msgstr "Sítio"
+
+msgid "Sites"
+msgstr "Sítios"
+
+msgid "Designation"
+msgstr "Designação"
+
+msgid "Acronym"
+msgstr "Acrónimo"
+
+msgid "Toponym"
+msgstr "Topónimo"
+
+msgid "Owner"
+msgstr "Proprietário"
+
+msgid "Altitude"
+msgstr "Altitude"
+
+msgid "Position"
+msgstr "Posição"
+
+msgid "Bounding Polygon"
+msgstr "Polígono Delimitador"
+
+msgid "Occurrence"
+msgstr "Ocorrência"
+
+msgid "Occurrences"
+msgstr "Ocorrências"
+
+msgid "Metric Type"
+msgstr "Tipo de Métrica"
+
+msgid "Metric Types"
+msgstr "Tipos de Métricas"
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "automatic value"
+msgstr "Valor Automático"
+
+msgid "Confirmed Value"
+msgstr "Valor Confirmado"
+
+msgid "unit of measurement"
+msgstr "Unidade de Medida"
+
+msgid "Metric"
+msgstr "Métrica"
+
+msgid "Metrics"
+msgstr "Métricas"
+
+msgid "Site does not exist"
+msgstr "O Sítio não existe"
+
+msgid "Site and Occurrence created successfully."
+msgstr "Sítio e Ocorrência criadas com sucesso."
+
+msgid "Changes saved successfully."
+msgstr "Alterações guardadas com sucesso."
+
+msgid "Site "
+msgstr "Sítio "
+
+msgid " successfully deleted."
+msgstr " eliminado com sucesso."
+
+msgid "Occurrence does not exist"
+msgstr "A Ocorrência não existe"
+
+msgid "Occurrence created successfully."
+msgstr "Ocorrência criada com sucesso."
+
+msgid "Occurrence "
+msgstr "Ocorrência "
+
+msgid "English"
+msgstr "Inglês"
+
+msgid "Portuguese"
+msgstr "Português"
 
 msgid "About the Project"
 msgstr "Sobre o Projeto"
@@ -64,13 +211,44 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"    <p align =\"justify\">Odyssey é um projeto de investigação português que combina o potencial da geoinformática e o estudo do passado. Formado por uma equipa multidisciplinar de arqueólogos e engenheiros informáticos, o projeto tem como objectivo localizar sítios arqueológicos, utilizando técnicas não invasivas de detecção remota. Esta abordagem é relativamente nova na investigação arqueológica e a primeira do seu género em território português.</p>\n"
-"    <p align =\"justify\">O projecto decorre entre 2021 e 2023 e é financiado pela União Europeia.</p>\n"
+"    <p align =\"justify\">Odyssey é um projeto de investigação português que "
+"combina o potencial da geoinformática e o estudo do passado. Formado por uma "
+"equipa multidisciplinar de arqueólogos e engenheiros informáticos, o projeto "
+"tem como objectivo localizar sítios arqueológicos, utilizando técnicas não "
+"invasivas de detecção remota. Esta abordagem é relativamente nova na "
+"investigação arqueológica e a primeira do seu género em território português."
+"</p>\n"
+"    <p align =\"justify\">O projecto decorre entre 2021 e 2023 e é "
+"financiado pela União Europeia.</p>\n"
 "    <h3 id=\"objectives\">Objetivos</h3>\n"
-"    <p align= \"justify\">O principal objetivo do projeto é apoiar as tarefas dos arqueólogos. A utilização de técnicas de detecção remota em Arqueologia não é algo recente. A utilização de fotografias aéreas foi a primeira abordagem para estudar o património arqueológico à distância. Ajudou a compreender sítios arqueológicos de uma perspectiva diferente e também apoiou tarefas de trabalho de campo. Recentemente novos elementos surgiram na investigação arqueológica, tais como a utilização de imagens de satélite ou drones com novos dados, como nuvens de pontos LiDAR ou imagens multiespectrais. Estes elementos não foram criados para a Arqueologia, mas diversos arqueólogos perceberam como poderiam ser úteis para a investigação arqueológica e começaram a aplicá-los. Este tipo de estudos começou no norte da Europa e está a começar a ser utilizado em Portugal.</"
-"p>\n"
-"    <p align =\"justify\">O potencial da imagem multiespectral e dos dados LiDAR, se utilizados correctamente, é que contêm informações muito detalhadas de interesse para os arqueólogos, tais como anomalias topográficas (que podem ser potencialmente arqueológicas) ou diferenças nas condições de humidade do solo (que podem sugerir possíveis sítios arqueológicos). É preciso referir que estas técnicas não substituem o trabalho de campo arqueológico, tais como escavações ou levantamentos. Elas servem de apoio e a sua informação deve ser verificada com trabalho de campo.</p>\n"
-"    <p align =\"justify\">Resumindo, podemos dizer que o principal objetivo do projeto é auxiliar na localização de novos sítios arqueológicos e, ao fazê-lo, na preservação e proteção do património cultural. A utilização desta abordagem inovadora pode ajudar a localizar novos sítios arqueológicos que seriam muito difíceis de encontrar pelos métodos tradicionais e, ao mesmo tempo, pode fazê-lo num tempo muito restrito, poupando tempo e dinheiro aos arqueólogos.</p>\n"
+"    <p align= \"justify\">O principal objetivo do projeto é apoiar as "
+"tarefas dos arqueólogos. A utilização de técnicas de detecção remota em "
+"Arqueologia não é algo recente. A utilização de fotografias aéreas foi a "
+"primeira abordagem para estudar o património arqueológico à distância. "
+"Ajudou a compreender sítios arqueológicos de uma perspectiva diferente e "
+"também apoiou tarefas de trabalho de campo. Recentemente novos elementos "
+"surgiram na investigação arqueológica, tais como a utilização de imagens de "
+"satélite ou drones com novos dados, como nuvens de pontos LiDAR ou imagens "
+"multiespectrais. Estes elementos não foram criados para a Arqueologia, mas "
+"diversos arqueólogos perceberam como poderiam ser úteis para a investigação "
+"arqueológica e começaram a aplicá-los. Este tipo de estudos começou no norte "
+"da Europa e está a começar a ser utilizado em Portugal.</p>\n"
+"    <p align =\"justify\">O potencial da imagem multiespectral e dos dados "
+"LiDAR, se utilizados correctamente, é que contêm informações muito "
+"detalhadas de interesse para os arqueólogos, tais como anomalias "
+"topográficas (que podem ser potencialmente arqueológicas) ou diferenças nas "
+"condições de humidade do solo (que podem sugerir possíveis sítios "
+"arqueológicos). É preciso referir que estas técnicas não substituem o "
+"trabalho de campo arqueológico, tais como escavações ou levantamentos. Elas "
+"servem de apoio e a sua informação deve ser verificada com trabalho de campo."
+"</p>\n"
+"    <p align =\"justify\">Resumindo, podemos dizer que o principal objetivo "
+"do projeto é auxiliar na localização de novos sítios arqueológicos e, ao "
+"fazê-lo, na preservação e proteção do património cultural. A utilização "
+"desta abordagem inovadora pode ajudar a localizar novos sítios arqueológicos "
+"que seriam muito difíceis de encontrar pelos métodos tradicionais e, ao "
+"mesmo tempo, pode fazê-lo num tempo muito restrito, poupando tempo e "
+"dinheiro aos arqueólogos.</p>\n"
 "    "
 
 msgid "Institutions"
@@ -100,9 +278,16 @@ msgstr ""
 "                &nbsp\n"
 "                <h4 class=\"text-center\">ERA Arqueologia</h4>\n"
 "                &nbsp\n"
-"                <p class=\"text-justify\">Empresa de arqueologia fundada em 1997.</p>\n"
-"                <p class=\"text-justify\">A ERA tem trabalhado em todo o país e tem contribuído em projetos muito diversos. O estudo da Arqueologia em Portugal era tradicionalmente feito por instituições públicas (universidades, museus, etc.) mas a ERA mostrou nos últimos 25 anos como o sector privado pode contribuir de forma inovadora, profissional e eficiente para o estudo do passado humano. </p>\n"
-"                <p class=\"text-justify\"> A ERA é a entidade coordenadora do projeto.</p>\n"
+"                <p class=\"text-justify\">Empresa de arqueologia fundada em "
+"1997.</p>\n"
+"                <p class=\"text-justify\">A ERA tem trabalhado em todo o "
+"país e tem contribuído em projetos muito diversos. O estudo da Arqueologia "
+"em Portugal era tradicionalmente feito por instituições públicas "
+"(universidades, museus, etc.) mas a ERA mostrou nos últimos 25 anos como o "
+"sector privado pode contribuir de forma inovadora, profissional e eficiente "
+"para o estudo do passado humano. </p>\n"
+"                <p class=\"text-justify\"> A ERA é a entidade coordenadora "
+"do projeto.</p>\n"
 "              </div>\n"
 "              "
 
@@ -129,10 +314,15 @@ msgstr ""
 "                &nbsp\n"
 "                <h4 class=\"text-center\">Universidade de Aveiro</h4>\n"
 "                &nbsp\n"
-"                <p class=\"text-justify\">Universidade pública fundada em 1973."
-"</p>\n"
-"                <p class=\"text-justify\">A equipa do projeto está baseada no IEETA (Instituto de Engenharia Eletrónica e Telemática de Aveiro), uma unidade de investigação em Engenharia Informática. Estão a trabalhar no âmbito do projeto investigadores de duas áreas de estudo diferentes: programadores SIG e especialistas em Inteligência Artificial.</p>\n"
-"                <p class= \"text-justify\">A Universidade de Aveiro é uma instituição líder na área da Engenharia Informática. </p>\n"
+"                <p class=\"text-justify\">Universidade pública fundada em "
+"1973.</p>\n"
+"                <p class=\"text-justify\">A equipa do projeto está baseada "
+"no IEETA (Instituto de Engenharia Eletrónica e Telemática de Aveiro), uma "
+"unidade de investigação em Engenharia Informática. Estão a trabalhar no "
+"âmbito do projeto investigadores de duas áreas de estudo diferentes: "
+"programadores SIG e especialistas em Inteligência Artificial.</p>\n"
+"                <p class= \"text-justify\">A Universidade de Aveiro é uma "
+"instituição líder na área da Engenharia Informática. </p>\n"
 "              </div>\n"
 "              "
 
@@ -156,9 +346,11 @@ msgstr ""
 "                &nbsp\n"
 "                <h4 class=\"text-center\">Universidade da Maia</h4>\n"
 "                &nbsp\n"
-"                <p class=\"text-justify\">Universidade privada fundada em 1990."
-"</p>\n"
-"                <p class=\"text-justify\">É a universidade privada mais importante do norte de Portugal. Os investigadores desta universidade foram dos primeiros a trabalhar com LiDAR e dados multiespectrais.</p>\n"
+"                <p class=\"text-justify\">Universidade privada fundada em "
+"1990.</p>\n"
+"                <p class=\"text-justify\">É a universidade privada mais "
+"importante do norte de Portugal. Os investigadores desta universidade foram "
+"dos primeiros a trabalhar com LiDAR e dados multiespectrais.</p>\n"
 "                <p class=\"text-justify\"></p>\n"
 "              </div>\n"
 "              "
@@ -184,9 +376,6 @@ msgstr "Criar Sítio"
 msgid "Add New Archaeological Site"
 msgstr "Adicionar Novo Sítio Arqueológico"
 
-msgid "Occurrence"
-msgstr "Ocorrência"
-
 msgid "Add"
 msgstr "Adicionar"
 
@@ -195,9 +384,6 @@ msgstr "Eliminar Sítio - "
 
 msgid "Remove "
 msgstr "Remover "
-
-msgid "Site"
-msgstr "Sítio"
 
 msgid "Are you sure you want to delete"
 msgstr "Tem a certeza que quer eliminar"
@@ -223,17 +409,8 @@ msgstr "Filtros"
 msgid "Search by:"
 msgstr "Pesquisar por:"
 
-msgid "Designation"
-msgstr "Designação"
-
 msgid "Archaeological Site"
 msgstr "Sítio Arqueológico"
-
-msgid "Altitude"
-msgstr "Altitude"
-
-msgid "Owner"
-msgstr "Proprietário"
 
 msgid "Attributes"
 msgstr "Atributos"
@@ -289,15 +466,6 @@ msgstr "Não foram encontrados resultados."
 msgid "Explore Sites"
 msgstr "Explorar Sítios"
 
-msgid "Name"
-msgstr "Nome"
-
-msgid "National Site Code"
-msgstr "Código Nacional de Sítio"
-
-msgid "Parish"
-msgstr "Freguesia"
-
 msgid " Explore Archaeological Sites"
 msgstr " Explorar Sítios Arqueológicos"
 
@@ -313,38 +481,14 @@ msgstr "Em "
 msgid "Info"
 msgstr "Informação"
 
-msgid "Metrics"
-msgstr "Métricas"
-
 msgid "Documents"
 msgstr "Documentos"
-
-msgid "Acronym"
-msgstr "Acrónimo"
-
-msgid "Toponym"
-msgstr "Topónimo"
-
-msgid "Added by"
-msgstr "Adicionado por"
-
-msgid "Category"
-msgstr "Categoria"
-
-msgid "Value"
-msgstr "Valor"
 
 msgid "No attributes!"
 msgstr "Sem atributos!"
 
-msgid "Type"
-msgstr "Tipo"
-
 msgid "Automatic Value"
 msgstr "Valor Automático"
-
-msgid "Confirmed Value"
-msgstr "Valor Confirmado"
 
 msgid "No metrics!"
 msgstr "Sem métricas!"
@@ -377,12 +521,6 @@ msgstr "Editar Ocorrência - "
 
 msgid "Add New "
 msgstr "Adicionar Novo "
-
-msgid "Occurrences"
-msgstr "Ocorrências"
-
-msgid "Country"
-msgstr "País"
 
 msgid "No occurrences!"
 msgstr "Sem ocorrências!"
@@ -431,9 +569,6 @@ msgstr "Criar Mapa"
 
 msgid "Archaeology"
 msgstr "Arqueologia"
-
-msgid "Sites"
-msgstr "Sítios"
 
 msgid "Users"
 msgstr "Utilizadores"
@@ -499,6 +634,9 @@ msgstr "Categorias de Grupos"
 msgid "About the Project &raquo;"
 msgstr "Sobre o Projeto &raquo;"
 
+msgid "Our Partners"
+msgstr "Os Nossos Parceiros"
+
 msgid "No"
 msgstr "Não"
 
@@ -510,7 +648,9 @@ msgstr[1] "Camadas"
 msgid ""
 "Click to search for geospatial data published by other users, organizations "
 "and public sources. Download data in standard formats."
-msgstr "Clique para procurar dados geoespaciais publicadas por outros utilizadores, organizações e fontes públicas. Transferência de dados nos formatos padrão."
+msgstr ""
+"Clique para procurar dados geoespaciais publicadas por outros utilizadores, "
+"organizações e fontes públicas. Transferência de dados nos formatos padrão."
 
 msgid "Add layers"
 msgstr "Adicionar Camadas"
@@ -527,7 +667,10 @@ msgid ""
 "Data is available for browsing, aggregating and styling to generate maps "
 "which can be saved, downloaded, shared publicly or restricted to specify "
 "users only."
-msgstr "Os dados estão disponíveis para navegação, agregação e definição de estilos para gerar mapas que podem ser partilhadas publicamente ou restrito apenas a utilizadores específicos."
+msgstr ""
+"Os dados estão disponíveis para navegação, agregação e definição de estilos "
+"para gerar mapas que podem ser partilhadas publicamente ou restrito apenas a "
+"utilizadores específicos."
 
 msgid "Create maps"
 msgstr "Criar Mapas"
@@ -538,7 +681,9 @@ msgstr "Explorar Mapas"
 msgid ""
 "As for the layers and maps GeoNode allows to publish tabular and text data, "
 "manage theirs metadata and associated documents."
-msgstr "Quanto às camadas e mapas, o GeoNode permite publicar informações tabulares e de texto, gerir os seus metadados e documentos associados."
+msgstr ""
+"Quanto às camadas e mapas, o GeoNode permite publicar informações tabulares "
+"e de texto, gerir os seus metadados e documentos associados."
 
 msgid "Add documents"
 msgstr "Adicionar Documentos"
@@ -554,7 +699,9 @@ msgstr[1] "Utilizadores"
 msgid ""
 "Geonode allows registered users to easily upload geospatial data and various "
 "documents in several formats."
-msgstr "O GeoNode permite que os utilizadores registados carreguem facilmente dados geoespaciais em vários formatos."
+msgstr ""
+"O GeoNode permite que os utilizadores registados carreguem facilmente dados "
+"geoespaciais em vários formatos."
 
 msgid "See users"
 msgstr "Ver Utilizadores"
@@ -562,12 +709,16 @@ msgstr "Ver Utilizadores"
 msgid ""
 "Explore archaeological sites, i.e., areas of archaeological intervention or "
 "interest."
-msgstr "Explorar Sítios Arqueológicos, ou seja, áreas de intervenção ou interesse arqueológico."
+msgstr ""
+"Explorar Sítios Arqueológicos, ou seja, áreas de intervenção ou interesse "
+"arqueológico."
 
 msgid ""
 "Explore archaeological occurrences, i.e., points of archaeological interest "
 "within a site."
-msgstr "Explorar Ocorrências Arqueológicas, ou seja, pontos de interesse arqueológico dentro de um sítio."
+msgstr ""
+"Explorar Ocorrências Arqueológicas, ou seja, pontos de interesse "
+"arqueológico dentro de um sítio."
 
 msgid "Search for Data."
 msgstr "Pesquisar Dados."
@@ -580,3 +731,6 @@ msgstr "Pesquisar Sítios Arqueológicos"
 
 msgid "Search Archaeological Occurrences"
 msgstr "Pesquisar Ocorrências Arqueológicas"
+
+msgid "Odyssey Project"
+msgstr "Projeto Odyssey"

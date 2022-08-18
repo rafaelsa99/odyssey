@@ -10,6 +10,7 @@ from django.core.management import execute_from_command_line
 from django.forms import modelformset_factory
 from django.contrib.gis.geos import Polygon
 from django.contrib.auth.decorators import login_required
+from django.utils.translation import ugettext_lazy
 # Create your views here.
 
 @login_required
@@ -72,7 +73,7 @@ def view_site(request, pk):
     try:
         site = Site.objects.get(id=pk)
     except Site.DoesNotExist:
-        raise Http404("Site does not exist")
+        raise Http404(ugettext_lazy('Site does not exist'))
     occurrences = site.occurrence_set.all()
     context = {
         'site': site,
@@ -98,7 +99,7 @@ def create_site(request):
         occurrence.site = site
         occurrence.save()
         formOccurrence.save_m2m()
-        messages.success(request, "Site and Occurrence created successfully.")
+        messages.success(request, ugettext_lazy('Site and Occurrence created successfully.'))
         execute_from_command_line(["../manage_dev.sh", "updatelayers", "-s", "archaeology"])
         return redirect(site.get_absolute_url())
     return render(request, "archaeology/create_site.html", context=context)
@@ -108,7 +109,7 @@ def update_site(request, pk):
     try:
         site = Site.objects.get(id=pk)
     except Site.DoesNotExist:
-        raise Http404("Site does not exist")
+        raise Http404(ugettext_lazy('Site does not exist'))
     form = SiteForm(request.POST or None, instance=site)
     occurrences_list = site.occurrence_set.all()
     page = request.GET.get('page', 1)
@@ -121,7 +122,7 @@ def update_site(request, pk):
         occurrences = paginator.page(paginator.num_pages)
     if form.is_valid():
         form.save()
-        messages.success(request, "Changes saved successfully.")
+        messages.success(request, ugettext_lazy('Changes saved successfully.'))
         execute_from_command_line(["../manage_dev.sh", "updatelayers", "-s", "archaeology"])
         return redirect(site.get_absolute_url())
     context = {
@@ -136,11 +137,11 @@ def delete_site(request, pk):
     try:
         site = Site.objects.get(id=pk)
     except Site.DoesNotExist:
-        raise Http404("Site does not exist")
+        raise Http404(ugettext_lazy('Site does not exist'))
     occurrences = site.occurrence_set.all()
     context = {'item': site, 'occurrences': occurrences, }  
     if request.method == "POST":
-        msg = "Site " + site.name + " successfully deleted."
+        msg = str(ugettext_lazy('Site ')) + site.name + str(ugettext_lazy(' successfully deleted.'))
         site.delete()
         messages.success(request, msg)
         execute_from_command_line(["../manage_dev.sh", "updatelayers", "-s", "archaeology"])
@@ -215,7 +216,7 @@ def view_occurrence(request, pk):
     try:
         occurrence_instance = Occurrence.objects.get(id=pk)
     except Occurrence.DoesNotExist:
-        raise Http404("Occurrence does not exist")
+        raise Http404(ugettext_lazy('Occurrence does not exist'))
     metrics = occurrence_instance.metric_set.all()
     context = {
         'occurrence': occurrence_instance,
@@ -228,7 +229,7 @@ def create_occurrence(request, pk):
     try:
         site = Site.objects.get(id=pk)
     except Site.DoesNotExist:
-        raise Http404("Site does not exist")
+        raise Http404(ugettext_lazy('Site does not exist'))
     form = OccurrenceForm(request.POST or None, initial={'site':site})
     MetricFormset = modelformset_factory(Metric, form=MetricForm, extra=3)
     formset = MetricFormset(queryset=Metric.objects.none())
@@ -246,7 +247,7 @@ def create_occurrence(request, pk):
                     metric = metric_form.save(commit=False)
                     metric.occurrence = occurrence
                     metric.save()
-        messages.success(request, "Occurrence created successfully.")
+        messages.success(request, ugettext_lazy('Occurrence created successfully.'))
         execute_from_command_line(["../manage_dev.sh", "updatelayers", "-s", "archaeology"])
         return redirect(occurrence.get_absolute_url())
     context = {
@@ -262,7 +263,7 @@ def update_occurrence(request, pk):
     try:
         occurrence_instance = Occurrence.objects.get(id=pk)
     except Occurrence.DoesNotExist:
-        raise Http404("Occurrence does not exist")
+        raise Http404(ugettext_lazy('Occurrence does not exist'))
     form = OccurrenceForm(request.POST or None, instance=occurrence_instance)
     MetricFormset = modelformset_factory(Metric, form=MetricForm, extra=1, can_delete=True)
     formset = MetricFormset(queryset=Metric.objects.filter(occurrence=occurrence_instance))
@@ -281,7 +282,7 @@ def update_occurrence(request, pk):
                         metric = metric_form.save(commit=False)
                         metric.occurrence = occurrence_instance
                         metric.save()
-        messages.success(request, "Changes saved successfully.")
+        messages.success(request, ugettext_lazy('Changes saved successfully.'))
         execute_from_command_line(["../manage_dev.sh", "updatelayers", "-s", "archaeology"])
         return redirect(occurrence_instance.get_absolute_url())
     context = {
@@ -297,11 +298,11 @@ def delete_occurrence(request, pk):
     try:
         occurrence = Occurrence.objects.get(id=pk)
     except Occurrence.DoesNotExist:
-        raise Http404("Occurrence does not exist")
+        raise Http404(ugettext_lazy('Occurrence does not exist'))
     
     if request.method == "POST":
         site = occurrence.site
-        msg = "Occurrence " + occurrence.designation + " successfully deleted."
+        msg = str(ugettext_lazy('Occurrence ')) + occurrence.designation + str(ugettext_lazy(' successfully deleted.'))
         occurrence.delete()
         messages.success(request, msg)
         execute_from_command_line(["../manage_dev.sh", "updatelayers", "-s", "archaeology"])

@@ -1,4 +1,3 @@
-from cProfile import label
 from django.contrib.gis import forms
 from django.core.exceptions import ValidationError
 from django.forms.models import BaseInlineFormSet
@@ -6,7 +5,7 @@ from django.contrib.gis.geos import Point
 from leaflet.forms.widgets import LeafletWidget
 from .models import Metric, Occurrence, Site
 from django_select2 import forms as s2forms
-from django.forms import inlineformset_factory
+from django.utils.translation import ugettext_lazy
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 
@@ -19,7 +18,7 @@ class AtLeastOneFormSet(BaseInlineFormSet):
             if form.cleaned_data:
                 non_empty_forms += 1
         if non_empty_forms - len(self.deleted_forms) < 1:
-            raise ValidationError("Please fill at least one form.")
+            raise ValidationError(ugettext_lazy('Please fill at least one form.'))
     
 class MetricForm(forms.ModelForm):
     class Meta:
@@ -34,12 +33,14 @@ class MetricFormSetHelper(FormHelper):
 
 class SiteForm(forms.ModelForm):
     latitude = forms.FloatField(
+        label= ugettext_lazy('Latitude'),
         min_value=-90,
         max_value=90,
         required=False,
-        help_text="Enter coordinates as an alternative to selecting a point on the map."
+        help_text=ugettext_lazy('Enter coordinates as an alternative to selecting a point on the map.'),
     )
     longitude = forms.FloatField(
+        label= ugettext_lazy('Longitude'),
         min_value=-180,
         max_value=180,
         required=False,
@@ -73,14 +74,14 @@ class SiteForm(forms.ModelForm):
 
 class OccurrenceForm(forms.ModelForm):
     latitude_occurrence = forms.FloatField(
-        label="Latitude",
+        label= ugettext_lazy('Latitude'),
         min_value=-90,
         max_value=90,
         required=False,
-        help_text="Enter coordinates as an alternative to selecting a point on the map."
+        help_text=ugettext_lazy('Enter coordinates as an alternative to selecting a point on the map.')
     )
     longitude_occurrence = forms.FloatField(
-        label="Longitude",
+        label= ugettext_lazy('Longitude'),
         min_value=-180,
         max_value=180,
         required=False,
@@ -114,12 +115,14 @@ class OccurrenceForm(forms.ModelForm):
 
 class SiteFormAdmin(forms.ModelForm):
     latitude = forms.FloatField(
+        label= ugettext_lazy('Latitude'),
         min_value=-90,
         max_value=90,
         required=False,
-        help_text="Enter coordinates as an alternative to selecting a point on the map."
+        help_text=ugettext_lazy('Enter coordinates as an alternative to selecting a point on the map.')
     )
     longitude = forms.FloatField(
+        label= ugettext_lazy('Longitude'),
         min_value=-180,
         max_value=180,
         required=False,
@@ -145,14 +148,14 @@ class SiteFormAdmin(forms.ModelForm):
 
 class OccurrenceFormAdmin(forms.ModelForm):
     latitude_occurrence = forms.FloatField(
-        label="Latitude",
+        label= ugettext_lazy('Latitude'),
         min_value=-90,
         max_value=90,
         required=False,
-        help_text="Enter coordinates as an alternative to selecting a point on the map."
+        help_text=ugettext_lazy('Enter coordinates as an alternative to selecting a point on the map.')
     )
     longitude_occurrence = forms.FloatField(
-        label="Longitude",
+        label= ugettext_lazy('Longitude'),
         min_value=-180,
         max_value=180,
         required=False,

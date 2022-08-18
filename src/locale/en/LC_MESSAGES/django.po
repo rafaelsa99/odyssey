@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-17 00:10+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2022-08-18 16:52+0100\n"
+"PO-Revision-Date: 2022-08-18 16:33+0100\n"
 "Last-Translator: Rafael Gomes de Sá, rafael.sa@ua.pt\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: English\n"
@@ -17,6 +17,153 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Please fill at least one form."
+msgstr "Please fill at least one form."
+
+msgid "Latitude"
+msgstr "Latitude"
+
+msgid "Enter coordinates as an alternative to selecting a point on the map."
+msgstr "Enter coordinates as an alternative to selecting a point on the map."
+
+msgid "Longitude"
+msgstr "Longitude"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Attribute Category"
+msgstr "Attribute Category"
+
+msgid "Attribute Categories"
+msgstr "Attribute Categories"
+
+msgid "Category"
+msgstr "Category"
+
+msgid "Value"
+msgstr "Value"
+
+msgid "Attribute Choice"
+msgstr "Attribute Choice"
+
+msgid "Attribute Choices"
+msgstr "Attribute Choices"
+
+msgid "National Site Code"
+msgstr "National Site Code"
+
+msgid "Country"
+msgstr "Country"
+
+msgid "Parish"
+msgstr "Parish"
+
+msgid "Location"
+msgstr "Location"
+
+msgid "Surrounding Polygon"
+msgstr "Surrounding Polygon"
+
+msgid "Added by"
+msgstr "Added by"
+
+msgid "documents"
+msgstr "documents"
+
+msgid "attributes"
+msgstr "attributes"
+
+msgid "At least one of the spatial fields (point or polygon) is required."
+msgstr "At least one of the spatial fields (point or polygon) is required."
+
+msgid "Site"
+msgstr "Site"
+
+msgid "Sites"
+msgstr "Sites"
+
+msgid "Designation"
+msgstr "Designation"
+
+msgid "Acronym"
+msgstr "Acronym"
+
+msgid "Toponym"
+msgstr "Toponym"
+
+msgid "Owner"
+msgstr "Owner"
+
+msgid "Altitude"
+msgstr "Altitude"
+
+msgid "Position"
+msgstr "Position"
+
+msgid "Bounding Polygon"
+msgstr "Bounding Polygon"
+
+msgid "Occurrence"
+msgstr "Occurrence"
+
+msgid "Occurrences"
+msgstr "Occurrences"
+
+msgid "Metric Type"
+msgstr "Metric Type"
+
+msgid "Metric Types"
+msgstr "Metric Types"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "automatic value"
+msgstr "Automatic Value"
+
+msgid "Confirmed Value"
+msgstr "Confirmed Value"
+
+msgid "unit of measurement"
+msgstr "Unit of Measurement"
+
+msgid "Metric"
+msgstr "Metric"
+
+msgid "Metrics"
+msgstr "Metrics"
+
+msgid "Site does not exist"
+msgstr "Site does not exist"
+
+msgid "Site and Occurrence created successfully."
+msgstr "Site and Occurrence created successfully."
+
+msgid "Changes saved successfully."
+msgstr "Changes saved successfully."
+
+msgid "Site "
+msgstr "Site "
+
+msgid " successfully deleted."
+msgstr " successfully deleted."
+
+msgid "Occurrence does not exist"
+msgstr "Occurrence does not exist"
+
+msgid "Occurrence created successfully."
+msgstr "Occurrence created successfully."
+
+msgid "Occurrence "
+msgstr "Occurrence "
+
+msgid "English"
+msgstr "English"
+
+msgid "Portuguese"
+msgstr "Portuguese"
 
 msgid "About the Project"
 msgstr "About the Project"
@@ -226,9 +373,6 @@ msgstr "Create Site"
 msgid "Add New Archaeological Site"
 msgstr "Add New Archaeological Site"
 
-msgid "Occurrence"
-msgstr "Occurrence"
-
 msgid "Add"
 msgstr "Add"
 
@@ -237,9 +381,6 @@ msgstr "Delete Site - "
 
 msgid "Remove "
 msgstr "Remove "
-
-msgid "Site"
-msgstr "Site"
 
 msgid "Are you sure you want to delete"
 msgstr "Are you sure you want to delete"
@@ -265,17 +406,8 @@ msgstr "Filters"
 msgid "Search by:"
 msgstr "Search by:"
 
-msgid "Designation"
-msgstr "Designation"
-
 msgid "Archaeological Site"
 msgstr "Archaeological Site"
-
-msgid "Altitude"
-msgstr "Altitude"
-
-msgid "Owner"
-msgstr "Owner"
 
 msgid "Attributes"
 msgstr "Attributes"
@@ -331,15 +463,6 @@ msgstr "No results found."
 msgid "Explore Sites"
 msgstr "Explore Sites"
 
-msgid "Name"
-msgstr "Name"
-
-msgid "National Site Code"
-msgstr "National Site Code"
-
-msgid "Parish"
-msgstr "Parish"
-
 msgid " Explore Archaeological Sites"
 msgstr " Explore Archaeological Sites"
 
@@ -355,38 +478,14 @@ msgstr "In "
 msgid "Info"
 msgstr "Info"
 
-msgid "Metrics"
-msgstr "Metrics"
-
 msgid "Documents"
 msgstr "Documents"
-
-msgid "Acronym"
-msgstr "Acronym"
-
-msgid "Toponym"
-msgstr "Toponym"
-
-msgid "Added by"
-msgstr "Added by"
-
-msgid "Category"
-msgstr "Category"
-
-msgid "Value"
-msgstr "Value"
 
 msgid "No attributes!"
 msgstr "No attributes!"
 
-msgid "Type"
-msgstr "Type"
-
 msgid "Automatic Value"
 msgstr "Automatic Value"
-
-msgid "Confirmed Value"
-msgstr "Confirmed Value"
 
 msgid "No metrics!"
 msgstr "No metrics!"
@@ -419,12 +518,6 @@ msgstr "Update Occurrence - "
 
 msgid "Add New "
 msgstr "Add New "
-
-msgid "Occurrences"
-msgstr "Occurrences"
-
-msgid "Country"
-msgstr "Country"
 
 msgid "No occurrences!"
 msgstr "No occurrences!"
@@ -473,9 +566,6 @@ msgstr "Create Map"
 
 msgid "Archaeology"
 msgstr "Archaeology"
-
-msgid "Sites"
-msgstr "Sites"
 
 msgid "Users"
 msgstr "Users"
@@ -540,6 +630,9 @@ msgstr "Group Categories"
 
 msgid "About the Project &raquo;"
 msgstr "About the Project &raquo;"
+
+msgid "Our Partners"
+msgstr "Our Partners"
 
 msgid "No"
 msgstr "No"
