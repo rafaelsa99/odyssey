@@ -243,8 +243,8 @@ This is where you can override the hero area block. You can simply modify the co
             </form>
           </div>
           <p><a class="btn btn-default btn-lg" href="{% url "search" %}">{% trans "Advanced Search" %}</a> | 
-            <a class="btn btn-default btn-lg" href="{% url "search" %}">{% trans "Search Archaeological Sites" %}</a> | 
-          <a class="btn btn-default btn-lg" href="{% url "search" %}">{% trans "Search Archaeological Occurrences" %}</a></p>
+            <a class="btn btn-default btn-lg" href="{% url "list_sites" %}">{% trans "Search Archaeological Sites" %}</a> | 
+          <a class="btn btn-default btn-lg" href="{% url "list_occurrences" %}">{% trans "Search Archaeological Occurrences" %}</a></p>
         </div>
       </div>
     {% endif %}
