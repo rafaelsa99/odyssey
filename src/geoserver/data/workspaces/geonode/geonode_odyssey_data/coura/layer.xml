@@ -1,0 +1,19 @@
+<layer>
+  <name>coura</name>
+  <id>LayerInfoImpl--d7d0240:1833b1cd3a8:-7f99</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--d7d0240:1833b1cd3a8:-7f95</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--d7d0240:1833b1cd3a8:-7f9b</id>
+  </resource>
+  <queryable>true</queryable>
+  <opaque>false</opaque>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2022-09-14 17:02:42.911 UTC</dateCreated>
+  <dateModified>2022-09-14 17:02:48.842 UTC</dateModified>
+</layer>

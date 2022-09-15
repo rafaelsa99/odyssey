@@ -5,12 +5,14 @@ from django.db.models import Q
 from .forms import MetricForm, OccurrenceForm, SiteForm, MetricFormSetHelper
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .models import Metric, Occurrence, Site
+from .models import AttributeChoice, Metric, Occurrence, Site
 from django.core.management import execute_from_command_line
 from django.forms import modelformset_factory
 from django.contrib.gis.geos import Polygon
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext_lazy
+import pandas
+from django.db import connection
 # Create your views here.
 
 @login_required
@@ -123,7 +125,7 @@ def update_site(request, pk):
     if form.is_valid():
         form.save()
         messages.success(request, ugettext_lazy('Changes saved successfully.'))
-        execute_from_command_line(["../manage_dev.sh", "updatelayers", "-s", "archaeology"])
+        execute_from_command_line(["../manage_dev.sh", "updatelayers", "-f", "site"])
         return redirect(site.get_absolute_url())
     context = {
         'form': form,
@@ -147,6 +149,47 @@ def delete_site(request, pk):
         execute_from_command_line(["../manage_dev.sh", "updatelayers", "-s", "archaeology"])
         return redirect(list_sites)
     return render(request, "archaeology/delete.html", context=context)
+
+@login_required
+def import_occurrences(request, pk):
+    try:
+        site_to_import = Site.objects.get(id=pk)
+    except Site.DoesNotExist:
+        raise Http404(ugettext_lazy('Site does not exist'))
+    context = {'site': site_to_import, }  
+    if request.method == "POST":
+        csv_file = request.FILES["csv_file"]
+        if not csv_file.name.endswith('.csv'):
+            messages.error(request,'File is not CSV type')
+        else:
+            counter = 0
+            # Reads small chunks to avoid memory errors
+            for chunk in pandas.read_csv(csv_file, chunksize=50):
+                for row in chunk.itertuples():
+                    #TODO: Check the Id field, and match to the attribute "Type".
+                    #Now it is assumed that is "Mamoas".
+                    with connection.cursor() as cursor:
+                        cursor.execute("SELECT ST_Transform(ST_SetSRID(geom, 3763), 4326) FROM ST_Dump(%s);", [row.WKT])
+                        rows = cursor.fetchone()
+                        for item in rows: #Iterate over all polygons inside the Multipolygon
+                            cursor.execute("SELECT ST_GeometryType(%s);", [item])
+                            type = cursor.fetchone()
+                            name = "Mamoa " + str(row.Index)
+                            if type[0] == "ST_Point":
+                                new_occurrence = Occurrence(designation=name, position=item, site=site_to_import, added_by=request.user)
+                                new_occurrence.save()
+                                new_occurrence.attribute_occurrence.add(AttributeChoice.objects.filter(value__icontains="Mamoa"))
+                                counter += 1
+                            elif type[0] == "ST_Polygon":
+                                new_occurrence = Occurrence(designation=name, bounding_polygon=item, site=site_to_import, added_by=request.user)
+                                new_occurrence.save()
+                                new_occurrence.attribute_occurrence.add(AttributeChoice.objects.get(value="Mamoa"))
+                                counter += 1
+            msg = str(ugettext_lazy('A total of ')) + str(counter) + str(ugettext_lazy(' new occurrences were added.'))
+            messages.success(request, msg)
+            execute_from_command_line(["../manage_dev.sh", "updatelayers", "-f", "occurrence"])
+            return redirect(site_to_import.get_absolute_url())
+    return render(request, "archaeology/import_occurrences.html", context=context)
 
 @login_required
 def list_occurrences(request):
@@ -248,7 +291,7 @@ def create_occurrence(request, pk):
                     metric.occurrence = occurrence
                     metric.save()
         messages.success(request, ugettext_lazy('Occurrence created successfully.'))
-        execute_from_command_line(["../manage_dev.sh", "updatelayers", "-s", "archaeology"])
+        execute_from_command_line(["../manage_dev.sh", "updatelayers", "-f", "occurrence"])
         return redirect(occurrence.get_absolute_url())
     context = {
         'form': form,
@@ -283,7 +326,7 @@ def update_occurrence(request, pk):
                         metric.occurrence = occurrence_instance
                         metric.save()
         messages.success(request, ugettext_lazy('Changes saved successfully.'))
-        execute_from_command_line(["../manage_dev.sh", "updatelayers", "-s", "archaeology"])
+        execute_from_command_line(["../manage_dev.sh", "updatelayers", "-f", "occurrence"])
         return redirect(occurrence_instance.get_absolute_url())
     context = {
         'form': form,
@@ -305,7 +348,7 @@ def delete_occurrence(request, pk):
         msg = str(ugettext_lazy('Occurrence ')) + occurrence.designation + str(ugettext_lazy(' successfully deleted.'))
         occurrence.delete()
         messages.success(request, msg)
-        execute_from_command_line(["../manage_dev.sh", "updatelayers", "-s", "archaeology"])
+        execute_from_command_line(["../manage_dev.sh", "updatelayers", "-f", "occurrence"])
         return redirect(site.get_absolute_url())
     context = {'item': occurrence}    
     return render(request, "archaeology/delete.html", context=context)

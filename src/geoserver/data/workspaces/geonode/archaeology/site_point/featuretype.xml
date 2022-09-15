@@ -8,8 +8,10 @@
   <title>Archaeological Sites (point)</title>
   <abstract>Archaeological Sites represented by points.</abstract>
   <keywords>
-    <string>features</string>
+    <string>Site</string>
+    <string>Archaeological</string>
     <string>site_point</string>
+    <string>features</string>
   </keywords>
   <metadataLinks>
     <metadataLink>

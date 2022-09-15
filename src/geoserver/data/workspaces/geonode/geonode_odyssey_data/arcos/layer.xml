@@ -1,0 +1,19 @@
+<layer>
+  <name>arcos</name>
+  <id>LayerInfoImpl--d7d0240:1833b1cd3a8:-7f4c</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--d7d0240:1833b1cd3a8:-7f48</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--d7d0240:1833b1cd3a8:-7f4e</id>
+  </resource>
+  <queryable>true</queryable>
+  <opaque>false</opaque>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2022-09-14 17:06:17.264 UTC</dateCreated>
+  <dateModified>2022-09-14 17:06:21.549 UTC</dateModified>
+</layer>

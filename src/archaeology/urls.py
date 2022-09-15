@@ -6,6 +6,7 @@ urlpatterns = [
     path('site', views.list_sites, name='list_sites'),
     path('site/<int:pk>', views.view_site, name='view_site'),
     path('site/<int:pk>/update', views.update_site, name='update_site'),
+    path('site/<int:pk>/import', views.import_occurrences, name='import_occurrences'),
     path('site/<int:pk>/delete', views.delete_site, name='delete_site'),
     path('occurrence', views.list_occurrences, name='list_occurrences'),
     path('occurrence/<int:pk>/create', views.create_occurrence, name='create_occurrence'),

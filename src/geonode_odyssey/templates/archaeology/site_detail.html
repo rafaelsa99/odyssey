@@ -126,6 +126,9 @@
         <div class="col-md-3">
             <ul class="list-group">
                 <li class="list-group-item">
+                    <a class="btn btn-primary  btn-md btn-block" href="{% url 'import_occurrences' site.id %}">{% trans "Import Occurrences" %}</a>
+                </li>
+                <li class="list-group-item">
                     <a class="btn btn-primary  btn-md btn-block" href="{% url 'update_site' site.id %}">{% trans "Edit" %}</a>
                 </li>
                 <li class="list-group-item">
