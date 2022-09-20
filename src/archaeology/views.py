@@ -13,6 +13,11 @@ from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext_lazy
 import pandas
 from django.db import connection
+from osgeo import gdal
+from geonode.layers.models import LayerFile
+from django.conf import settings
+from pyproj import Proj, transform
+import os
 # Create your views here.
 
 @login_required
@@ -352,3 +357,36 @@ def delete_occurrence(request, pk):
         return redirect(site.get_absolute_url())
     context = {'item': occurrence}    
     return render(request, "archaeology/delete.html", context=context)
+
+@login_required
+def auto_identification(request):
+    
+    if 'bbox' in request.GET:
+        #TODO: Check if bbox is not filled and send error message to template
+        bbox_coordinates = request.GET['bbox'].split(",")
+        bbox_polygon = Polygon.from_bbox((bbox_coordinates[0],bbox_coordinates[1],bbox_coordinates[2],bbox_coordinates[3]))
+        bbox = [float(bbox_coordinates[0]),float(bbox_coordinates[1]),float(bbox_coordinates[2]),float(bbox_coordinates[3])]
+        #Get only occurrences from the polygons, since the points are not useful for the ML algorithm
+        occurrences_list = Occurrence.objects.filter(Q(bounding_polygon__intersects=bbox_polygon))
+        files_list = LayerFile.objects.filter(Q(file__icontains=".tif") )#& Q(upload_session__resource__bbox_polygon__intersects=bbox_polygon))
+        #TODO: filter with the bbox. (bbox_polygon from resourcebase is already in 4326, despite the GeoTiffs are in 3763)
+        gdal.UseExceptions() # For debuging
+        inProj = Proj(init='epsg:4326')
+        outProj = Proj(init='epsg:3763')
+        xmin,ymin = transform(inProj,outProj,bbox_coordinates[0],bbox_coordinates[1])
+        xmax,ymax = transform(inProj,outProj,bbox_coordinates[2],bbox_coordinates[3])
+        bbox_converted = [xmin, ymin, xmax, ymax]
+        folder_path = settings.PROJECT_ROOT + settings.MEDIA_URL
+        print(folder_path)
+        for file in files_list:
+            #ds = gdal.Open(settings.LOCAL_MEDIA_URL + str(file.file))
+            ds = gdal.Open('/home/rafael/.virtualenvs/geonode_odyssey_dev/src/geonode/geonode/uploaded/layers/2022/07/26/laboreiro_mdt_td9mOoP.tif')
+            #ds = gdal.Translate('/home/rafael/Desktop/output_crop_raster.tif', ds, projWin = bbox, options = "-projwin_srs EPSG:4326") #Not creating the output file
+            ds = gdal.Warp('/home/rafael/Desktop/output_crop_raster.tif', ds, outputBounds = bbox_converted)   
+            ds = None 
+        
+    
+    context = {
+        'values': request.GET,
+    }    
+    return render(request, "archaeology/identification.html", context=context)

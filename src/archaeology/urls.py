@@ -13,5 +13,6 @@ urlpatterns = [
     path('occurrence/<int:pk>', views.view_occurrence, name='view_occurrence'),
     path('occurrence/<int:pk>/update', views.update_occurrence, name='update_occurrence'),
     path('occurrence/<int:pk>/delete', views.delete_occurrence, name='delete_occurrence'),
+    path('identification', views.auto_identification, name='auto_identification'),
     ]
  

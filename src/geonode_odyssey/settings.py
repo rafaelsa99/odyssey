@@ -155,4 +155,5 @@ LEAFLET_CONFIG = {
     'MAX_ZOOM': 18,
     'MIN_ZOOM':3,
     'SCALE': 'both',
+    'NO_GLOBALS': 'False',
 }

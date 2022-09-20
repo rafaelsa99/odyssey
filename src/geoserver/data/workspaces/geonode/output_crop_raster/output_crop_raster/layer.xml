@@ -1,0 +1,19 @@
+<layer>
+  <name>output_crop_raster</name>
+  <id>LayerInfoImpl--155acfb8:1835a616da1:-7f5e</id>
+  <type>RASTER</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--155acfb8:1835a616da1:-7f59</id>
+  </defaultStyle>
+  <resource class="coverage">
+    <id>CoverageInfoImpl--155acfb8:1835a616da1:-7f60</id>
+  </resource>
+  <queryable>true</queryable>
+  <opaque>false</opaque>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2022-09-20 16:31:04.654 UTC</dateCreated>
+  <dateModified>2022-09-20 16:31:11.648 UTC</dateModified>
+</layer>
