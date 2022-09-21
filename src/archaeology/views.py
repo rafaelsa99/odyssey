@@ -1,4 +1,5 @@
 from email import message
+from traceback import print_tb
 from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import redirect, render
@@ -19,6 +20,7 @@ from geonode.layers.models import LayerFile
 from django.conf import settings
 from pyproj import Proj, transform
 import os
+import json
 from pathlib import Path
 # Create your views here.
 
@@ -364,6 +366,8 @@ def delete_occurrence(request, pk):
 def identification_aoi(request):
     if 'message' in request.session:
         messages.warning(request, ugettext_lazy(request.session.pop('message')))
+    if 'success' in request.session:
+        messages.success(request, ugettext_lazy(request.session.pop('success')))
     if request.method == 'GET' and 'bbox' in request.GET:
         bbox_coordinates = request.GET['bbox']
         if bbox_coordinates:
@@ -380,9 +384,10 @@ def identification_layers(request):
         return redirect(identification_aoi)
     bbox_coordinates = request.session.get('bbox')
     bbox_polygon = Polygon.from_bbox((bbox_coordinates[0],bbox_coordinates[1],bbox_coordinates[2],bbox_coordinates[3]))
-    #Get only occurrences from the polygons, since the points are not useful for the ML algorithm
-    occurrences_list = Occurrence.objects.filter(Q(bounding_polygon__intersects=bbox_polygon))
-    #TODO:Uncomment occurrences verification
+    #Get only occurrences from the polygons, since the points are not useful for the ML algorithm, and with a type defined.
+    types_list = AttributeChoice.objects.filter(Q(category__name__icontains="type") | Q(category__name__icontains="tipo"))
+    occurrences_list = Occurrence.objects.filter(Q(bounding_polygon__intersects=bbox_polygon) & Q(attribute_occurrence__in=types_list))
+    #TODO:Uncomment occurrences verification.
     #if not occurrences_list:
     #        request.session['message'] = "The area of interest that has been selected does not intersect any archaeological occurrence that can be used."
     #        return redirect(identification_aoi)
@@ -391,7 +396,19 @@ def identification_layers(request):
         if not checked_layers:
             messages.warning(request, ugettext_lazy("No layer is selected. At least one layer must be selected."))
         else:
-            #TODO:Create json with the occurrences to send to the ML algorithm
+            #Create json with the occurrences inside the bbox
+            #Necessary to aggregate all polygons of a type inside a MULTIPOLYGON and convert to SRID 3763.
+            data = {}
+            for type in types_list:
+                with connection.cursor() as cursor:
+                        cursor.execute("SELECT ST_AsText(ST_Transform(ST_Multi(ST_Union(o.bounding_polygon)), 3763)) FROM occurrence o"\
+                         " JOIN occurrence_attribute_occurrence ot  ON ot.occurrence_id = o.id AND ot.attributechoice_id = %s;", [type.id])
+                        rows = cursor.fetchone()
+                        for row in rows:
+                            if row:
+                                data[type.value] = row
+            json_data = json.dumps(data)
+            #Crop the selected layers with the defined bbox
             gdal.UseExceptions() # For debuging
             inProj = Proj(init='epsg:4326')
             outProj = Proj(init='epsg:3763')
@@ -419,6 +436,9 @@ def identification_layers(request):
                 #Delete temporary file when is no longer necessary
                 if os.path.isfile(temp_file):
                     os.remove(temp_file) 
+            
+            request.session['success'] = "The automatic identification has been started, and the results will be added as soon as the identification process is finished."
+            return redirect(identification_aoi)
 
     #Filter by file extension and geographic bbox (ll_bbox_polygon from resourcebase is already in 4326, despite the GeoTiffs are in 3763)
     files_list = LayerFile.objects.filter(Q(file__icontains=".tif") & Q(upload_session__resource__ll_bbox_polygon__intersects=bbox_polygon))
