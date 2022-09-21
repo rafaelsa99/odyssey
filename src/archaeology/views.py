@@ -1,3 +1,4 @@
+from email import message
 from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import redirect, render
@@ -18,6 +19,7 @@ from geonode.layers.models import LayerFile
 from django.conf import settings
 from pyproj import Proj, transform
 import os
+from pathlib import Path
 # Create your views here.
 
 @login_required
@@ -359,34 +361,72 @@ def delete_occurrence(request, pk):
     return render(request, "archaeology/delete.html", context=context)
 
 @login_required
-def auto_identification(request):
-    
-    if 'bbox' in request.GET:
-        #TODO: Check if bbox is not filled and send error message to template
-        bbox_coordinates = request.GET['bbox'].split(",")
-        bbox_polygon = Polygon.from_bbox((bbox_coordinates[0],bbox_coordinates[1],bbox_coordinates[2],bbox_coordinates[3]))
-        bbox = [float(bbox_coordinates[0]),float(bbox_coordinates[1]),float(bbox_coordinates[2]),float(bbox_coordinates[3])]
-        #Get only occurrences from the polygons, since the points are not useful for the ML algorithm
-        occurrences_list = Occurrence.objects.filter(Q(bounding_polygon__intersects=bbox_polygon))
-        files_list = LayerFile.objects.filter(Q(file__icontains=".tif") )#& Q(upload_session__resource__bbox_polygon__intersects=bbox_polygon))
-        #TODO: filter with the bbox. (bbox_polygon from resourcebase is already in 4326, despite the GeoTiffs are in 3763)
-        gdal.UseExceptions() # For debuging
-        inProj = Proj(init='epsg:4326')
-        outProj = Proj(init='epsg:3763')
-        xmin,ymin = transform(inProj,outProj,bbox_coordinates[0],bbox_coordinates[1])
-        xmax,ymax = transform(inProj,outProj,bbox_coordinates[2],bbox_coordinates[3])
-        bbox_converted = [xmin, ymin, xmax, ymax]
-        folder_path = settings.PROJECT_ROOT + settings.MEDIA_URL
-        print(folder_path)
-        for file in files_list:
-            #ds = gdal.Open(settings.LOCAL_MEDIA_URL + str(file.file))
-            ds = gdal.Open('/home/rafael/.virtualenvs/geonode_odyssey_dev/src/geonode/geonode/uploaded/layers/2022/07/26/laboreiro_mdt_td9mOoP.tif')
-            #ds = gdal.Translate('/home/rafael/Desktop/output_crop_raster.tif', ds, projWin = bbox, options = "-projwin_srs EPSG:4326") #Not creating the output file
-            ds = gdal.Warp('/home/rafael/Desktop/output_crop_raster.tif', ds, outputBounds = bbox_converted)   
-            ds = None 
-        
-    
+def identification_aoi(request):
+    if 'message' in request.session:
+        messages.warning(request, ugettext_lazy(request.session.pop('message')))
+    if request.method == 'GET' and 'bbox' in request.GET:
+        bbox_coordinates = request.GET['bbox']
+        if bbox_coordinates:
+            bbox_coordinates = request.GET['bbox'].split(",")
+            request.session['bbox'] = bbox_coordinates
+            return redirect(identification_layers)
+        else:
+            messages.warning(request, ugettext_lazy('It is required to select an area of interest on the map.'))
+    return render(request, "archaeology/identification_aoi.html")
+
+@login_required
+def identification_layers(request):
+    if 'bbox' not in request.session:
+        return redirect(identification_aoi)
+    bbox_coordinates = request.session.get('bbox')
+    bbox_polygon = Polygon.from_bbox((bbox_coordinates[0],bbox_coordinates[1],bbox_coordinates[2],bbox_coordinates[3]))
+    #Get only occurrences from the polygons, since the points are not useful for the ML algorithm
+    occurrences_list = Occurrence.objects.filter(Q(bounding_polygon__intersects=bbox_polygon))
+    #TODO:Uncomment occurrences verification
+    #if not occurrences_list:
+    #        request.session['message'] = "The area of interest that has been selected does not intersect any archaeological occurrence that can be used."
+    #        return redirect(identification_aoi)
+    if request.method == "POST":
+        checked_layers = request.POST.getlist("layers")
+        if not checked_layers:
+            messages.warning(request, ugettext_lazy("No layer is selected. At least one layer must be selected."))
+        else:
+            #TODO:Create json with the occurrences to send to the ML algorithm
+            gdal.UseExceptions() # For debuging
+            inProj = Proj(init='epsg:4326')
+            outProj = Proj(init='epsg:3763')
+            xmin,ymin = transform(inProj,outProj,bbox_coordinates[0],bbox_coordinates[1])
+            xmax,ymax = transform(inProj,outProj,bbox_coordinates[2],bbox_coordinates[3])
+            bbox_converted = [xmin, ymin, xmax, ymax]
+            folder_path = settings.PROJECT_ROOT + settings.MEDIA_URL
+            temp_folder_path = os.path.join(folder_path, "tmp")
+            Path(temp_folder_path).mkdir(parents=True, exist_ok=True)
+            temp_files = []
+            for file in checked_layers:
+                file_path = os.path.join(folder_path + file)
+                output_file = "{0}_{2}{1}".format(*os.path.splitext(os.path.basename(file)) + ("cropped",))
+                output_file_path = os.path.join(temp_folder_path, output_file)
+                ds = gdal.Open(file_path)
+                #ds = gdal.Translate(output_file_path, ds, projWin = bbox, options = "-projwin_srs EPSG:4326") #Not creating the output file - using gdal.Warp instead
+                ds = gdal.Warp(output_file_path, ds, outputBounds = bbox_converted)   
+                ds = None # To close the dataset
+                temp_files.append(output_file_path)
+                #TODO: aggregate all files to send to the ML algorithm
+                 
+            #TODO: do whatever is necessary to send the set of cropped files and the json to the ML algorithm
+
+            for temp_file in temp_files:
+                #Delete temporary file when is no longer necessary
+                if os.path.isfile(temp_file):
+                    os.remove(temp_file) 
+
+    #Filter by file extension and geographic bbox (ll_bbox_polygon from resourcebase is already in 4326, despite the GeoTiffs are in 3763)
+    files_list = LayerFile.objects.filter(Q(file__icontains=".tif") & Q(upload_session__resource__ll_bbox_polygon__intersects=bbox_polygon))
+    if not files_list:
+        request.session['message'] = "The area of interest that has been selected does not intersect any layer that can be used."
+        return redirect(identification_aoi)
     context = {
-        'values': request.GET,
+        'layers': files_list,
+        'occurrences': occurrences_list,
     }    
-    return render(request, "archaeology/identification.html", context=context)
+    return render(request, "archaeology/identification_layers.html", context=context)

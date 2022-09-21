@@ -1,0 +1,74 @@
+{% extends "geonode_base.html" %}
+{% load staticfiles %}
+
+{% load leaflet_tags %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block title %}
+{% trans "Automatic Identification" %}
+{% endblock %}
+
+{% block extra_head %}
+<link href="{{ STATIC_URL }}css/site_base.css" rel="stylesheet"/>
+{% endblock %}
+
+
+{% block body %}
+{{ form.media }}
+{% leaflet_css plugins="forms" %}
+{% leaflet_js plugins="forms" %}
+
+<div class="page-header">
+    <h2 class="page-title">{% trans "Automatic Archaeological Identification" %}</h2>
+</div>
+
+<div class="container">
+    <form action="" method="get" enctype="multipart/form-data">
+        <h4>{% trans "Area of Interest:" %}</h4>
+        {% leaflet_map "area_of_interest" callback="window.map_init"%}
+        <input type="hidden" id="bbox" name="bbox"> 
+        <br>
+        <input type="submit" value={% trans "Next" %} class="btn btn-success"/>
+    </form>
+</div>
+<br>  
+{% endblock %}
+
+{% block extra_script%}
+<script type="text/javascript">
+    function map_init(map, options) {
+      var drawnItems = new L.FeatureGroup();
+      map.addLayer(drawnItems);
+      var url = new URL(window.location.href);
+      var bbox = url.searchParams.get("bbox");
+      if (bbox != null && bbox != ""){
+          var array = bbox.split(',');
+          var bounds = [[array[1], array[0]], [array[3], array[2]]];
+          drawnItems.addLayer(L.rectangle(bounds));
+          map.fitBounds(drawnItems.getBounds());
+      }
+      var drawControl = new L.Control.Draw({
+      edit: {
+        featureGroup: drawnItems,
+      },
+      draw: {
+        circle: false,
+        circlemarker: false,
+        polygon: false,
+        marker: false,
+        polyline: false,
+      }
+    });
+    map.addControl(drawControl);
+    map.on(L.Draw.Event.CREATED, function (event) {
+        var layer = event.layer;
+        drawnItems.eachLayer(function (layer) {
+            drawnItems.removeLayer(layer);
+        });
+        drawnItems.addLayer(layer);
+        document.getElementById("bbox").value = layer.getBounds().toBBoxString();
+    });
+    }
+</script>
+{% endblock %}

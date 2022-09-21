@@ -44,7 +44,7 @@
               <li><a href="{% url 'list_sites' %}">{% trans "Sites" %}</a></li>
               <li><a href="{% url 'list_occurrences' %}">{% trans "Occurrences" %}</a></li>
               <li><a href="{% url 'addsite' %}">{% trans "Create Site" %}</a></li>
-              <li><a href="{% url 'auto_identification' %}">{% trans "Automatic Identification" %}</a></li>
+              <li><a href="{% url 'identification_aoi' %}">{% trans "Automatic Identification" %}</a></li>
             </ul>
             {% endif %}
           </div>
@@ -212,7 +212,7 @@
                         <li><a href="{% url 'list_occurrences' %}">{% trans "Occurrences" %}</a></li>
                         <li class="divider" role="separator"></li>
                         <li><a href="{% url 'addsite' %}">{% trans "Create Site" %}</a></li>
-                        <li><a href="{% url 'auto_identification' %}">{% trans "Automatic Identification" %}</a></li>
+                        <li><a href="{% url 'identification_aoi' %}">{% trans "Automatic Identification" %}</a></li>
                   </ul>
             </li>
             {% endif %}  
