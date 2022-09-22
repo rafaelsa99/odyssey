@@ -61,6 +61,8 @@
                         <dd>{{site.parish}}</dd>
                         <dt>{% trans "Added by" %}</dt>
                         <dd><a href="{{site.added_by.get_absolute_url}}">{{site.added_by}}</a></dd>
+                        <dt>{% trans "Status" %}</dt>
+                        <dd>{{ site.get_status_site_display }}</dd>
                     </dl>
                 </div>
                 <div class="tab-pane mrg-top" id="attributes">

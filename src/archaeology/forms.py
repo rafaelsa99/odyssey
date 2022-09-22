@@ -54,7 +54,7 @@ class SiteForm(forms.ModelForm):
             'attribute_site': s2forms.Select2MultipleWidget,
             'document_site': s2forms.Select2MultipleWidget,
         }
-        exclude = ['added_by',]
+        exclude = ['added_by','created_by_execution']
     
     field_order = ['name', 'national_site_code', 'country_iso', 'parish', 'location', 'latitude', 'longitude', 'surrounding_polygon']
 
@@ -95,7 +95,7 @@ class OccurrenceForm(forms.ModelForm):
             'attribute_occurrence': s2forms.Select2MultipleWidget,
             'document_occurrence': s2forms.Select2MultipleWidget,
         }
-        exclude = ['added_by', 'site',]
+        exclude = ['added_by', 'site','algorithm_execution']
     
     field_order = ['designation', 'acronym', 'toponym', 'owner', 'altitude', 'position', 'latitude_occurrence', 'longitude_occurrence', 'bounding_polygon']
 

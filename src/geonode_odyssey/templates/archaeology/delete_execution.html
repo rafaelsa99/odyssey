@@ -1,0 +1,27 @@
+{% extends "geonode_base.html" %}
+{% load i18n %}
+{% load class_tag %}
+
+{% block title %}
+{% trans "Delete - " %} {{item}}
+{% endblock %}
+
+{% block body %}
+<div class="container" style="min-height:45vh;">
+    <div class="page-header">
+        <h2 class="page-title">{% trans "Remove Execution Log " %}{{item.name}}</h2>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+        <p class="lead">
+            {% trans "Are you sure you want to delete" %} <a href="{{ item.get_absolute_url }}">{{ item }}</a>?
+            </p>
+            <form action="{% url 'delete_execution' item.id %}" method="post">
+                {% csrf_token %}
+                <a class="btn btn-default" href="{% url 'view_execution' item.id %}">{% trans "No, don't remove it" %}</a>
+                <input type="submit" value="{% trans "Yes, I am sure" %}" class="btn btn-danger"/>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

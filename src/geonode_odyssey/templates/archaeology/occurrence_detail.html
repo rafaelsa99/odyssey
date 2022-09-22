@@ -71,6 +71,8 @@
                         <dd>{{occurrence.altitude}}</dd>
                         <dt>{% trans "Added by" %}</dt>
                         <dd><a href="{{occurrence.added_by.get_absolute_url}}">{{occurrence.added_by}}</a></dd>
+                        <dt>{% trans "Status" %}</dt>
+                        <dd>{{ occurrence.get_status_occurrence_display }}</dd>
                     </dl>
                 </div>
                 <div class="tab-pane mrg-top" id="attributes">

@@ -23,17 +23,18 @@
     <div class="col-md-8">
         <form action="" method="post">
             {% csrf_token %}
+            <div class="form-group">
+                <label for="name">{% trans "Title" %}</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <br>
             <h4>{% trans "Select the layers that you want to use for identification:" %}</h4>
-            <table>
-                <tbody>
-                {% for layer in layers %}
-                    <tr>
-                        <td><input type="checkbox" name="layers" value="{{layer.file}}"></td>
-                        <td>&nbsp{{layer.name}}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            {% for layer in layers %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="layers" value="{{layer.file}}">
+                    <label class="form-check-label">{{layer.name}}</label>
+                </div>  
+            {% endfor %}
             <br>
             <input type="submit" value={% trans "Start" %} class="btn btn-success"/>
         </form>

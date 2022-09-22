@@ -1,5 +1,4 @@
-from email import message
-from traceback import print_tb
+from unicodedata import name
 from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import redirect, render
@@ -7,7 +6,7 @@ from django.db.models import Q
 from .forms import MetricForm, OccurrenceForm, SiteForm, MetricFormSetHelper
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .models import AttributeChoice, Metric, Occurrence, Site
+from .models import AlgorithmExecution, AttributeChoice, Metric, Occurrence, Site
 from django.core.management import execute_from_command_line
 from django.forms import modelformset_factory
 from django.contrib.gis.geos import Polygon
@@ -21,6 +20,8 @@ from django.conf import settings
 from pyproj import Proj, transform
 import os
 import json
+import asyncio
+import httpx
 from pathlib import Path
 # Create your views here.
 
@@ -179,18 +180,18 @@ def import_occurrences(request, pk):
                     #Now it is assumed that is "Mamoas".
                     with connection.cursor() as cursor:
                         cursor.execute("SELECT ST_Transform(ST_SetSRID(geom, 3763), 4326) FROM ST_Dump(%s);", [row.WKT])
-                        rows = cursor.fetchone()
+                        rows = cursor.fetchall()
                         for item in rows: #Iterate over all polygons inside the Multipolygon
-                            cursor.execute("SELECT ST_GeometryType(%s);", [item])
+                            cursor.execute("SELECT ST_GeometryType(%s);", [item[0]])
                             type = cursor.fetchone()
                             name = "Mamoa " + str(row.Index)
                             if type[0] == "ST_Point":
-                                new_occurrence = Occurrence(designation=name, position=item, site=site_to_import, added_by=request.user)
+                                new_occurrence = Occurrence(designation=name, position=item[0], site=site_to_import, added_by=request.user)
                                 new_occurrence.save()
                                 new_occurrence.attribute_occurrence.add(AttributeChoice.objects.filter(value__icontains="Mamoa"))
                                 counter += 1
                             elif type[0] == "ST_Polygon":
-                                new_occurrence = Occurrence(designation=name, bounding_polygon=item, site=site_to_import, added_by=request.user)
+                                new_occurrence = Occurrence(designation=name, bounding_polygon=item[0], site=site_to_import, added_by=request.user)
                                 new_occurrence.save()
                                 new_occurrence.attribute_occurrence.add(AttributeChoice.objects.get(value="Mamoa"))
                                 counter += 1
@@ -364,10 +365,6 @@ def delete_occurrence(request, pk):
 
 @login_required
 def identification_aoi(request):
-    if 'message' in request.session:
-        messages.warning(request, ugettext_lazy(request.session.pop('message')))
-    if 'success' in request.session:
-        messages.success(request, ugettext_lazy(request.session.pop('success')))
     if request.method == 'GET' and 'bbox' in request.GET:
         bbox_coordinates = request.GET['bbox']
         if bbox_coordinates:
@@ -384,13 +381,13 @@ def identification_layers(request):
         return redirect(identification_aoi)
     bbox_coordinates = request.session.get('bbox')
     bbox_polygon = Polygon.from_bbox((bbox_coordinates[0],bbox_coordinates[1],bbox_coordinates[2],bbox_coordinates[3]))
-    #Get only occurrences from the polygons, since the points are not useful for the ML algorithm, and with a type defined.
+    #Get only occurrences from the polygons, since the points are not useful for the ML algorithm, and with a type defined and with the information verified
     types_list = AttributeChoice.objects.filter(Q(category__name__icontains="type") | Q(category__name__icontains="tipo"))
-    occurrences_list = Occurrence.objects.filter(Q(bounding_polygon__intersects=bbox_polygon) & Q(attribute_occurrence__in=types_list))
+    occurrences_list = Occurrence.objects.filter(Q(bounding_polygon__intersects=bbox_polygon) & Q(attribute_occurrence__in=types_list) & Q(status_occurrence__icontains="V"))
     #TODO:Uncomment occurrences verification.
     #if not occurrences_list:
-    #        request.session['message'] = "The area of interest that has been selected does not intersect any archaeological occurrence that can be used."
-    #        return redirect(identification_aoi)
+    #   messages.warning(request, ugettext_lazy('The area of interest that has been selected does not intersect any archaeological occurrence that can be used.')
+    #   return redirect(identification_aoi)
     if request.method == "POST":
         checked_layers = request.POST.getlist("layers")
         if not checked_layers:
@@ -403,11 +400,10 @@ def identification_layers(request):
                 with connection.cursor() as cursor:
                         cursor.execute("SELECT ST_AsText(ST_Transform(ST_Multi(ST_Union(o.bounding_polygon)), 3763)) FROM occurrence o"\
                          " JOIN occurrence_attribute_occurrence ot  ON ot.occurrence_id = o.id AND ot.attributechoice_id = %s;", [type.id])
-                        rows = cursor.fetchone()
+                        rows = cursor.fetchall()
                         for row in rows:
                             if row:
-                                data[type.value] = row
-            json_data = json.dumps(data)
+                                data[type.value] = row[0]
             #Crop the selected layers with the defined bbox
             gdal.UseExceptions() # For debuging
             inProj = Proj(init='epsg:4326')
@@ -428,25 +424,140 @@ def identification_layers(request):
                 ds = gdal.Warp(output_file_path, ds, outputBounds = bbox_converted)   
                 ds = None # To close the dataset
                 temp_files.append(output_file_path)
+                
                 #TODO: aggregate all files to send to the ML algorithm
                  
-            #TODO: do whatever is necessary to send the set of cropped files and the json to the ML algorithm
+            files = [] #Just for testing
 
+            asyncio.run(execute_identification(data, files, request, bbox_polygon))
+            
+            #TODO: Confirm if can delete the temporary files here, or only after the POST is made.
             for temp_file in temp_files:
                 #Delete temporary file when is no longer necessary
                 if os.path.isfile(temp_file):
                     os.remove(temp_file) 
-            
-            request.session['success'] = "The automatic identification has been started, and the results will be added as soon as the identification process is finished."
-            return redirect(identification_aoi)
+
+            messages.success(request, ugettext_lazy('The automatic identification has been started, and the results will be added as soon as the identification process is finished.'))
+            return redirect(executions_history)
 
     #Filter by file extension and geographic bbox (ll_bbox_polygon from resourcebase is already in 4326, despite the GeoTiffs are in 3763)
     files_list = LayerFile.objects.filter(Q(file__icontains=".tif") & Q(upload_session__resource__ll_bbox_polygon__intersects=bbox_polygon))
     if not files_list:
-        request.session['message'] = "The area of interest that has been selected does not intersect any layer that can be used."
+        messages.warning(request, ugettext_lazy('The area of interest that has been selected does not intersect any layer that can be used.'))
         return redirect(identification_aoi)
     context = {
         'layers': files_list,
         'occurrences': occurrences_list,
     }    
     return render(request, "archaeology/identification_layers.html", context=context)
+
+
+async def execute_identification(data, files, request, polygon):
+    ml_webservice_url = 'https://www.example.com/' #TODO: Put the correct URl
+    title = request.POST.get("name")
+    checked_layers = request.POST.getlist("layers")
+    execution = AlgorithmExecution(name=title, aoi=polygon, executed_by=request.user)
+    execution.save()
+    for file in checked_layers:
+        layer = LayerFile.objects.get(file=file)
+        execution.layers_used.add(layer)
+
+    json_data = json.dumps(data)
+
+    async with httpx.AsyncClient() as client:
+        #response = await client.post(ml_webservice_url, json=json_data) #TODO: How to send the files?
+        #For Testing:
+        response = '{"Mamoa": "MULTIPOLYGON (((-29241.2906252581 241680.89583582,-29221.2441570028 241680.969808027,-29221.8359346635 241662.920589377,-29241.2166530505 241662.772644962,-29241.2906252581 241680.89583582)), ((-23757.952793673 238264.267511927,-23731.4707433579 238268.188038928,-23731.3227989427 238242.149821859,-23757.7308770502 238241.927905236,-23757.952793673 238264.267511927)))"}'
+    
+    execution.status = 'F'
+    execution.save()
+    detections = json.loads(response)
+    if detections: #Check if there is any detection
+        site = Site(name=title, surrounding_polygon=polygon, added_by=request.user, created_by_execution=execution, status_site='N')
+        site.save()
+        counter = 0
+        for key, value in detections.items():
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT ST_Transform(ST_SetSRID(geom, 3763), 4326) FROM ST_Dump(%s);", [value])
+                rows = cursor.fetchall()
+                for item in rows: #Iterate over all polygons inside the Multipolygon
+                    cursor.execute("SELECT ST_GeometryType(%s);", [item[0]])
+                    type = cursor.fetchone()
+                    designation = key + " " + str(counter)
+                    counter += 1
+                    if type[0] == "ST_Polygon":
+                        new_occurrence = Occurrence(designation=designation, bounding_polygon=item[0], site=site, added_by=request.user, algorithm_execution=execution, status_occurrence='N')
+                        new_occurrence.save()
+                        new_occurrence.attribute_occurrence.add(AttributeChoice.objects.get(value=key))
+        execute_from_command_line(["../manage_dev.sh", "updatelayers", "-s", "archaeology"])
+
+@login_required
+def executions_history(request):
+    if 'searchBy' in request.GET and request.GET['searchBy'] == "extent":
+        bbox_coordinates = request.GET['coordinates'].split(",")
+        bbox = Polygon.from_bbox((bbox_coordinates[0],bbox_coordinates[1],bbox_coordinates[2],bbox_coordinates[3]))
+        executions_list = AlgorithmExecution.objects.filter(Q(aoi__intersects=bbox))
+    elif 'text' in request.GET and request.GET['text'] != "":
+        text = request.GET['text']
+        search_by = request.GET['searchBy']
+        if not search_by or search_by == "name":
+            executions_list = AlgorithmExecution.objects.filter(name__icontains=text)
+    else:
+        executions_list = AlgorithmExecution.objects.all()
+    if 'orderBy' in request.GET:
+        orderBy = request.GET['orderBy']
+        if orderBy == "recent":
+            executions_list = executions_list.order_by('-id')
+        elif orderBy == "older":
+            executions_list = executions_list.order_by('id')
+        elif orderBy == "name_asc":
+            executions_list = executions_list.order_by('name')
+        elif orderBy == "name_desc":
+            executions_list = executions_list.order_by('-name')
+    page = request.GET.get('page', 1)
+    paginator = Paginator(executions_list, 10)
+    try:
+        executions = paginator.page(page)
+    except PageNotAnInteger:
+        executions = paginator.page(1)
+    except EmptyPage:
+        executions = paginator.page(paginator.num_pages)
+    path = ''
+    path += "%s" % "&".join(["%s=%s" % (key, value) for (key, value) in request.GET.items() if not key=='page' ])
+    context = {
+        'executions': executions,
+        'values': request.GET,
+        'count': executions_list.count(),
+        'path': path,
+        }
+    return render(request, "archaeology/executions_history.html", context=context)
+
+@login_required
+def view_execution(request, pk):
+    try:
+        execution = AlgorithmExecution.objects.get(id=pk)
+    except AlgorithmExecution.DoesNotExist:
+        raise Http404(ugettext_lazy('Execution does not exist'))
+    occurrences = execution.occurrence_set.all()
+    layers = execution.layers_used.all()
+    context = {
+        'execution': execution,
+        'occurrences': occurrences,
+        'total_detections':occurrences.count(),
+        'layers': layers,
+    }
+    return render(request, "archaeology/execution_detail.html", context=context)
+
+@login_required
+def delete_execution(request, pk):
+    try:
+        execution = AlgorithmExecution.objects.get(id=pk)
+    except AlgorithmExecution.DoesNotExist:
+        raise Http404(ugettext_lazy('Execution does not exist'))
+    if request.method == "POST":
+        msg = str(ugettext_lazy('Execution log ')) + execution.name + str(ugettext_lazy(' successfully deleted.'))
+        execution.delete()
+        messages.success(request, msg)
+        return redirect(executions_history)
+    context = {'item': execution}  
+    return render(request, "archaeology/delete_execution.html", context=context)

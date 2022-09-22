@@ -5,9 +5,37 @@ from django.forms import ValidationError
 from django.urls import reverse
 from django_countries.fields import CountryField
 from geonode.documents.models import Document
+from geonode.layers.models import LayerFile
 from django.utils.translation import ugettext_lazy
 
 # Create your models here.
+class AlgorithmExecution(models.Model):
+    """Model representing an execution of the automatic identification algorithm."""
+    
+    STATUS_CHOICES = (
+    ("E", ugettext_lazy("Executing")),
+    ("F", ugettext_lazy("Finished")))
+
+    name = models.CharField(max_length=254, verbose_name=ugettext_lazy('Name'))
+    executed_at = models.DateTimeField(auto_now_add = True, verbose_name=ugettext_lazy('Executed at'))
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default="E", verbose_name=ugettext_lazy('Status'))
+    executed_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, verbose_name=ugettext_lazy('Executed by'))
+    layers_used = models.ManyToManyField(LayerFile, verbose_name=ugettext_lazy('Layers Used'))
+    aoi = models.PolygonField(verbose_name=ugettext_lazy('Area of Interest'))
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        """Returns the url to access a particular archaeological site."""
+        return reverse('view_execution', args=[str(self.id)])
+
+    class Meta:
+        db_table = 'algorithm_execution'
+        verbose_name = ugettext_lazy('Algorithm Execution')
+        verbose_name_plural = ugettext_lazy('Algorithm Executions')
+        ordering = ['-executed_at']
+
 class AttributeCategory(models.Model):
     """Model representing a category for an attribute (e.g. chronology, geological context)."""
     name = models.CharField(max_length=254, verbose_name=ugettext_lazy('Name'))
@@ -35,6 +63,10 @@ class AttributeChoice(models.Model):
         verbose_name_plural = ugettext_lazy('Attribute Choices')
         ordering = ['category', 'value']
 
+STATE_CHOICES = (
+    ("N", ugettext_lazy("Not Verified")),
+    ("V", ugettext_lazy("Verified")))
+
 class Site(models.Model):
     """Model representing an archaeological site."""
     name = models.CharField(max_length=254, verbose_name=ugettext_lazy('Name'))
@@ -46,6 +78,8 @@ class Site(models.Model):
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, verbose_name=ugettext_lazy('Added by'))
     document_site = models.ManyToManyField(Document, blank=True, verbose_name=ugettext_lazy('documents'))
     attribute_site = models.ManyToManyField(AttributeChoice, blank=True, verbose_name=ugettext_lazy('attributes'))
+    created_by_execution = models.ForeignKey(AlgorithmExecution, null=True, on_delete=models.SET_NULL, default=None, verbose_name=ugettext_lazy('Created by execution'))
+    status_site = models.CharField(max_length=1, choices=STATE_CHOICES, default="V", verbose_name=ugettext_lazy('Status'))
 
     def __str__(self):  
         return self.name
@@ -88,6 +122,8 @@ class Occurrence(models.Model):
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, verbose_name=ugettext_lazy('Added by'))
     document_occurrence = models.ManyToManyField(Document, blank=True, verbose_name=ugettext_lazy('documents'))
     attribute_occurrence = models.ManyToManyField(AttributeChoice, blank=True, verbose_name=ugettext_lazy('attributes'))
+    algorithm_execution = models.ForeignKey(AlgorithmExecution, null=True, on_delete=models.SET_NULL, default=None, verbose_name=ugettext_lazy('Created by execution'))
+    status_occurrence = models.CharField(max_length=1, choices=STATE_CHOICES, default="V", verbose_name=ugettext_lazy('Status'))
 
     def __str__(self):
         return self.designation

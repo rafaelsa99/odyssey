@@ -3,7 +3,7 @@
 {% load class_tag %}
 
 {% block title %}
-{% trans "Delete Site - " %} {{item}}
+{% trans "Delete - " %} {{item}}
 {% endblock %}
 
 {% block body %}
@@ -31,7 +31,8 @@
                 {% csrf_token %}
                 <a class="btn btn-default" href="{% url 'view_site' item.id %}">{% trans "No, don't remove it" %}</a>
             {% endif %}
-            <input type="submit" value="{% trans "Yes, I am sure" %}" class="btn btn-danger"/>
+                <input type="submit" value="{% trans "Yes, I am sure" %}" class="btn btn-danger"/>
+            </form>
         </div>
         {% if occurrences %}
         <div class="col-md-4">

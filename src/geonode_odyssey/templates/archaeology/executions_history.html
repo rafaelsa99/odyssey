@@ -1,0 +1,212 @@
+{% extends "geonode_base.html" %}
+{% load i18n %}
+{% load leaflet_tags %}
+
+{% block title %}
+{% trans "Executions History" %}
+{% endblock %}
+
+{% block extra_head %}
+<link href="{{ STATIC_URL }}css/site_base.css" rel="stylesheet"/>
+<style>   
+    .btn {
+        margin-bottom: 5px;
+    }
+    
+    .grid {
+        position: relative;
+        width: 100%;
+        background: #fff;
+        color: #666666;
+        border-radius: 2px;
+        margin-bottom: 25px;
+        box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .grid .grid-body {
+        padding: 15px 20px 15px 20px;
+        font-size: 0.9em;
+        line-height: 1.9em;
+    }
+
+    .show {
+      display: none;
+    }
+</style>
+{% leaflet_js %}
+{% leaflet_css %}
+{% endblock %}
+
+{% block body %}
+<div class="container">
+<div class="row">
+  <!-- BEGIN SEARCH RESULT -->
+  <div class="col-md-12">
+    <div class="grid search">
+      <div class="grid-body">
+        <div class="row">
+          <!-- BEGIN FILTERS -->
+          <div class="col-md-3">
+            <h2 class="grid-title"><i class="fa fa-filter"></i> {% trans "Filters" %}</h2>
+            <hr>
+            <form action="" method="get" id="searchForm">
+            <!-- BEGIN FILTER BY CATEGORY -->
+            <h4>{% trans "Search by:" %}</h4>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="searchBy" id="searchBy1" value="name" {% if "name" == values.searchBy or not values.searchBy %}checked{% endif %}>
+              <label class="form-check-label" for="searchBy1">{% trans "Name" %}</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="searchBy" id="searchBy5" value="extent" {% if "extent" == values.searchBy %}checked{% endif %}>
+              <label class="form-check-label" for="searchBy5">{% trans "Extent" %}</label>
+            </div>            
+            <!-- END FILTER BY CATEGORY -->
+            
+            <div class="padding"></div>
+            <div class="show">
+            <!-- BEGIN FILTER BY EXTENT -->
+              <h4>{% trans "Extent" %}:</h4>
+              <button class="btn btn-primary" type="submit">{% trans "Search" %}</button>
+              {% leaflet_map "extent" callback="map_init" %}
+              <input type="hidden" id="coordinates" name="coordinates"> 
+            </div>
+            <!-- END FILTER BY EXTENT -->
+          </div>
+          <!-- END FILTERS -->
+          <!-- BEGIN RESULT -->
+          <div class="col-md-9">
+            <h2><i class="fa fa-history"></i>{% trans " Execution History of the Automatic Identification" %}</h2>
+            <hr>
+            <!-- BEGIN SEARCH INPUT -->
+            <div class="input-group">
+              <input type="text" class="form-control" name="text" value="{{ values.text }}">
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+              </span>
+            </div>
+          
+            <!-- END SEARCH INPUT -->
+            {% if values.searchBy == "extent" %}
+            <p>{% trans "Showing " %}{{count}} {% trans "result" %}{{ count|pluralize }} {% trans "matching the geographical extent" %}</p>
+            {% elif values.text %}
+              <p>{% trans "Showing " %}{{count}} {% trans "result" %}{{ count|pluralize }} {% trans "matching" %} "{{ values.text }}"</p>
+            {% else %}
+              <p>{% trans "Showing all results" %}</p>
+            {% endif %}
+            
+            <div class="padding"></div>
+            
+            <div class="row">
+              <!-- BEGIN ORDER RESULT -->
+              <div class="form-group">
+                <select class="btn btn-default pull-right" name="orderBy" onchange='this.form.submit();'>
+                  <option value="" disabled selected hidden>{% trans "Order by" %}</option>
+                  <option value="recent" {% if "recent" == values.orderBy%}selected{% endif %}>{% trans "Most recent" %}</option>
+                  <option value="older" {% if "older" == values.orderBy%}selected{% endif %}>{% trans "Less recent" %}</option>
+                  <option value="name_asc" {% if "name_asc" == values.orderBy%}selected{% endif %}>{% trans "Name (A - Z)" %}</option>
+                  <option value="name_desc" {% if "name_desc" == values.orderBy%}selected{% endif %}>{% trans "Name (Z - A)" %}</option>
+                </select>
+              </div> 
+              </div>
+              <!-- END ORDER RESULT -->
+            
+            </form>
+            <!-- BEGIN TABLE RESULT -->
+            {% if count == 0 %}
+              <h3>{% trans "No results found." %}</h3>
+            {% else %}
+            
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>{% trans "Name" %}</th>
+                    <th class="text-right">{% trans "Status" %}</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for execution in executions %}
+                  <tr>
+                  <td><a href="{% url 'view_execution' execution.id %}"><strong>{{execution.name}}</strong></a><br>{{execution.executed_at}}</td>
+                  <td class="text-right">{{execution.get_status_display}}</td>
+                </tr>
+                {% endfor %}
+              </tbody></table>
+            </div>
+            <!-- END TABLE RESULT -->
+            
+            <!-- BEGIN PAGINATION -->
+            {% if executions.has_other_pages %}
+            <ul class="pagination">
+              {% if executions.has_previous %}
+              <li class="page-item"><a class="page-link" href="?page={{ executions.previous_page_number }}&{{path}}">&laquo;</a></li>
+              {% else %}
+              <li class="page-item disabled"><a class="page-link" href="" tabindex="-1">&laquo;</a></li>
+              {% endif %}
+              {% for i in executions.paginator.page_range %}
+              {% if executions.number == i %}
+                <li class="page-item active"><a class="page-link" href="?page={{ i }}&{{path}}">{{ i }} <span class="sr-only">(current)</span></a></li>
+              {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ i }}&{{path}}">{{ i }}</a></li>
+              {% endif %}
+              {% endfor %}
+              {% if executions.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{ executions.next_page_number }}&{{path}}">&raquo;</a></li>
+              {% else %}
+              <li class="page-item disabled"><a class="page-link" href="" tabindex="-1">&raquo;</a></li>
+              {% endif %}
+            </ul>
+            {% endif %}
+            <!-- END PAGINATION -->
+            {% endif %}
+          </div>
+          <!-- END RESULT -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END SEARCH RESULT -->
+</div>
+</div>
+
+{% endblock %}
+
+{% block extra_script %}
+<script>
+
+  function map_init (map, options) {
+    var url = new URL(window.location.href);
+    var coord = url.searchParams.get("coordinates");
+    if (coord != null){
+      var array = coord.split(',');
+      var corner1 = L.latLng(array[1], array[0]);
+      var corner2 = L.latLng(array[3], array[2]);
+      var bounds = L.latLngBounds(corner1, corner2);
+      map.fitBounds(bounds);
+    }
+    document.getElementById("coordinates").value = map.getBounds().toBBoxString();
+    map.on('moveend', function() { 
+      document.getElementById("coordinates").value = map.getBounds().toBBoxString();
+      //Causes a form submit loop since this event is fired with the fitBound method
+      //document.getElementById("searchForm").submit();
+    });
+  }
+
+  $(window).on('load', function(){
+    if ($("#searchBy5").is(':checked')) {
+      $('.show').removeClass("hidden");
+    } else {
+      $('.show').addClass("hidden");
+    }
+  });
+
+  $(".form-check input[type='radio']").on("change", function() {
+     if ($("#searchBy5").is(':checked')) {
+       $('.show').removeClass("hidden");
+     } else {
+       $('.show').addClass("hidden");
+     }
+   })
+</script>
+{% endblock %}

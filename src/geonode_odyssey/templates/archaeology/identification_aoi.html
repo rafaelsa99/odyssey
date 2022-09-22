@@ -19,8 +19,11 @@
 {% leaflet_css plugins="forms" %}
 {% leaflet_js plugins="forms" %}
 
-<div class="page-header">
-    <h2 class="page-title">{% trans "Automatic Archaeological Identification" %}</h2>
+<div class="container">
+    <div class="page-header">
+        <a href="{% url 'executions_history' %}" class="btn btn-primary pull-right">{% trans "View Previous Executions" %}</a>
+        <h2 class="page-title">{% trans "Automatic Archaeological Identification" %}</h2>
+    </div>
 </div>
 
 <div class="container">
