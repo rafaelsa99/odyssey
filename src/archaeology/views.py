@@ -20,8 +20,8 @@ from django.conf import settings
 from pyproj import Proj, transform
 import os
 import json
-import asyncio
-import httpx
+import threading
+import requests
 from pathlib import Path
 # Create your views here.
 
@@ -429,7 +429,8 @@ def identification_layers(request):
                  
             files = [] #Just for testing
 
-            asyncio.run(execute_identification(data, files, request, bbox_polygon))
+            execution = threading.Thread(target=execute_identification, args=(data, files, request, bbox_polygon))
+            execution.start()
             
             #TODO: Confirm if can delete the temporary files here, or only after the POST is made.
             for temp_file in temp_files:
@@ -452,7 +453,7 @@ def identification_layers(request):
     return render(request, "archaeology/identification_layers.html", context=context)
 
 
-async def execute_identification(data, files, request, polygon):
+def execute_identification(data, files, request, polygon):
     ml_webservice_url = 'https://www.example.com/' #TODO: Put the correct URl
     title = request.POST.get("name")
     checked_layers = request.POST.getlist("layers")
@@ -464,10 +465,9 @@ async def execute_identification(data, files, request, polygon):
 
     json_data = json.dumps(data)
 
-    async with httpx.AsyncClient() as client:
-        #response = await client.post(ml_webservice_url, json=json_data) #TODO: How to send the files?
-        #For Testing:
-        response = '{"Mamoa": "MULTIPOLYGON (((-29241.2906252581 241680.89583582,-29221.2441570028 241680.969808027,-29221.8359346635 241662.920589377,-29241.2166530505 241662.772644962,-29241.2906252581 241680.89583582)), ((-23757.952793673 238264.267511927,-23731.4707433579 238268.188038928,-23731.3227989427 238242.149821859,-23757.7308770502 238241.927905236,-23757.952793673 238264.267511927)))"}'
+    #response = requests.post(ml_webservice_url, json=json_data) #TODO: How to send the files?
+    #For Testing:
+    response = '{"Mamoa": "MULTIPOLYGON (((-29241.2906252581 241680.89583582,-29221.2441570028 241680.969808027,-29221.8359346635 241662.920589377,-29241.2166530505 241662.772644962,-29241.2906252581 241680.89583582)), ((-23757.952793673 238264.267511927,-23731.4707433579 238268.188038928,-23731.3227989427 238242.149821859,-23757.7308770502 238241.927905236,-23757.952793673 238264.267511927)))"}'
     
     execution.status = 'F'
     execution.save()
