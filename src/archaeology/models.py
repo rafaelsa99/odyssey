@@ -63,12 +63,13 @@ class AttributeChoice(models.Model):
         verbose_name_plural = ugettext_lazy('Attribute Choices')
         ordering = ['category', 'value']
 
-STATE_CHOICES = (
-    ("N", ugettext_lazy("Not Verified")),
-    ("V", ugettext_lazy("Verified")))
-
 class Site(models.Model):
     """Model representing an archaeological site."""
+
+    STATE_CHOICES = (
+        ("N", ugettext_lazy("Not Verified")),
+        ("V", ugettext_lazy("Verified")))
+
     name = models.CharField(max_length=254, verbose_name=ugettext_lazy('Name'))
     national_site_code = models.IntegerField(null=True, blank=True, unique=True, verbose_name=ugettext_lazy('National Site Code'))
     country_iso = CountryField(verbose_name=ugettext_lazy('Country'), default="PT")
@@ -111,6 +112,13 @@ class Site(models.Model):
 
 class Occurrence(models.Model):
     """Model representing an archaeological occurrence within a site."""
+
+    STATE_CHOICES_OCCURRENCE = (
+        ("N", ugettext_lazy("Not Verified")),
+        ("V", ugettext_lazy("Verified")),
+        ("T", ugettext_lazy("Verified - True Positive")),
+        ("F", ugettext_lazy("Verified - False Positive")))
+
     designation = models.CharField(max_length=254, verbose_name=ugettext_lazy('Designation'))
     acronym = models.CharField(max_length=254, blank=True, verbose_name=ugettext_lazy('Acronym'))
     toponym = models.CharField(max_length=254, blank=True, verbose_name=ugettext_lazy('Toponym'))
@@ -123,7 +131,7 @@ class Occurrence(models.Model):
     document_occurrence = models.ManyToManyField(Document, blank=True, verbose_name=ugettext_lazy('documents'))
     attribute_occurrence = models.ManyToManyField(AttributeChoice, blank=True, verbose_name=ugettext_lazy('attributes'))
     algorithm_execution = models.ForeignKey(AlgorithmExecution, null=True, on_delete=models.SET_NULL, default=None, verbose_name=ugettext_lazy('Created by execution'))
-    status_occurrence = models.CharField(max_length=1, choices=STATE_CHOICES, default="V", verbose_name=ugettext_lazy('Status'))
+    status_occurrence = models.CharField(max_length=1, choices=STATE_CHOICES_OCCURRENCE, default="V", verbose_name=ugettext_lazy('Status'))
 
     def __str__(self):
         return self.designation

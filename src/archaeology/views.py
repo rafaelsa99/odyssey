@@ -530,11 +530,19 @@ def executions_history(request):
         executions = paginator.page(paginator.num_pages)
     path = ''
     path += "%s" % "&".join(["%s=%s" % (key, value) for (key, value) in request.GET.items() if not key=='page' ])
+    total_occurrences = Occurrence.objects.filter(algorithm_execution__isnull=False).count()
+    not_verified_occurrences = Occurrence.objects.filter(algorithm_execution__isnull=False, status_occurrence__icontains="N").count()
+    false_positive_occurrences = Occurrence.objects.filter(algorithm_execution__isnull=False, status_occurrence__icontains="F").count()
+    true_positive_occurrences = Occurrence.objects.filter(algorithm_execution__isnull=False, status_occurrence__icontains="T").count()
     context = {
         'executions': executions,
         'values': request.GET,
         'count': executions_list.count(),
         'path': path,
+        'total_occurrences': total_occurrences,
+        'not_verified_occurrences': not_verified_occurrences,
+        'false_positive_occurrences': false_positive_occurrences,
+        'true_positive_occurrences': true_positive_occurrences,
         }
     return render(request, "archaeology/executions_history.html", context=context)
 

@@ -47,11 +47,14 @@
         <div class="row">
           <!-- BEGIN FILTERS -->
           <div class="col-md-3">
-            <h2 class="grid-title"><i class="fa fa-filter"></i> {% trans "Filters" %}</h2>
+            <h4><i class="fa fa-bar-chart"></i> {% trans "Statistics" %}</h4>
+            <p><b>{% trans "Not Verified:" %} {% widthratio not_verified_occurrences total_occurrences 100 %}%</b></p>
+            <p><b>{% trans "Verified - False Positive:" %} {% widthratio false_positive_occurrences total_occurrences 100 %}%</b></p>
+            <p><b>{% trans "Verified - True Positive:" %} {% widthratio true_positive_occurrences total_occurrences 100 %}%</b></p>
             <hr>
             <form action="" method="get" id="searchForm">
             <!-- BEGIN FILTER BY CATEGORY -->
-            <h4>{% trans "Search by:" %}</h4>
+            <h4><i class="fa fa-filter"></i> {% trans "Filters" %}</h4>
             <div class="form-check">
               <input class="form-check-input" type="radio" name="searchBy" id="searchBy1" value="name" {% if "name" == values.searchBy or not values.searchBy %}checked{% endif %}>
               <label class="form-check-label" for="searchBy1">{% trans "Name" %}</label>
