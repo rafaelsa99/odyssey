@@ -1,8 +1,8 @@
 <GeoServerTileLayer>
-  <id>LayerInfoImpl--2c04627b:1825a33c53c:-7faa</id>
+  <id>LayerInfoImpl--6a0cee3d:18367d0a2b8:-7f69</id>
   <enabled>true</enabled>
   <inMemoryCached>true</inMemoryCached>
-  <name>geonode:site_point_verified</name>
+  <name>geonode:site_point_unverified</name>
   <mimeFormats>
     <string>application/json;type=utfgrid</string>
     <string>image/png</string>

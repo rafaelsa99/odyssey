@@ -2,7 +2,7 @@
   <id>LayerInfoImpl--2c04627b:1825a33c53c:-7fa7</id>
   <enabled>true</enabled>
   <inMemoryCached>true</inMemoryCached>
-  <name>geonode:site_polygon</name>
+  <name>geonode:site_polygon_verified</name>
   <mimeFormats>
     <string>application/json;type=utfgrid</string>
     <string>image/png</string>

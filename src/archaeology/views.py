@@ -80,6 +80,14 @@ def list_sites(request):
         }
     return render(request, "archaeology/list_sites.html", context=context)
 
+def updateLayers(filter):
+    if filter == "store":
+        execute_from_command_line(["../manage_dev.sh", "updatelayers", "-s", "archaeology"])
+    elif filter == "site":
+        execute_from_command_line(["../manage_dev.sh", "updatelayers", "-f", "site"])
+    elif filter == "occurrence":
+        execute_from_command_line(["../manage_dev.sh", "updatelayers", "-f", "occurrence"])
+
 @login_required
 def view_site(request, pk):
     try:
@@ -112,7 +120,7 @@ def create_site(request):
         occurrence.save()
         formOccurrence.save_m2m()
         messages.success(request, ugettext_lazy('Site and Occurrence created successfully.'))
-        execute_from_command_line(["../manage_dev.sh", "updatelayers", "-s", "archaeology"])
+        threading.Thread(target=updateLayers, args=("store",)).start()
         return redirect(site.get_absolute_url())
     return render(request, "archaeology/create_site.html", context=context)
 
@@ -135,7 +143,7 @@ def update_site(request, pk):
     if form.is_valid():
         form.save()
         messages.success(request, ugettext_lazy('Changes saved successfully.'))
-        execute_from_command_line(["../manage_dev.sh", "updatelayers", "-f", "site"])
+        threading.Thread(target=updateLayers, args=("site",)).start()
         return redirect(site.get_absolute_url())
     context = {
         'form': form,
@@ -156,7 +164,7 @@ def delete_site(request, pk):
         msg = str(ugettext_lazy('Site ')) + site.name + str(ugettext_lazy(' successfully deleted.'))
         site.delete()
         messages.success(request, msg)
-        execute_from_command_line(["../manage_dev.sh", "updatelayers", "-s", "archaeology"])
+        threading.Thread(target=updateLayers, args=("store",)).start()
         return redirect(list_sites)
     return render(request, "archaeology/delete.html", context=context)
 
@@ -203,7 +211,7 @@ def import_occurrences(request, pk):
                                 counter += 1
             msg = str(ugettext_lazy('A total of ')) + str(counter) + str(ugettext_lazy(' new occurrences were added.'))
             messages.success(request, msg)
-            execute_from_command_line(["../manage_dev.sh", "updatelayers", "-f", "occurrence"])
+            threading.Thread(target=updateLayers, args=("occurrence",)).start()
             return redirect(site_to_import.get_absolute_url())
     return render(request, "archaeology/import_occurrences.html", context=context)
 
@@ -307,7 +315,7 @@ def create_occurrence(request, pk):
                     metric.occurrence = occurrence
                     metric.save()
         messages.success(request, ugettext_lazy('Occurrence created successfully.'))
-        execute_from_command_line(["../manage_dev.sh", "updatelayers", "-f", "occurrence"])
+        threading.Thread(target=updateLayers, args=("occurrence",)).start()
         return redirect(occurrence.get_absolute_url())
     context = {
         'form': form,
@@ -342,7 +350,7 @@ def update_occurrence(request, pk):
                         metric.occurrence = occurrence_instance
                         metric.save()
         messages.success(request, ugettext_lazy('Changes saved successfully.'))
-        execute_from_command_line(["../manage_dev.sh", "updatelayers", "-f", "occurrence"])
+        threading.Thread(target=updateLayers, args=("occurrence",)).start()
         return redirect(occurrence_instance.get_absolute_url())
     context = {
         'form': form,
@@ -364,7 +372,7 @@ def delete_occurrence(request, pk):
         msg = str(ugettext_lazy('Occurrence ')) + occurrence.designation + str(ugettext_lazy(' successfully deleted.'))
         occurrence.delete()
         messages.success(request, msg)
-        execute_from_command_line(["../manage_dev.sh", "updatelayers", "-f", "occurrence"])
+        threading.Thread(target=updateLayers, args=("occurrence",)).start()
         return redirect(site.get_absolute_url())
     context = {'item': occurrence}    
     return render(request, "archaeology/delete.html", context=context)
@@ -495,7 +503,7 @@ def execute_identification(data, files, request, polygon):
                         new_occurrence = Occurrence(designation=designation, bounding_polygon=item[0], site=site, added_by=request.user, algorithm_execution=execution, status_occurrence='N')
                         new_occurrence.save()
                         new_occurrence.attribute_occurrence.add(AttributeChoice.objects.get(value=key))
-        execute_from_command_line(["../manage_dev.sh", "updatelayers", "-s", "archaeology"])
+        threading.Thread(target=updateLayers, args=("store",)).start()
 
 @login_required
 def executions_history(request):

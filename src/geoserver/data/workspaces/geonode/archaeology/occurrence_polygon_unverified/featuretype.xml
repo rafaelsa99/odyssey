@@ -1,0 +1,96 @@
+<featureType>
+  <id>FeatureTypeInfoImpl--6a0cee3d:18367d0a2b8:-7f63</id>
+  <name>occurrence_polygon_unverified</name>
+  <nativeName>occurrence_polygon_unverified</nativeName>
+  <namespace>
+    <id>NamespaceInfoImpl-78ff667e:12476299803:-7ffe</id>
+  </namespace>
+  <title>Unverified Archaeological Occurrences [polygon]</title>
+  <abstract>Unverified Occurrences inside the Archaeological Sites represented by polygons</abstract>
+  <keywords>
+    <string>features</string>
+    <string>occurrence_polygon_unverified</string>
+  </keywords>
+  <metadataLinks>
+    <metadataLink>
+      <type>other</type>
+      <metadataType>other</metadataType>
+      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=01704ed2-3a13-499d-8cbd-d68894133b74&amp;outputschema=http%3A%2F%2Fwww.w3.org%2F2005%2FAtom&amp;elementsetname=full</content>
+    </metadataLink>
+    <metadataLink>
+      <type>other</type>
+      <metadataType>other</metadataType>
+      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=01704ed2-3a13-499d-8cbd-d68894133b74&amp;outputschema=http%3A%2F%2Fgcmd.gsfc.nasa.gov%2FAboutus%2Fxml%2Fdif%2F&amp;elementsetname=full</content>
+    </metadataLink>
+    <metadataLink>
+      <type>other</type>
+      <metadataType>other</metadataType>
+      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=01704ed2-3a13-499d-8cbd-d68894133b74&amp;outputschema=http%3A%2F%2Fwww.opengis.net%2Fcat%2Fcsw%2F2.0.2&amp;elementsetname=full</content>
+    </metadataLink>
+    <metadataLink>
+      <type>other</type>
+      <metadataType>other</metadataType>
+      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=01704ed2-3a13-499d-8cbd-d68894133b74&amp;outputschema=urn%3Aoasis%3Anames%3Atc%3Aebxml-regrep%3Axsd%3Arim%3A3.0&amp;elementsetname=full</content>
+    </metadataLink>
+    <metadataLink>
+      <type>text/xml</type>
+      <metadataType>FGDC</metadataType>
+      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=01704ed2-3a13-499d-8cbd-d68894133b74&amp;outputschema=http%3A%2F%2Fwww.opengis.net%2Fcat%2Fcsw%2Fcsdgm&amp;elementsetname=full</content>
+    </metadataLink>
+    <metadataLink>
+      <type>other</type>
+      <metadataType>other</metadataType>
+      <content>http://localhost:8000/catalogue/csw?request=GetRecordById&amp;service=CSW&amp;version=2.0.2&amp;id=01704ed2-3a13-499d-8cbd-d68894133b74&amp;outputschema=http%3A%2F%2Fwww.isotc211.org%2F2005%2Fgmd&amp;elementsetname=full</content>
+    </metadataLink>
+    <metadataLink>
+      <type>other</type>
+      <metadataType>other</metadataType>
+      <content>http://localhost:8000/showmetadata/xsl/35</content>
+    </metadataLink>
+  </metadataLinks>
+  <srs>EPSG:4326</srs>
+  <nativeBoundingBox>
+    <minx>-8.48518909131558</minx>
+    <maxx>-8.418709382923813</maxx>
+    <miny>41.81328058642253</miny>
+    <maxy>41.84406037562822</maxy>
+  </nativeBoundingBox>
+  <latLonBoundingBox>
+    <minx>-8.48518909131558</minx>
+    <maxx>-8.418709382923813</maxx>
+    <miny>41.81328058642253</miny>
+    <maxy>41.84406037562822</maxy>
+    <crs>EPSG:4326</crs>
+  </latLonBoundingBox>
+  <projectionPolicy>FORCE_DECLARED</projectionPolicy>
+  <enabled>true</enabled>
+  <advertised>true</advertised>
+  <metadata>
+    <entry key="JDBC_VIRTUAL_TABLE">
+      <virtualTable>
+        <name>occurrence_polygon_unverified</name>
+        <sql>select occurrence.id, occurrence.designation, occurrence.acronym, occurrence.toponym, site.name as site_name, occurrence.owner, occurrence.altitude, occurrence.bounding_polygon, people_profile.username as added_by, string_agg(metric_values.automatic_values, &apos;, &apos;) as automatic_metrics, string_agg(metric_values.confirmed_values, &apos;, &apos;) as confirmed_metrics, attributes.values as attributes, &apos;Not Verified&apos; as status from occurrence left join (select occurrence_attribute_occurrence.occurrence_id, array_to_string(array_agg(attribute_category.name  || &apos;: &apos; || attribute_choice.value), &apos;, &apos;) as values from occurrence_attribute_occurrence, attribute_category, attribute_choice where occurrence_attribute_occurrence.attributechoice_id = attribute_choice.id and attribute_choice.category_id = attribute_category.id group by occurrence_attribute_occurrence.occurrence_id) as attributes on attributes.occurrence_id = occurrence.id left join (select metric.occurrence_id, array_to_string(array_agg(metric_type.name  || &apos;=&apos; || metric.auto_value || metric.unit_measurement), &apos;, &apos;) as automatic_values, array_to_string(array_agg(metric_type.name  || &apos;=&apos; || metric.confirmed_value || metric.unit_measurement), &apos;, &apos;) as confirmed_values from metric, metric_type where metric.type_id = metric_type.id group by metric.occurrence_id) as metric_values on metric_values.occurrence_id = occurrence.id, people_profile, site where occurrence.added_by_id = people_profile.id and site.id = occurrence.site_id and occurrence.status_occurrence = &apos;N&apos; group by occurrence.id, attributes.values, people_profile.username, site.name
+</sql>
+        <escapeSql>false</escapeSql>
+        <geometry>
+          <name>bounding_polygon</name>
+          <type>Polygon</type>
+          <srid>-1</srid>
+        </geometry>
+      </virtualTable>
+    </entry>
+  </metadata>
+  <store class="dataStore">
+    <id>DataStoreInfoImpl--54ab80b:1823b340422:-8000</id>
+  </store>
+  <serviceConfiguration>false</serviceConfiguration>
+  <simpleConversionEnabled>false</simpleConversionEnabled>
+  <maxFeatures>0</maxFeatures>
+  <numDecimals>0</numDecimals>
+  <padWithZeros>false</padWithZeros>
+  <forcedDecimal>false</forcedDecimal>
+  <overridingServiceSRS>false</overridingServiceSRS>
+  <skipNumberMatched>false</skipNumberMatched>
+  <circularArcPresent>false</circularArcPresent>
+  <encodeMeasures>false</encodeMeasures>
+</featureType>

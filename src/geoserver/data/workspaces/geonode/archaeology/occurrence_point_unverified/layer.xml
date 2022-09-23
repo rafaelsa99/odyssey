@@ -1,0 +1,16 @@
+<layer>
+  <name>occurrence_point_unverified</name>
+  <id>LayerInfoImpl--6a0cee3d:18367d0a2b8:-7f65</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--11523451:1823ab9c1f4:-7ffd</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--6a0cee3d:18367d0a2b8:-7f66</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2022-09-23 03:06:57.722 UTC</dateCreated>
+</layer>

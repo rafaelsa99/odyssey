@@ -1,0 +1,17 @@
+<layer>
+  <name>occurrence_polygon_verified</name>
+  <id>LayerInfoImpl--2c04627b:1825a33c53c:-7fa3</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--be02ae1:1824ae90817:-7f72</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--2c04627b:1825a33c53c:-7fa4</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2022-08-01 16:59:17.96 UTC</dateCreated>
+  <dateModified>2022-09-23 02:58:41.438 UTC</dateModified>
+</layer>

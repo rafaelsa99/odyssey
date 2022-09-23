@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-18 16:52+0100\n"
-"PO-Revision-Date: 2022-08-18 16:57+0100\n"
+"POT-Creation-Date: 2022-09-23 04:42+0100\n"
+"PO-Revision-Date: 2022-09-23 05:10+0100\n"
 "Last-Translator: Rafael Gomes de Sá, rafael.sa@ua.pt\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: Portuguese\n"
@@ -25,13 +25,41 @@ msgid "Latitude"
 msgstr "Latitude"
 
 msgid "Enter coordinates as an alternative to selecting a point on the map."
-msgstr "Introduza as coordenadas como alternativa à selecção de um ponto no mapa."
+msgstr ""
+"Introduza as coordenadas como alternativa à selecção de um ponto no mapa."
 
 msgid "Longitude"
 msgstr "Longitude"
 
+msgid "Executing"
+msgstr "A Executar"
+
+msgid "Finished"
+msgstr "Concluído"
+
 msgid "Name"
 msgstr "Nome"
+
+msgid "Executed at"
+msgstr "Executado a"
+
+msgid "Status"
+msgstr "Estado"
+
+msgid "Executed by"
+msgstr "Executado por"
+
+msgid "Layers Used"
+msgstr "Camadas Utilizadas"
+
+msgid "Area of Interest"
+msgstr "Área de Interesse"
+
+msgid "Algorithm Execution"
+msgstr "Execução do Algoritmo"
+
+msgid "Algorithm Executions"
+msgstr "Execuções do Algoritmo"
 
 msgid "Attribute Category"
 msgstr "Categorias de Atributos"
@@ -50,6 +78,12 @@ msgstr "Opção do Atributo"
 
 msgid "Attribute Choices"
 msgstr "Opções do Atributo"
+
+msgid "Not Verified"
+msgstr "Não Verificado"
+
+msgid "Verified"
+msgstr "Verificado"
 
 msgid "National Site Code"
 msgstr "Código Nacional de Sítio"
@@ -75,6 +109,9 @@ msgstr "Documentos"
 msgid "attributes"
 msgstr "Atributos"
 
+msgid "Created by execution"
+msgstr "Criado através da execução"
+
 msgid "At least one of the spatial fields (point or polygon) is required."
 msgstr "Pelo menos um dos campos geográficos (ponto ou polígono) é necessário."
 
@@ -83,6 +120,12 @@ msgstr "Sítio"
 
 msgid "Sites"
 msgstr "Sítios"
+
+msgid "Verified - True Positive"
+msgstr "Verificado - Verdadeiro Positivo"
+
+msgid "Verified - False Positive"
+msgstr "Verificado - Falso Positivo"
 
 msgid "Designation"
 msgstr "Designação"
@@ -150,6 +193,12 @@ msgstr "Sítio "
 msgid " successfully deleted."
 msgstr " eliminado com sucesso."
 
+msgid "A total of "
+msgstr "Um total de "
+
+msgid " new occurrences were added."
+msgstr " novas ocorrências foram adicionadas."
+
 msgid "Occurrence does not exist"
 msgstr "A Ocorrência não existe"
 
@@ -158,6 +207,28 @@ msgstr "Ocorrência criada com sucesso."
 
 msgid "Occurrence "
 msgstr "Ocorrência "
+
+msgid "It is required to select an area of interest on the map."
+msgstr "É necessário seleccionar uma área de interesse no mapa."
+
+msgid "No layer is selected. At least one layer must be selected."
+msgstr "Nenhuma camada foi selecionada. Pelo menos uma camada deve ser selecionada."
+
+msgid ""
+"The automatic identification has been started, and the results will be added "
+"as soon as the identification process is finished."
+msgstr "A identificação automática foi iniciada, devendo os resultados ser adicionados assim que o processo de identificação estiver concluído."
+
+msgid ""
+"The area of interest that has been selected does not intersect any layer "
+"that can be used."
+msgstr "A área de interesse que foi seleccionada não intersecta nenhuma camada que possa ser utilizada."
+
+msgid "Execution does not exist"
+msgstr "A Execução não existe"
+
+msgid "Execution log "
+msgstr "Registo de execução "
 
 msgid "English"
 msgstr "Inglês"
@@ -379,8 +450,8 @@ msgstr "Adicionar Novo Sítio Arqueológico"
 msgid "Add"
 msgstr "Adicionar"
 
-msgid "Delete Site - "
-msgstr "Eliminar Sítio - "
+msgid "Delete - "
+msgstr "Eliminar - "
 
 msgid "Remove "
 msgstr "Remover "
@@ -400,20 +471,50 @@ msgstr "Esta ação afeta as seguintes ocorrências:"
 msgid "This site does not have occurrences"
 msgstr "Este sítio não tem ocorrências"
 
-msgid "Explore Occurrences"
-msgstr "Explorar Ocorrências"
+msgid "Remove Execution Log "
+msgstr "Remover Registo de Execução "
+
+msgid "Info"
+msgstr "Informação"
+
+msgid "Detections"
+msgstr "Deteções"
+
+msgid "Date of Execution"
+msgstr "Data de Execução"
+
+msgid "Total Detections"
+msgstr "Total de Deteções"
+
+msgid "Layers"
+msgstr "Camadas"
+
+msgid "No layers!"
+msgstr "Sem camadas!"
+
+msgid "No occurrences!"
+msgstr "Sem ocorrências!"
+
+msgid "Delete"
+msgstr "Eliminar"
+
+msgid "Executions History"
+msgstr "Histórico de Execuções"
+
+msgid "Statistics"
+msgstr "Estatísticas"
+
+msgid "Not Verified:"
+msgstr "Não Verificado:"
+
+msgid "Verified - False Positive:"
+msgstr "Verificado - Falso Positivo:"
+
+msgid "Verified - True Positive:"
+msgstr "Verificado - Verdadeiro Positivo:"
 
 msgid "Filters"
 msgstr "Filtros"
-
-msgid "Search by:"
-msgstr "Pesquisar por:"
-
-msgid "Archaeological Site"
-msgstr "Sítio Arqueológico"
-
-msgid "Attributes"
-msgstr "Atributos"
 
 msgid "Extent"
 msgstr "Extensão"
@@ -421,8 +522,8 @@ msgstr "Extensão"
 msgid "Search"
 msgstr "Pesquisar"
 
-msgid " Explore Archaeological Occurrences"
-msgstr " Explorar Ocorrências Arqueológicas"
+msgid " Execution History of the Automatic Identification"
+msgstr " Histórico de Execução de Identificações Automáticas"
 
 msgid "Showing "
 msgstr "A mostrar "
@@ -454,14 +555,71 @@ msgstr "Nome (A - Z)"
 msgid "Name (Z - A)"
 msgstr "Nome (Z - A)"
 
+msgid "No results found."
+msgstr "Não foram encontrados resultados."
+
+msgid "Automatic Identification"
+msgstr "Identificação Automática"
+
+msgid "View Previous Executions"
+msgstr "Consultar Execuções Anteriores"
+
+msgid "Automatic Archaeological Identification"
+msgstr "Identificação Arqueológica Automática"
+
+msgid "Area of Interest:"
+msgstr "Área de Interesse:"
+
+msgid "Next"
+msgstr "Seguinte"
+
+msgid "Title"
+msgstr "Título"
+
+msgid "Select the layers that you want to use for identification:"
+msgstr "Selecione as camadas que pretende utilizar para a identificação:"
+
+msgid "Start"
+msgstr "Iniciar"
+
+msgid "Archaeological occurrences inside the area of interest:"
+msgstr "Ocorrências arqueológicas no interior da área de interesse:"
+
+msgid "Import Occurrences"
+msgstr "Importar Ocorrências"
+
+msgid "In "
+msgstr "Em "
+
+msgid "Allowed document types"
+msgstr "Tipos de documentos permitidos"
+
+msgid "File: "
+msgstr "Ficheiro: "
+
+msgid "Import"
+msgstr "Importar"
+
+msgid "Explore Occurrences"
+msgstr "Explorar Ocorrências"
+
+msgid "Search by:"
+msgstr "Pesquisar por:"
+
+msgid "Archaeological Site"
+msgstr "Sítio Arqueológico"
+
+msgid "Attributes"
+msgstr "Atributos"
+
+msgid " Explore Archaeological Occurrences"
+msgstr " Explorar Ocorrências Arqueológicas"
+
 msgid "Site (A - Z)"
 msgstr "Sítio (A - Z)"
 
 msgid "Site (Z - A)"
 msgstr "Sítio (Z - A)"
-
-msgid "No results found."
-msgstr "Não foram encontrados resultados."
 
 msgid "Explore Sites"
 msgstr "Explorar Sítios"
@@ -474,12 +632,6 @@ msgstr "Código de Sítio (ascendente)"
 
 msgid "Site Code (descending)"
 msgstr "Código de Sítio (descendente)"
-
-msgid "In "
-msgstr "Em "
-
-msgid "Info"
-msgstr "Informação"
 
 msgid "Documents"
 msgstr "Documentos"
@@ -510,9 +662,6 @@ msgstr "Sem documentos!"
 msgid "Edit"
 msgstr "Editar"
 
-msgid "Delete"
-msgstr "Eliminar"
-
 msgid "Create Occurrence"
 msgstr "Criar Ocorrência"
 
@@ -521,9 +670,6 @@ msgstr "Editar Ocorrência - "
 
 msgid "Add New "
 msgstr "Adicionar Novo "
-
-msgid "No occurrences!"
-msgstr "Sem ocorrências!"
 
 msgid "Update Site - "
 msgstr "Editar Sítio - "
@@ -539,9 +685,6 @@ msgstr "Submeter"
 
 msgid "Data"
 msgstr "Data"
-
-msgid "Layers"
-msgstr "Camadas"
 
 msgid "Remote Services"
 msgstr "Serviços Remotos"
@@ -732,5 +875,3 @@ msgstr "Pesquisar Sítios Arqueológicos"
 msgid "Search Archaeological Occurrences"
 msgstr "Pesquisar Ocorrências Arqueológicas"
 
-msgid "Odyssey Project"
-msgstr "Projeto Odyssey"

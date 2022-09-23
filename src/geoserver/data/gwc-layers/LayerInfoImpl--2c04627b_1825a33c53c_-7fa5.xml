@@ -2,7 +2,7 @@
   <id>LayerInfoImpl--2c04627b:1825a33c53c:-7fa5</id>
   <enabled>true</enabled>
   <inMemoryCached>true</inMemoryCached>
-  <name>geonode:occurrence_point</name>
+  <name>geonode:occurrence_point_verified</name>
   <mimeFormats>
     <string>application/json;type=utfgrid</string>
     <string>image/png</string>

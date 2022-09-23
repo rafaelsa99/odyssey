@@ -1,17 +1,16 @@
 <layer>
-  <name>site_point</name>
-  <id>LayerInfoImpl--2c04627b:1825a33c53c:-7faa</id>
+  <name>occurrence_point_verified_tp</name>
+  <id>LayerInfoImpl--6a0cee3d:18367d0a2b8:-7f5c</id>
   <type>VECTOR</type>
   <defaultStyle>
     <id>StyleInfoImpl--11523451:1823ab9c1f4:-7ffd</id>
   </defaultStyle>
   <resource class="featureType">
-    <id>FeatureTypeInfoImpl--2c04627b:1825a33c53c:-7fab</id>
+    <id>FeatureTypeInfoImpl--6a0cee3d:18367d0a2b8:-7f5d</id>
   </resource>
   <attribution>
     <logoWidth>0</logoWidth>
     <logoHeight>0</logoHeight>
   </attribution>
-  <dateCreated>2022-08-01 16:55:42.887 UTC</dateCreated>
-  <dateModified>2022-08-02 17:10:34.343 UTC</dateModified>
+  <dateCreated>2022-09-23 03:13:24.737 UTC</dateCreated>
 </layer>

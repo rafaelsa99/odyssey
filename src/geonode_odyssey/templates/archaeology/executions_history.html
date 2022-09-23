@@ -48,9 +48,11 @@
           <!-- BEGIN FILTERS -->
           <div class="col-md-3">
             <h4><i class="fa fa-bar-chart"></i> {% trans "Statistics" %}</h4>
-            <p><b>{% trans "Not Verified:" %} {% widthratio not_verified_occurrences total_occurrences 100 %}%</b></p>
-            <p><b>{% trans "Verified - False Positive:" %} {% widthratio false_positive_occurrences total_occurrences 100 %}%</b></p>
-            <p><b>{% trans "Verified - True Positive:" %} {% widthratio true_positive_occurrences total_occurrences 100 %}%</b></p>
+            <ul style="list-style-type: none; padding: 0;">
+            <li>{% trans "Not Verified:" %} {% widthratio not_verified_occurrences total_occurrences 100 %}%</li>
+            <li>{% trans "Verified - False Positive:" %} {% widthratio false_positive_occurrences total_occurrences 100 %}%</li>
+            <li>{% trans "Verified - True Positive:" %} {% widthratio true_positive_occurrences total_occurrences 100 %}%</li>
+            </ul>
             <hr>
             <form action="" method="get" id="searchForm">
             <!-- BEGIN FILTER BY CATEGORY -->
