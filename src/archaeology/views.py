@@ -18,10 +18,8 @@ from osgeo import gdal
 from geonode.layers.models import LayerFile
 from django.conf import settings
 from pyproj import Proj, transform
-import os
-import json
-import threading
-import requests
+import os, json, threading, uuid, requests
+from zipfile import ZipFile
 from pathlib import Path
 # Create your views here.
 
@@ -398,10 +396,9 @@ def identification_layers(request):
     #Get only occurrences from the polygons, since the points are not useful for the ML algorithm, and with a type defined and with the information verified
     types_list = AttributeChoice.objects.filter(Q(category__name__icontains="type") | Q(category__name__icontains="tipo"))
     occurrences_list = Occurrence.objects.filter(Q(bounding_polygon__intersects=bbox_polygon) & Q(attribute_occurrence__in=types_list) & Q(status_occurrence__icontains="V"))
-    #TODO:Uncomment occurrences verification.
-    #if not occurrences_list:
-    #   messages.warning(request, ugettext_lazy('The area of interest that has been selected does not intersect any archaeological occurrence that can be used.')
-    #   return redirect(identification_aoi)
+    if not occurrences_list:
+        messages.warning(request, ugettext_lazy('The area of interest that has been selected does not intersect any archaeological occurrence that can be used.'))
+        return redirect(identification_aoi)
     if request.method == "POST":
         checked_layers = request.POST.getlist("layers")
         if not checked_layers:
@@ -428,7 +425,9 @@ def identification_layers(request):
             folder_path = settings.PROJECT_ROOT + settings.MEDIA_URL
             temp_folder_path = os.path.join(folder_path, "tmp")
             Path(temp_folder_path).mkdir(parents=True, exist_ok=True)
-            temp_files = []
+            zip_filename = str(uuid.uuid4().hex) + '.zip'
+            zip_file_path = os.path.join(temp_folder_path, zip_filename)
+            zip_file = ZipFile(zip_file_path, 'w')
             for file in checked_layers:
                 file_path = os.path.join(folder_path + file)
                 output_file = "{0}_{2}{1}".format(*os.path.splitext(os.path.basename(file)) + ("cropped",))
@@ -437,21 +436,14 @@ def identification_layers(request):
                 #ds = gdal.Translate(output_file_path, ds, projWin = bbox, options = "-projwin_srs EPSG:4326") #Not creating the output file - using gdal.Warp instead
                 ds = gdal.Warp(output_file_path, ds, outputBounds = bbox_converted)   
                 ds = None # To close the dataset
-                temp_files.append(output_file_path)
-                
-                #TODO: aggregate all files to send to the ML algorithm
-                 
-            files = [] #Just for testing
+                zip_file.write(output_file_path, arcname=output_file)
+                # Delete temporary file after write in the zip file
+                os.remove(output_file_path) 
 
-            execution = threading.Thread(target=execute_identification, args=(data, files, request, bbox_polygon))
+            zip_file.close() 
+            execution = threading.Thread(target=execute_identification, args=(data, zip_file_path, request, bbox_polygon))
             execution.start()
             
-            #TODO: Confirm if can delete the temporary files here, or only after the POST is made.
-            for temp_file in temp_files:
-                #Delete temporary file when is no longer necessary
-                if os.path.isfile(temp_file):
-                    os.remove(temp_file) 
-
             messages.success(request, ugettext_lazy('The automatic identification has been started, and the results will be added as soon as the identification process is finished.'))
             return redirect(executions_history)
 
@@ -467,7 +459,7 @@ def identification_layers(request):
     return render(request, "archaeology/identification_layers.html", context=context)
 
 
-def execute_identification(data, files, request, polygon):
+def execute_identification(data, zip_file, request, polygon):
     ml_webservice_url = 'https://www.example.com/' #TODO: Put the correct URl
     title = request.POST.get("name")
     checked_layers = request.POST.getlist("layers")
@@ -478,14 +470,22 @@ def execute_identification(data, files, request, polygon):
         execution.layers_used.add(layer)
 
     json_data = json.dumps(data)
+    zip_obj = open(zip_file, 'rb')
 
-    #response = requests.post(ml_webservice_url, json=json_data) #TODO: How to send the files?
-    #For Testing:
-    response = '{"Mamoa": "MULTIPOLYGON (((-29241.2906252581 241680.89583582,-29221.2441570028 241680.969808027,-29221.8359346635 241662.920589377,-29241.2166530505 241662.772644962,-29241.2906252581 241680.89583582)), ((-23757.952793673 238264.267511927,-23731.4707433579 238268.188038928,-23731.3227989427 238242.149821859,-23757.7308770502 238241.927905236,-23757.952793673 238264.267511927)))"}'
+    #TODO: POST request not tested. Can the zip name in the request be different from the file?
+    #response = requests.post(ml_webservice_url, json=json_data, files = {"archive": ("layers.zip", zip_obj, 'application/zip')}) 
+    #response_text = response.text
+
+    #TODO: Delete the following line when using the POST request. Just for testing.
+    response_text = '{"Mamoa": "MULTIPOLYGON (((-29241.2906252581 241680.89583582,-29221.2441570028 241680.969808027,-29221.8359346635 241662.920589377,-29241.2166530505 241662.772644962,-29241.2906252581 241680.89583582)), ((-23757.952793673 238264.267511927,-23731.4707433579 238268.188038928,-23731.3227989427 238242.149821859,-23757.7308770502 238241.927905236,-23757.952793673 238264.267511927)))"}'
     
+    #Delete temporary zip file
+    if os.path.isfile(zip_file):
+        os.remove(zip_file) 
+
     execution.status = 'F'
     execution.save()
-    detections = json.loads(response)
+    detections = json.loads(response_text)
     if detections: #Check if there is any detection
         site = Site(name=title, surrounding_polygon=polygon, added_by=request.user, created_by_execution=execution, status_site='N')
         site.save()
