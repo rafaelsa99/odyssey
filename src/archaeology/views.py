@@ -176,24 +176,30 @@ def import_occurrences(request, pk):
             # Reads small chunks to avoid memory errors
             for chunk in pandas.read_csv(csv_file, chunksize=50):
                 for row in chunk.itertuples():
-                    #TODO: Check the Id field, and match to the attribute "Type".
-                    #Now it is assumed that is "Mamoas".
                     with connection.cursor() as cursor:
                         cursor.execute("SELECT ST_Transform(ST_SetSRID(geom, 3763), 4326) FROM ST_Dump(%s);", [row.WKT])
                         rows = cursor.fetchall()
                         for item in rows: #Iterate over all polygons inside the Multipolygon
                             cursor.execute("SELECT ST_GeometryType(%s);", [item[0]])
                             type = cursor.fetchone()
-                            name = "Mamoa " + str(row.Index)
+                            name = row.Id + " " + str(row.Index)
                             if type[0] == "ST_Point":
                                 new_occurrence = Occurrence(designation=name, position=item[0], site=site_to_import, added_by=request.user)
                                 new_occurrence.save()
-                                new_occurrence.attribute_occurrence.add(AttributeChoice.objects.filter(value__icontains="Mamoa"))
+                                try:
+                                    attribute = AttributeChoice.objects.get(value__icontains=row.Id)
+                                    new_occurrence.attribute_occurrence.add(attribute)
+                                except AttributeChoice.DoesNotExist:
+                                    pass
                                 counter += 1
                             elif type[0] == "ST_Polygon":
                                 new_occurrence = Occurrence(designation=name, bounding_polygon=item[0], site=site_to_import, added_by=request.user)
                                 new_occurrence.save()
-                                new_occurrence.attribute_occurrence.add(AttributeChoice.objects.get(value="Mamoa"))
+                                try:
+                                    attribute = AttributeChoice.objects.get(value__icontains=row.Id)
+                                    new_occurrence.attribute_occurrence.add(attribute)
+                                except AttributeChoice.DoesNotExist:
+                                    pass
                                 counter += 1
             msg = str(ugettext_lazy('A total of ')) + str(counter) + str(ugettext_lazy(' new occurrences were added.'))
             messages.success(request, msg)
