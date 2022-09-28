@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-23 04:42+0100\n"
-"PO-Revision-Date: 2022-09-23 04:51+0100\n"
+"POT-Creation-Date: 2022-09-28 18:41+0100\n"
+"PO-Revision-Date: 2022-09-28 18:45+0100\n"
 "Last-Translator: Rafael Gomes de Sá, rafael.sa@ua.pt\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: English\n"
@@ -36,6 +36,12 @@ msgstr "Executing"
 msgid "Finished"
 msgstr "Finished"
 
+msgid "Training"
+msgstr "Training"
+
+msgid "Inference"
+msgstr "Inference"
+
 msgid "Name"
 msgstr "Name"
 
@@ -44,6 +50,9 @@ msgstr "Executed at"
 
 msgid "Status"
 msgstr "Status"
+
+msgid "Purpose"
+msgstr "Purpose"
 
 msgid "Executed by"
 msgstr "Executed by"
@@ -209,6 +218,13 @@ msgstr "Occurrence "
 
 msgid "It is required to select an area of interest on the map."
 msgstr "It is required to select an area of interest on the map."
+
+msgid ""
+"The area of interest that has been selected does not intersect any "
+"archaeological occurrence that can be used."
+msgstr ""
+"The area of interest that has been selected does not intersect any "
+"archaeological occurrence that can be used."
 
 msgid "No layer is selected. At least one layer must be selected."
 msgstr "No layer is selected. At least one layer must be selected."
@@ -494,8 +510,8 @@ msgstr "Layers"
 msgid "No layers!"
 msgstr "No layers!"
 
-msgid "No occurrences!"
-msgstr "No occurrences!"
+msgid "No detections!"
+msgstr "No detections!"
 
 msgid "Delete"
 msgstr "Delete"
@@ -578,8 +594,8 @@ msgstr "Next"
 msgid "Title"
 msgstr "Title"
 
-msgid "Select the layers that you want to use for identification:"
-msgstr "Select the layers that you want to use for identification:"
+msgid "Select the layers that you want to use:"
+msgstr "Select the layers that you want to use:"
 
 msgid "Start"
 msgstr "Start"
@@ -672,6 +688,9 @@ msgstr "Update Occurrence - "
 
 msgid "Add New "
 msgstr "Add New "
+
+msgid "No occurrences!"
+msgstr "No occurrences!"
 
 msgid "Update Site - "
 msgstr "Update Site - "

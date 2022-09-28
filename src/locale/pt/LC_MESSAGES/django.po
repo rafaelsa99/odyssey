@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-23 04:42+0100\n"
-"PO-Revision-Date: 2022-09-23 05:10+0100\n"
+"POT-Creation-Date: 2022-09-28 18:41+0100\n"
+"PO-Revision-Date: 2022-09-28 18:50+0100\n"
 "Last-Translator: Rafael Gomes de Sá, rafael.sa@ua.pt\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: Portuguese\n"
@@ -37,6 +37,12 @@ msgstr "A Executar"
 msgid "Finished"
 msgstr "Concluído"
 
+msgid "Training"
+msgstr "Treino"
+
+msgid "Inference"
+msgstr "Inferência"
+
 msgid "Name"
 msgstr "Nome"
 
@@ -45,6 +51,9 @@ msgstr "Executado a"
 
 msgid "Status"
 msgstr "Estado"
+
+msgid "Purpose"
+msgstr "Finalidade"
 
 msgid "Executed by"
 msgstr "Executado por"
@@ -211,18 +220,30 @@ msgstr "Ocorrência "
 msgid "It is required to select an area of interest on the map."
 msgstr "É necessário seleccionar uma área de interesse no mapa."
 
+msgid ""
+"The area of interest that has been selected does not intersect any "
+"archaeological occurrence that can be used."
+msgstr ""
+"A área de interesse que foi seleccionada não interseta nenhuma ocorrência arqueológica que "
+"possa ser utilizada."
+
 msgid "No layer is selected. At least one layer must be selected."
-msgstr "Nenhuma camada foi selecionada. Pelo menos uma camada deve ser selecionada."
+msgstr ""
+"Nenhuma camada foi selecionada. Pelo menos uma camada deve ser selecionada."
 
 msgid ""
 "The automatic identification has been started, and the results will be added "
 "as soon as the identification process is finished."
-msgstr "A identificação automática foi iniciada, devendo os resultados ser adicionados assim que o processo de identificação estiver concluído."
+msgstr ""
+"A identificação automática foi iniciada, devendo os resultados ser "
+"adicionados assim que o processo de identificação estiver concluído."
 
 msgid ""
 "The area of interest that has been selected does not intersect any layer "
 "that can be used."
-msgstr "A área de interesse que foi seleccionada não intersecta nenhuma camada que possa ser utilizada."
+msgstr ""
+"A área de interesse que foi seleccionada não interseta nenhuma camada que "
+"possa ser utilizada."
 
 msgid "Execution does not exist"
 msgstr "A Execução não existe"
@@ -492,8 +513,8 @@ msgstr "Camadas"
 msgid "No layers!"
 msgstr "Sem camadas!"
 
-msgid "No occurrences!"
-msgstr "Sem ocorrências!"
+msgid "No detections!"
+msgstr "Sem deteções!"
 
 msgid "Delete"
 msgstr "Eliminar"
@@ -576,8 +597,8 @@ msgstr "Seguinte"
 msgid "Title"
 msgstr "Título"
 
-msgid "Select the layers that you want to use for identification:"
-msgstr "Selecione as camadas que pretende utilizar para a identificação:"
+msgid "Select the layers that you want to use:"
+msgstr "Selecione as camadas que pretende utilizar:"
 
 msgid "Start"
 msgstr "Iniciar"
@@ -670,6 +691,9 @@ msgstr "Editar Ocorrência - "
 
 msgid "Add New "
 msgstr "Adicionar Novo "
+
+msgid "No occurrences!"
+msgstr "Sem ocorrências!"
 
 msgid "Update Site - "
 msgstr "Editar Sítio - "
@@ -874,4 +898,3 @@ msgstr "Pesquisar Sítios Arqueológicos"
 
 msgid "Search Archaeological Occurrences"
 msgstr "Pesquisar Ocorrências Arqueológicas"
-
