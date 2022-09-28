@@ -16,9 +16,14 @@ class AlgorithmExecution(models.Model):
     ("E", ugettext_lazy("Executing")),
     ("F", ugettext_lazy("Finished")))
 
+    PURPOSE_CHOICES = (
+    ("training", ugettext_lazy("Training")),
+    ("inference", ugettext_lazy("Inference")))
+
     name = models.CharField(max_length=254, verbose_name=ugettext_lazy('Name'))
     executed_at = models.DateTimeField(auto_now_add = True, verbose_name=ugettext_lazy('Executed at'))
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default="E", verbose_name=ugettext_lazy('Status'))
+    purpose = models.CharField(max_length=15, choices=PURPOSE_CHOICES, default="inference", verbose_name=ugettext_lazy('Purpose'))
     executed_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, verbose_name=ugettext_lazy('Executed by'))
     layers_used = models.ManyToManyField(LayerFile, verbose_name=ugettext_lazy('Layers Used'))
     aoi = models.PolygonField(verbose_name=ugettext_lazy('Area of Interest'))

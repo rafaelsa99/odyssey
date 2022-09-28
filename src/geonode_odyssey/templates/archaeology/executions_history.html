@@ -126,6 +126,7 @@
                 <thead>
                   <tr>
                     <th>{% trans "Name" %}</th>
+                    <th class="text-right">{% trans "Purpose" %}</th>
                     <th class="text-right">{% trans "Status" %}</th>
                     <th></th>
                   </tr>
@@ -134,6 +135,7 @@
                   {% for execution in executions %}
                   <tr>
                   <td><a href="{% url 'view_execution' execution.id %}"><strong>{{execution.name}}</strong></a><br>{{execution.executed_at}}</td>
+                  <td class="text-right">{{execution.get_purpose_display}}</td>
                   <td class="text-right">{{execution.get_status_display}}</td>
                 </tr>
                 {% endfor %}

@@ -19,8 +19,8 @@ from geonode.layers.models import LayerFile
 from django.conf import settings
 from pyproj import Proj, transform
 import os, json, threading, uuid, requests
-from zipfile import ZipFile
 from pathlib import Path
+import base64
 # Create your views here.
 
 @login_required
@@ -425,9 +425,7 @@ def identification_layers(request):
             folder_path = settings.PROJECT_ROOT + settings.MEDIA_URL
             temp_folder_path = os.path.join(folder_path, "tmp")
             Path(temp_folder_path).mkdir(parents=True, exist_ok=True)
-            zip_filename = str(uuid.uuid4().hex) + '.zip'
-            zip_file_path = os.path.join(temp_folder_path, zip_filename)
-            zip_file = ZipFile(zip_file_path, 'w')
+            layers = {}
             for file in checked_layers:
                 file_path = os.path.join(folder_path + file)
                 output_file = "{0}_{2}{1}".format(*os.path.splitext(os.path.basename(file)) + ("cropped",))
@@ -436,12 +434,12 @@ def identification_layers(request):
                 #ds = gdal.Translate(output_file_path, ds, projWin = bbox, options = "-projwin_srs EPSG:4326") #Not creating the output file - using gdal.Warp instead
                 ds = gdal.Warp(output_file_path, ds, outputBounds = bbox_converted)   
                 ds = None # To close the dataset
-                zip_file.write(output_file_path, arcname=output_file)
+                layer = base64.b64encode(open(output_file_path,'rb').read()).decode('ascii')    
+                layers['LRM'] = layer #TODO: How to get the name of the layer?
                 # Delete temporary file after write in the zip file
                 os.remove(output_file_path) 
 
-            zip_file.close() 
-            execution = threading.Thread(target=execute_identification, args=(data, zip_file_path, request, bbox_polygon))
+            execution = threading.Thread(target=execute_identification, args=(data, layers, request, bbox_polygon))
             execution.start()
             
             messages.success(request, ugettext_lazy('The automatic identification has been started, and the results will be added as soon as the identification process is finished.'))
@@ -459,51 +457,51 @@ def identification_layers(request):
     return render(request, "archaeology/identification_layers.html", context=context)
 
 
-def execute_identification(data, zip_file, request, polygon):
-    ml_webservice_url = 'https://www.example.com/' #TODO: Put the correct URl
+def execute_identification(data, files, request, polygon):
+    ml_webservice_url = 'http://192.168.1.65:8080' #TODO: Put the correct URl
     title = request.POST.get("name")
     checked_layers = request.POST.getlist("layers")
-    execution = AlgorithmExecution(name=title, aoi=polygon, executed_by=request.user)
+    purpose = request.POST.get("purpose")
+    execution = AlgorithmExecution(name=title, purpose=purpose, aoi=polygon, executed_by=request.user)
     execution.save()
     for file in checked_layers:
         layer = LayerFile.objects.get(file=file)
         execution.layers_used.add(layer)
 
     json_data = json.dumps(data)
-    zip_obj = open(zip_file, 'rb')
+    files_data = json.dumps(files)
+    multipleFiles = [('annotations', json_data), ('geotiff', files_data), ('purpose', purpose)]
 
-    #TODO: POST request not tested. Can the zip name in the request be different from the file?
-    #response = requests.post(ml_webservice_url, json=json_data, files = {"archive": ("layers.zip", zip_obj, 'application/zip')}) 
-    #response_text = response.text
+    #TODO: Uncomment line to use the POST request.
+    #response = requests.post(ml_webservice_url, data=multipleFiles) 
 
     #TODO: Delete the following line when using the POST request. Just for testing.
-    response_text = '{"Mamoa": "MULTIPOLYGON (((-29241.2906252581 241680.89583582,-29221.2441570028 241680.969808027,-29221.8359346635 241662.920589377,-29241.2166530505 241662.772644962,-29241.2906252581 241680.89583582)), ((-23757.952793673 238264.267511927,-23731.4707433579 238268.188038928,-23731.3227989427 238242.149821859,-23757.7308770502 238241.927905236,-23757.952793673 238264.267511927)))"}'
-    
-    #Delete temporary zip file
-    if os.path.isfile(zip_file):
-        os.remove(zip_file) 
+    response_text = '{"Mamoa": "MULTIPOLYGON (((-29241.2906252581 241680.89583582,-29221.2441570028 241680.969808027,-29221.8359346635 241662.920589377,-29241.2166530505 241662.772644962,-29241.2906252581 241680.89583582)), ((-23757.952793673 238264.267511927,-23731.4707433579 238268.188038928,-23731.3227989427 238242.149821859,-23757.7308770502 238241.927905236,-23757.952793673 238264.267511927)))"}' 
 
     execution.status = 'F'
     execution.save()
-    detections = json.loads(response_text)
-    if detections: #Check if there is any detection
-        site = Site(name=title, surrounding_polygon=polygon, added_by=request.user, created_by_execution=execution, status_site='N')
-        site.save()
-        counter = 0
-        for key, value in detections.items():
-            with connection.cursor() as cursor:
-                cursor.execute("SELECT ST_Transform(ST_SetSRID(geom, 3763), 4326) FROM ST_Dump(%s);", [value])
-                rows = cursor.fetchall()
-                for item in rows: #Iterate over all polygons inside the Multipolygon
-                    cursor.execute("SELECT ST_GeometryType(%s);", [item[0]])
-                    type = cursor.fetchone()
-                    designation = key + " " + str(counter)
-                    counter += 1
-                    if type[0] == "ST_Polygon":
-                        new_occurrence = Occurrence(designation=designation, bounding_polygon=item[0], site=site, added_by=request.user, algorithm_execution=execution, status_occurrence='N')
-                        new_occurrence.save()
-                        new_occurrence.attribute_occurrence.add(AttributeChoice.objects.get(value=key))
-        threading.Thread(target=updateLayers, args=("store",)).start()
+    
+    if purpose == "inference":
+        #response_text = response.text #TODO: Uncomment line when using the POST request.
+        detections = json.loads(response_text)
+        if detections: #Check if there is any detection
+            site = Site(name=title, surrounding_polygon=polygon, added_by=request.user, created_by_execution=execution, status_site='N')
+            site.save()
+            counter = 0
+            for key, value in detections.items():
+                with connection.cursor() as cursor:
+                    cursor.execute("SELECT ST_Transform(ST_SetSRID(geom, 3763), 4326) FROM ST_Dump(%s);", [value])
+                    rows = cursor.fetchall()
+                    for item in rows: #Iterate over all polygons inside the Multipolygon
+                        cursor.execute("SELECT ST_GeometryType(%s);", [item[0]])
+                        type = cursor.fetchone()
+                        designation = key + " " + str(counter)
+                        counter += 1
+                        if type[0] == "ST_Polygon":
+                            new_occurrence = Occurrence(designation=designation, bounding_polygon=item[0], site=site, added_by=request.user, algorithm_execution=execution, status_occurrence='N')
+                            new_occurrence.save()
+                            new_occurrence.attribute_occurrence.add(AttributeChoice.objects.get(value=key))
+            threading.Thread(target=updateLayers, args=("store",)).start()
 
 @login_required
 def executions_history(request):
