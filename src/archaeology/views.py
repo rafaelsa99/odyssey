@@ -435,7 +435,8 @@ def identification_layers(request):
                 ds = gdal.Warp(output_file_path, ds, outputBounds = bbox_converted)   
                 ds = None # To close the dataset
                 layer = base64.b64encode(open(output_file_path,'rb').read()).decode('ascii')    
-                layers['LRM'] = layer #TODO: How to get the name of the layer?
+                layerObj = LayerFile.objects.get(file = file)
+                layers[layerObj.name] = layer
                 # Delete temporary file after write in the zip file
                 os.remove(output_file_path) 
 
