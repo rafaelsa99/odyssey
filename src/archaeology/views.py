@@ -395,7 +395,7 @@ def identification_layers(request):
     bbox_polygon = Polygon.from_bbox((bbox_coordinates[0],bbox_coordinates[1],bbox_coordinates[2],bbox_coordinates[3]))
     #Get only occurrences from the polygons, since the points are not useful for the ML algorithm, and with a type defined and with the information verified
     types_list = AttributeChoice.objects.filter(Q(category__name__icontains="type") | Q(category__name__icontains="tipo"))
-    occurrences_list = Occurrence.objects.filter(Q(bounding_polygon__intersects=bbox_polygon) & Q(attribute_occurrence__in=types_list) & Q(status_occurrence__icontains="V") & Q(status_occurrence__icontains="T"))
+    occurrences_list = Occurrence.objects.filter(Q(bounding_polygon__intersects=bbox_polygon) & Q(attribute_occurrence__in=types_list) & (Q(status_occurrence__icontains="V") | Q(status_occurrence__icontains="T")))
     if not occurrences_list:
         messages.warning(request, ugettext_lazy('The area of interest that has been selected does not intersect any archaeological occurrence that can be used.'))
         return redirect(identification_aoi)
