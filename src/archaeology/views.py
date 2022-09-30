@@ -419,14 +419,30 @@ def identification_layers(request):
             gdal.UseExceptions() # For debuging
             inProj = Proj(init='epsg:4326')
             outProj = Proj(init='epsg:3763')
-            xmin,ymin = transform(inProj,outProj,bbox_coordinates[0],bbox_coordinates[1])
-            xmax,ymax = transform(inProj,outProj,bbox_coordinates[2],bbox_coordinates[3])
-            bbox_converted = [xmin, ymin, xmax, ymax]
             folder_path = settings.PROJECT_ROOT + settings.MEDIA_URL
             temp_folder_path = os.path.join(folder_path, "tmp")
             Path(temp_folder_path).mkdir(parents=True, exist_ok=True)
             layers = {}
             for file in checked_layers:
+                layerObj = LayerFile.objects.get(file = file)
+                #Get bbox that intersects with layer (without blank spaces)
+                with connection.cursor() as cursor:
+                    cursor.execute("SELECT ST_AsGeoJSON(ST_Envelope(ll_bbox_polygon)) FROM base_resourcebase WHERE id = %s;", [layerObj.id])
+                    layer_bbox = cursor.fetchone()
+                    layer_bbox_json = json.loads(layer_bbox[0])
+                    layer_xmin, layer_ymin = layer_bbox_json['coordinates'][0][0]
+                    layer_xmax, layer_ymax = layer_bbox_json['coordinates'][0][2]
+                xmin_crop = max([float(bbox_coordinates[0]), layer_xmin])
+                ymin_crop = max([float(bbox_coordinates[1]), layer_ymin])
+                xmax_crop = min([float(bbox_coordinates[2]), layer_xmax])
+                ymax_crop = min([float(bbox_coordinates[3]), layer_ymax])
+                xmin,ymin = transform(inProj,outProj,xmin_crop,ymin_crop)
+                xmax,ymax = transform(inProj,outProj,xmax_crop,ymax_crop)
+                print(xmin)
+                print(ymin)
+                print(xmax)
+                print(ymax)
+                bbox_converted = [xmin, ymin, xmax, ymax]
                 file_path = os.path.join(folder_path + file)
                 output_file = "{0}_{2}{1}".format(*os.path.splitext(os.path.basename(file)) + ("cropped",))
                 output_file_path = os.path.join(temp_folder_path, output_file)
@@ -435,7 +451,6 @@ def identification_layers(request):
                 ds = gdal.Warp(output_file_path, ds, outputBounds = bbox_converted)   
                 ds = None # To close the dataset
                 layer = base64.b64encode(open(output_file_path,'rb').read()).decode('ascii')    
-                layerObj = LayerFile.objects.get(file = file)
                 layers[layerObj.name] = layer
                 # Delete temporary file after write in the zip file
                 os.remove(output_file_path) 
