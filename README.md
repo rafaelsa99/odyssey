@@ -382,7 +382,7 @@ Alternatively, they can be entered directly into the database. The following SQL
 	```bash
 	cd odyssey/
 	workon geonode_odyssey
-	docker exec -it db bash
+	docker exec -it db4geonode_odyssey bash
 	psql -U postgres geonode_odyssey
 	```
 
