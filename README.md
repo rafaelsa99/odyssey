@@ -362,8 +362,8 @@ Some useful layers to add as a Remote Service via WMS:
 	- WMS: https://geo2.dgterritorio.gov.pt/geoserver/COS2018/wms?service=wms&version=1.3.0&request=GetCapabilities
 - [Carta Administrativa Oficial de Portugal - CAOP2021 (Continente)](https://www.dgterritorio.gov.pt/dados-abertos)
 	- WMS: http://mapas.dgterritorio.pt/wms-inspire/caop/continente?service=WMS&REQUEST=GetCapabilities&VERSION=1.3.0 
-- [Carta Geológica de Portugal, scale 1:50 000 (raster)](https://geoportal.lneg.pt/pt/dados_abertos/servicos_wms/)
-	- WMS: https://sig.lneg.pt/server/services/CGP50k/MapServer/WMSServer
+- [Carta Geológica de Portugal, na escala 1:500 000](https://geoportal.lneg.pt/pt/dados_abertos/servicos_wms/)
+	- WMS: https://sig.lneg.pt/server/services/CGP500k/MapServer/WMSServer
 
 **NOTE:** Information from [DGPC](http://www.patrimoniocultural.gov.pt/pt/recursos/pesquisa-georreferenciada-recursos/) such as the [Archaeology Geoportal](https://patrimoniodgpc.maps.arcgis.com/apps/webappviewer/index.html?id=5cb4735d7d7743a39a16d7269a753a4a%20) is relevant, but it is [published as WFS](https://patrimoniodgpc.maps.arcgis.com/home/item.html?id=b58036247d8849b59b45144135662d86). Thus, it is not possible to upload as a remote service. 
 
