@@ -425,7 +425,7 @@ def identification_layers(request):
             xmin,ymin = transform(inProj,outProj,bbox_coordinates[0],bbox_coordinates[1])
             xmax,ymax = transform(inProj,outProj,bbox_coordinates[2],bbox_coordinates[3])
             bbox_converted = [xmin, ymin, xmax, ymax]
-            folder_path = settings.PROJECT_ROOT + settings.MEDIA_ROOT
+            folder_path = settings.MEDIA_ROOT + "/"
             temp_folder_path = os.path.join(folder_path, "tmp")
             Path(temp_folder_path).mkdir(parents=True, exist_ok=True)
             layers = {}
