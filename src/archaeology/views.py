@@ -398,7 +398,7 @@ def identification_layers(request):
     bbox_polygon = Polygon.from_bbox((bbox_coordinates[0],bbox_coordinates[1],bbox_coordinates[2],bbox_coordinates[3]))
     #Get only occurrences from the polygons, since the points are not useful for the ML algorithm, and with a type defined and with the information verified
     types_list = AttributeChoice.objects.filter(Q(category__name__icontains="type") | Q(category__name__icontains="tipo"))
-    occurrences_list = Occurrence.objects.filter(Q(bounding_polygon__intersects=bbox_polygon) & Q(attribute_occurrence__in=types_list) & (Q(status_occurrence__icontains="V") | Q(status_occurrence__icontains="T")))
+    occurrences_list = Occurrence.objects.filter(Q(bounding_polygon__coveredby=bbox_polygon) & Q(attribute_occurrence__in=types_list) & (Q(status_occurrence__icontains="V") | Q(status_occurrence__icontains="T")))
     if not occurrences_list:
         messages.warning(request, ugettext_lazy('The area of interest that has been selected does not intersect any archaeological occurrence that can be used.'))
         return redirect(identification_aoi)
@@ -412,11 +412,10 @@ def identification_layers(request):
             data = {}
             for type in types_list:
                 with connection.cursor() as cursor:
-                        cursor.execute("SELECT ST_AsText(ST_Transform(ST_Multi(ST_Union(o.bounding_polygon)), 3763)) FROM occurrence o"\
-                         " JOIN occurrence_attribute_occurrence ot  ON ot.occurrence_id = o.id AND ot.attributechoice_id = %s;", [type.id])
+                        cursor.execute("SELECT ST_AsText(ST_Transform(ST_Multi(ST_Union(o.bounding_polygon)), 3763)) FROM occurrence o JOIN occurrence_attribute_occurrence ot ON ot.occurrence_id = o.id AND ot.attributechoice_id = %s  WHERE ST_CoveredBy(o.bounding_polygon, ST_PolygonFromText(%s, 4326));", [type.id, bbox_polygon.wkt])
                         rows = cursor.fetchall()
                         for row in rows:
-                            if row:
+                            if row and row[0]:
                                 data[type.value] = row[0]
             #Crop the selected layers with the defined bbox
             gdal.UseExceptions() # For debuging
