@@ -740,7 +740,7 @@ WKT,Id
 
 The automatic identification of occurrences using the algorithm has some restrictions to be considered:
 - Only occurrences with a defined polygon are fed into the algorithm. Occurrences defined only by a point are not used, because they do not geographically define the limits of the occurrence.
-- Only occurrences with the Status *Verified* or *Verified - True Positive* are considered. *Unverified* or *false positive* occurrences are not considered for the execution of the algorithm.
-- Only `GeoTIFF` layers can be chosen to run the algorithm. The format of the layer names must be consistent for correct identification by the algorithm. The name must have the format `type_name.tif` (e.g., `laboreiro_lrm.tif`).
+- Only occurrences with a type assigned and the Status *Verified* or *Verified - True Positive* are considered. *Unverified* or *false positive* occurrences are not considered for the execution of the algorithm.
+- Only `GeoTIFF` layers can be chosen to run the algorithm. The format of the layer names must be consistent for correct identification by the algorithm. The name must have the format `name_type.tif` (e.g., `laboreiro_lrm.tif`).
 - The area of interest for the algorithm's execution must intersect at least one layer and one occurrence. Furthermore, and considering the size of the layers that must be fed into the algorithm, the size of the area of interest should not be excessively large. The selection of an area of interest of reasonable size is left to the user.
-- For a correct identification of the type of occurrence that has been identified, the name of the attribute category for the occurrence type should be "Type" or "Type".
+- For a correct identification of the type of occurrence that has been identified, the name of the attribute category for the occurrence type should be "Type" or "Tipo".
