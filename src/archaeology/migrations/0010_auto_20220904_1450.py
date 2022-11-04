@@ -10,7 +10,6 @@ import django_countries.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('base', '0068_auto_20220403_1334'),
         ('archaeology', '0009_auto_20220806_1646'),
     ]
 
