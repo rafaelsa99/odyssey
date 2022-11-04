@@ -84,7 +84,8 @@ This installation method does not use Docker and is suitable for development. Th
 	**NOTE**: *Errors may occur for packages that have versions that are incompatible with GeoNode. In these cases, you should reinstall each package with the respective version.*
 
 	```bash
-    cd odyssey/src/
+	mv odyssey geonode_odyssey
+    cd geonode_odyssey/src/
 	pip install -r requirements.txt –upgrade
 
 	# In case of errors:
