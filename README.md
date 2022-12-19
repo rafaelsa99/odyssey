@@ -207,7 +207,11 @@ The installation instructions are based on the [official GeoNode documentation](
 # Prepare the GeoNode database (the first time only)
 ./paver_dev.sh setup
 ./paver_dev.sh sync
+```
 
+**NOTE**: Please verify in the *views.py* file in the *archaeology* folder, if in the *updateLayers* function the command being executed is *../manage.py* (**If not**, comment out the execution of the command *../manage_dev.py* and uncomment the correct line)
+
+```bash
 # Run the server in DEBUG mode
 ./paver_dev.sh start
 ```
