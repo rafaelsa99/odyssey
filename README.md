@@ -86,7 +86,7 @@ This installation method does not use Docker and is suitable for development. Th
 	```bash
 	mv odyssey geonode_odyssey
     cd geonode_odyssey/src/
-	pip install -r requirements.txt –upgrade
+	pip install -r requirements.txt --upgrade
 
 	# In case of errors:
 	# pip install <PACKAGE>==<VERSION> --force-reinstall
