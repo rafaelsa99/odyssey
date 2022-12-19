@@ -209,7 +209,7 @@ The installation instructions are based on the [official GeoNode documentation](
 ./paver_dev.sh sync
 ```
 
-**NOTE**: Please verify in the *views.py* file in the *archaeology* folder, if in the *updateLayers* function the command being executed is *../manage.py* (**If not**, comment out the execution of the command *../manage_dev.py* and uncomment the correct line)
+**NOTE**: Please verify in the [*views.py*](src/archaeology/views.py) file in the [*archaeology*](src/archaeology) folder, if in the *updateLayers* function the command being executed is *../manage_dev.py* (**If not**, comment out the execution of the command *../manage.py* and uncomment the correct line)
 
 ```bash
 # Run the server in DEBUG mode
@@ -271,6 +271,8 @@ The installation instructions are based on the [official GeoNode documentation](
 
 5.	Build the Docker Containers
 
+**NOTE**: Please verify in the [*views.py*](src/archaeology/views.py) file in the [*archaeology*](src/archaeology) folder, if in the *updateLayers* function the command being executed is *../manage.py* (**If not**, comment out the execution of the command *../manage_dev.py* and uncomment the correct line)
+	
 	```bash
     cd odyssey/
 	docker-compose -f docker-compose.yml build --no-cache
